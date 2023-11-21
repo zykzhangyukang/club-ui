@@ -1,5 +1,5 @@
 <template>
-    <div class="demo-login">
+    <div class="reigster-wrapper">
         <h3>注册账号</h3>
         <Divider/>
         <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
@@ -10,10 +10,10 @@
                 <Input type="password" v-model="formCustom.password"  placeholder="请输入登录密码" ></Input>
             </FormItem>
             <FormItem label="注册邮箱" prop="email">
-                <Input type="password" v-model="formCustom.email"  placeholder="请输入注册邮箱" ></Input>
+                <Input  v-model="formCustom.email"  placeholder="请输入注册邮箱" ></Input>
             </FormItem>
             <FormItem label="验证码" prop="captcha">
-                <Input type="password" v-model="formCustom.captcha"  placeholder="请输入图形验证码"  ></Input>
+                <Input  v-model="formCustom.captcha"  placeholder="请输入图形验证码"  ></Input>
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="handleSubmit('formCustom')">注册</Button>
@@ -40,6 +40,16 @@
                     return callback(new Error('登录账号不能为空'));
                 }
             };
+            const validateEmail = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('注册邮箱不能为空'));
+                }
+            };
+            const validateCaptcha = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('图形验证码不能为空'));
+                }
+            };
             return {
                 formCustom: {
                     username: '',
@@ -53,6 +63,12 @@
                     ],
                     username: [
                         { validator: validateUsername, trigger: 'blur' }
+                    ],
+                    email: [
+                        { validator: validateEmail, trigger: 'blur' }
+                    ],
+                    captcha: [
+                        { validator: validateCaptcha, trigger: 'blur' }
                     ]
                 }
             }

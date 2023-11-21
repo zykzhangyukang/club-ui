@@ -1,5 +1,5 @@
 <template>
-    <div class="demo-login">
+    <div class="login-wrapper">
         <h3>欢迎登录</h3>
         <Divider/>
         <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
