@@ -1,10 +1,10 @@
 <template>
     <Header>
         <Menu mode="horizontal" theme="light" active-name="1" class="layout_menu">
-            <div class="layout-logo">
+            <div class="layout-logo" @click="this.$router.push('/')">
             </div>
             <div class="layout-nav">
-                <MenuItem name="1">
+                <MenuItem name="1" @click="this.$router.push('/')">
                     <Icon type="ios-navigate"></Icon>
                     首页
                 </MenuItem>
@@ -13,8 +13,8 @@
                     话题
                 </MenuItem>
                 <div class="user_info_wrapper">
-                    <a style="margin-left: 20px;color: #303030;cursor: pointer">登录</a>
-                    <a style="margin-left: 20px;color: #303030;cursor: pointer">注册</a>
+                    <a style="margin-left: 20px;color: #303030;cursor: pointer" @click="this.$router.push('/login')">登录</a>
+                    <a style="margin-left: 20px;color: #303030;cursor: pointer" @click="this.$router.push('/register')">注册</a>
                 </div>
             </div>
         </Menu>
@@ -35,6 +35,7 @@
     }
 
     .layout-logo {
+        cursor: pointer;
         width: 100px;
         height: 30px;
         border-radius: 3px;
@@ -57,7 +58,7 @@
         margin: 0 20px 0 auto;
         height: 48px;
         line-height: 48px;
-        background: #ffffff;
+        background: #fff;
     }
 
     .ivu-menu-horizontal.ivu-menu-light:after {

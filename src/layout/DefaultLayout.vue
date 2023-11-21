@@ -2,11 +2,10 @@
     <Layout>
         <!-- 网站头部导航 -->
         <AppHeader></AppHeader>
-
-        <!-- 主要内容区域 -->
         <Content class="layout-content">
             <Row :gutter="16">
                 <Col span="18">
+                    <!-- 主要内容区域 -->
                     <div class="main_content">
                         <router-view/>
                     </div>
@@ -51,9 +50,8 @@
         margin: 20px auto;
     }
     .main_content{
-        padding: 5px;
-        background: #ffffff!important;
-        min-height: 650px;
+        padding: 20px;
+        background: #fff!important;
         border: 1px solid #eee;
     }
     .sep20{

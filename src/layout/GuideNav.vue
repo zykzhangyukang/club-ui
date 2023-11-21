@@ -4,9 +4,9 @@
         <p class="desc">Club 是一个关于分享和探索的地方</p>
         <Divider/>
         <div class="wrapper">
-            <Button style="margin-bottom: 10px;margin-top: 10px">现在注册</Button>
+            <Button style="margin-bottom: 10px;margin-top: 10px" @click="this.$router.push('/register')">现在注册</Button>
             <p>已注册用户请
-                <a>登录</a>
+                <a @click="this.$router.push('/login')">登录</a>
             </p>
         </div>
     </div>

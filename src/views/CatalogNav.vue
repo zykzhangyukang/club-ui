@@ -10,10 +10,9 @@
         <TabPane label="生活"></TabPane>
         <TabPane label="城市"></TabPane>
         <TabPane label="游戏"></TabPane>
-        <TabPane label="Geek"></TabPane>
         <TabPane label="职场"></TabPane>
     </Tabs>
-    <tag color="blue" style="cursor: pointer;margin-bottom: 5px">程序员</tag>
+    <tag color="blue" style="cursor: pointer;margin-bottom: 10px">程序员</tag>
     <tag style="cursor: pointer;margin-bottom: 10px">iDev</tag>
     <tag style="cursor: pointer;margin-bottom: 10px">Android</tag>
     <tag style="cursor: pointer;margin-bottom: 10px">Linux</tag>
@@ -30,7 +29,7 @@
     }
 </script>
 
-<style slot-scope="scope">
+<style scoped>
     .ivu-tabs-bar {
         border-bottom: 1px solid #dcdee2;
         margin-bottom: 0 !important;

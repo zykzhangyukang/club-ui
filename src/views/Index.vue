@@ -1,4 +1,8 @@
 <template>
+
+    <!-- 轮播图部分 -->
+    <Carousel></Carousel>
+
     <!-- 分类导航 -->
     <CatalogNav></CatalogNav>
 
@@ -10,11 +14,13 @@
 <script>
     import CatalogNav from "@/views/CatalogNav";
     import PostList from "@/views/PostList";
+    import Carousel from "@/views/Carousel";
     export default {
         name: "index.vue",
         components:{
             PostList,
-            CatalogNav
+            CatalogNav,
+            Carousel
         }
     }
 </script>

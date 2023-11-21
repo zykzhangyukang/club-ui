@@ -26,7 +26,7 @@
                         blankTarget: true
                     }
                 ],
-                copyright: 'Copyright © 2022 View Design All Rights Reserved'
+                copyright: 'Copyright © 2023 Club All Rights Reserved'
             }
         }
     }
