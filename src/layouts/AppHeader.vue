@@ -44,7 +44,7 @@
         top: 9px;
         left: 20px;
         margin-right: 80px;
-        background-image: url("https://www.imooc.com/static/img/index/logo2020.png");
+        background-image: url("../assets/logo.png");
         background-size: cover;
         background-position: center;
     }
