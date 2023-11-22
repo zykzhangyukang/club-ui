@@ -1,0 +1,60 @@
+<template>
+    <Layout>
+        <!-- 网站头部导航 -->
+        <AppHeader></AppHeader>
+        <Content class="layout-content">
+            <Row :gutter="16">
+                <Col span="18">
+                    <!-- 主要内容区域 -->
+                    <div class="main_content">
+                        <router-view/>
+                    </div>
+                </Col>
+                <Col span="6">
+                    <div class="right_content">
+                        <LoginNav></LoginNav>
+                    </div>
+                </Col>
+            </Row>
+        </Content>
+
+        <!-- 网站页尾部分 -->
+        <AppFooter></AppFooter>
+    </Layout>
+</template>
+
+<script>
+    import AppHeader from "@/layouts/AppHeader";
+    import AppFooter from "@/layouts/AppFooter";
+    import GuideNav from "@/layouts/GuideNav";
+    import AdvertNav from "@/layouts/AdvertNav";
+    import LoginNav from "@/layouts/LoginNav";
+
+    export default {
+        name: 'LoginLayout',
+        components: {
+            LoginNav,
+            AppHeader,
+            AppFooter,
+            GuideNav,
+            AdvertNav
+        },
+    }
+</script>
+<style scoped>
+    .layout-content {
+        background: #f6f8fa !important;
+        width: 1060px;
+        margin: 20px auto;
+    }
+
+    .main_content {
+        padding: 20px;
+        background: #fff !important;
+        border: 1px solid #eee;
+    }
+
+    .sep20 {
+        height: 20px;
+    }
+</style>

@@ -28,10 +28,10 @@
 </template>
 
 <script>
-    import AppHeader from "@/layout/AppHeader";
-    import AppFooter from "@/layout/AppFooter";
-    import GuideNav from "@/layout/GuideNav";
-    import AdvertNav from "@/layout/AdvertNav";
+    import AppHeader from "@/layouts/AppHeader";
+    import AppFooter from "@/layouts/AppFooter";
+    import GuideNav from "@/layouts/GuideNav";
+    import AdvertNav from "@/layouts/AdvertNav";
 
     export default {
         name: 'DefaultLayout',

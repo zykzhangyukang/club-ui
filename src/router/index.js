@@ -1,25 +1,21 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
-import DefaultLayout from '@/layout/DefaultLayout';
-import IndexView from '@/views/Index';
-import LoginView from '@/views/Login';
-import RegisterView from '@/views/Register';
+import DefaultLayout from '@/layouts/DefaultLayout';
+import LoginLayout from "@/layouts/LoginLayout";
+import IndexView from '@/views/index/Index';
+import LoginView from '@/views/login/Login';
+import RegisterView from '@/views/register/Register';
 
 const routes = [
     {
         path: '',
-        redirect: '/index',
+        redirect: '/',
         name: 'Root',
         component: DefaultLayout,
         children: [
             {
-                path: '/index',
+                path: '',
                 name: 'Index',
                 component: IndexView
-            },
-            {
-                path: '/login',
-                name: 'Login',
-                component: LoginView
             },
             {
                 path: '/register',
@@ -28,6 +24,17 @@ const routes = [
             },
         ]
     },
+    {
+        path: '',
+        component: LoginLayout,
+        children: [
+            {
+                path: '/login',
+                name: 'Login',
+                component: LoginView
+            },
+        ]
+    }
 ]
 
 const router = createRouter({

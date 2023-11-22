@@ -12,9 +12,9 @@
 </template>
 
 <script>
-    import CatalogNav from "@/views/CatalogNav";
-    import PostList from "@/views/PostList";
-    import Carousel from "@/views/Carousel";
+    import CatalogNav from "@/views/index/CatalogNav";
+    import PostList from "@/views/index/PostList";
+    import Carousel from "@/views/index/Carousel";
     export default {
         name: "index.vue",
         components:{
