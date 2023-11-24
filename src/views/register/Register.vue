@@ -2,88 +2,123 @@
     <div class="reigster-wrapper">
         <h3>注册账号</h3>
         <Divider/>
-        <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
+        <Form ref="registerForm" :model="registerForm" :label-width="80">
+            <Alert type="warning" show-icon v-if="tipMsg" :fade="false" :closable="false">{{tipMsg}}</Alert>
             <FormItem label="用户账号" prop="username">
-                <Input  v-model="formCustom.username"  placeholder="请输入登录账号" ></Input>
+                <Input  v-model="registerForm.username"  placeholder="请输入登录账号" maxlength="16"></Input>
             </FormItem>
             <FormItem label="登录密码" prop="password">
-                <Input type="password" v-model="formCustom.password"  placeholder="请输入登录密码" ></Input>
+                <Input type="password" v-model="registerForm.password"  placeholder="请输入登录密码" maxlength="20"></Input>
             </FormItem>
             <FormItem label="注册邮箱" prop="email">
-                <Input  v-model="formCustom.email"  placeholder="请输入注册邮箱" ></Input>
+                <Input  type="email" v-model="registerForm.email"  placeholder="请输入注册邮箱" maxlength="64"></Input>
             </FormItem>
-            <FormItem label="验证码" prop="captcha">
-                <Input  v-model="formCustom.captcha"  placeholder="请输入图形验证码"  ></Input>
+            <FormItem label="验证码" prop="code">
+                <Row :gutter="16">
+                    <Col span="8">
+                        <div>
+                            <Input v-model="registerForm.code" placeholder="请输入验证码" maxlength="5"></Input>
+                        </div>
+                    </Col>
+                    <Col span="6">
+                        <div class="captcha_img">
+                            <Spin fix :show="spinShow"> </Spin>
+                            <img :src="captchaBase64" @click="getRegisterCaptcha">
+                        </div>
+                    </Col>
+                </Row>
             </FormItem>
             <FormItem>
-                <Button type="primary" @click="handleSubmit('formCustom')">注册</Button>
-                <Button @click="handleReset('formCustom')" style="margin-left: 8px">重置</Button>
+                <Button type="primary" @click="handleSubmit('registerForm')">注册</Button>
+                <Button @click="handleReset('registerForm')" style="margin-left: 8px">重置</Button>
                 <p style="margin-top: 10px">
-                    已经拥有账户？<a @click="this.$router.push('/login')">登录</a>
+                    已经拥有账户？<a @click="this.$router.push('/login')" :loading="btnLoading">登录</a>
                 </p>
             </FormItem>
         </Form>
     </div>
 </template>
 <script>
+    import tool from "@/utils/tool";
+    import {registerCaptcha, userRegister} from "@/api/api";
+
     export default {
         data () {
-            const validatePass = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入您的登录密码'));
-                } else {
-                    callback();
-                }
-            };
-            const validateUsername = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('登录账号不能为空'));
-                }
-            };
-            const validateEmail = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('注册邮箱不能为空'));
-                }
-            };
-            const validateCaptcha = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('图形验证码不能为空'));
-                }
-            };
             return {
-                formCustom: {
+                registerForm: {
                     username: '',
                     password: '',
-                    captcha: '',
-                    email: ''
+                    code: '',
+                    email: '',
+                    captchaKey: ''
                 },
-                ruleCustom: {
-                    password: [
-                        { validator: validatePass, trigger: 'blur' }
-                    ],
-                    username: [
-                        { validator: validateUsername, trigger: 'blur' }
-                    ],
-                    email: [
-                        { validator: validateEmail, trigger: 'blur' }
-                    ],
-                    captcha: [
-                        { validator: validateCaptcha, trigger: 'blur' }
-                    ]
-                }
+                spinShow: false,
+                captchaBase64: '',
+                tipMsg: '',
+                btnLoading: false,
             }
         },
         methods: {
-            handleSubmit (name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    }
+            handleSubmit () {
+                if (!this.registerForm.username || this.registerForm.username === '') {
+                    this.tipMsg = "登录账号不能为空！";
+                    return;
+                }
+                if (!this.registerForm.password || this.registerForm.password === '') {
+                    this.tipMsg = "登录密码不能为空！";
+                    return
+                }
+                if (!this.registerForm.email || this.registerForm.email === '') {
+                    this.tipMsg = "注册邮箱不能为空！";
+                    return;
+                }
+                if (!this.registerForm.code || this.registerForm.code === '') {
+                    this.tipMsg = "验证码不能为空！";
+                    return;
+                }
+                this.btnLoading = true;
+                userRegister(this.registerForm).then(res => {
+                    this.$Message.success('注册成功!');
+                }).catch((e) => {
+                    this.registerForm.captchaKey = '';
+                    this.registerForm.code = '';
+                    this.tipMsg = e.msg;
+                    this.getRegisterCaptcha();
+                }).finally(() => {
+                    this.btnLoading = false;
                 })
+
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
-            }
+                this.tipMsg = "";
+            },
+            getRegisterCaptcha() {
+                let uuid = tool.uuid();
+                this.spinShow = true;
+                this.registerForm.captchaKey = uuid;
+                registerCaptcha(uuid).then(res => {
+                    this.captchaBase64 = res.result;
+                }).catch(e => {
+                    this.$Message.error(e.msg);
+                }).finally(() => {
+                    this.spinShow = false;
+                })
+            },
+        },
+        created() {
+            this.getRegisterCaptcha();
         }
     }
 </script>
+<style scoped>
+    .captcha_img {
+        width: 105px;
+        height: 35px;
+        vertical-align: middle;
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        border: 1px solid #eee;
+    }
+</style>

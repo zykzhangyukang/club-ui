@@ -1,17 +1,19 @@
 <template>
-    <Tabs :animated="false" size="small">
-        <TabPane label="技术"></TabPane>
-        <TabPane label="创意"></TabPane>
-        <TabPane label="好玩"></TabPane>
-        <TabPane label="Apple"></TabPane>
-        <TabPane label="前端开发"></TabPane>
-        <TabPane label="后端架构"></TabPane>
-        <TabPane label="机器学习"></TabPane>
-        <TabPane label="生活"></TabPane>
-        <TabPane label="城市"></TabPane>
-        <TabPane label="游戏"></TabPane>
-        <TabPane label="职场"></TabPane>
-    </Tabs>
+    <RadioGroup :size="'small'" type="button" style="margin-bottom: 10px;">
+        <Radio label="1">技术</Radio>
+        <Radio label="2">创意</Radio>
+        <Radio label="3">好玩</Radio>
+        <Radio label="4">Apple</Radio>
+        <Radio label="5">前端开发</Radio>
+        <Radio label="6">后端架构</Radio>
+        <Radio label="7">机器学习</Radio>
+        <Radio label="8">生活</Radio>
+        <Radio label="9">城市</Radio>
+        <Radio label="10">技术</Radio>
+        <Radio label="11">游戏</Radio>
+        <Radio label="12">职场</Radio>
+    </RadioGroup>
+
     <tag color="blue" style="cursor: pointer;margin-bottom: 10px">程序员</tag>
     <tag style="cursor: pointer;margin-bottom: 10px">iDev</tag>
     <tag style="cursor: pointer;margin-bottom: 10px">Android</tag>

@@ -12,7 +12,7 @@
             </FormItem>
             <FormItem label="验证码" prop="code">
                 <Row :gutter="16">
-                    <Col span="10">
+                    <Col span="8">
                         <div>
                             <Input v-model="loginForm.code" placeholder="请输入验证码" maxlength="5"></Input>
                         </div>
