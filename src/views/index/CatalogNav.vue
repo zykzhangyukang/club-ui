@@ -1,6 +1,6 @@
 <template>
     <RadioGroup class="catalog_wrapper" :size="'small'" type="button">
-        <Radio :label="section.sectionName" v-for="section in sectionList">{{section.sectionName}}</Radio>
+        <Radio :label="section.sectionName" v-for="section in sectionList" :key="section.sectionName">{{section.sectionName}}</Radio>
     </RadioGroup>
     <br/>
 

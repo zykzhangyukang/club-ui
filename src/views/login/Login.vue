@@ -70,8 +70,13 @@
                 }
                 this.btnLoading = true;
                 userLogin(this.loginForm).then(res => {
+
+                    // 保存用户信息
+                    this.$store.commit('user/setToken', res.result.token);
+                    this.$store.commit('user/setRefreshToken', res.result.refreshToken);
+                    this.$store.commit('user/setUser', res.result);
+                    this.$router.push("/")
                     this.$Message.success('登录成功！');
-                    this.$router.replace('/');
                 }).catch((e) => {
                     this.getLoginCaptcha();
                     this.loginForm.code = '';

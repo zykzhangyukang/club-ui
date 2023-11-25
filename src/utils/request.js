@@ -49,9 +49,7 @@ http.interceptors.response.use(
             if (error.response.status === 400) {
                 Message.warning('请求参数错误！');
 
-            } else if (error.response.status === 401) {
-
-            } else if (error.response.status === 403) {
+            }else if (error.response.status === 403) {
                 Message.error('您没有访问该资源的权限！');
 
             } else if (error.response.status === 404) {
