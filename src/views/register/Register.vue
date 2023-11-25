@@ -40,7 +40,7 @@
 </template>
 <script>
     import tool from "@/utils/tool";
-    import {registerCaptcha, userRegister} from "@/api/api";
+    import {registerCaptcha, userRegister} from "@/apis/user";
 
     export default {
         data () {
@@ -80,9 +80,8 @@
                 userRegister(this.registerForm).then(res => {
                     this.$Message.success('注册成功!');
                 }).catch((e) => {
-                    this.registerForm.captchaKey = '';
                     this.registerForm.code = '';
-                    this.tipMsg = e.msg;
+                    this.tipMsg  = e.msg;
                     this.getRegisterCaptcha();
                 }).finally(() => {
                     this.btnLoading = false;
@@ -99,8 +98,6 @@
                 this.registerForm.captchaKey = uuid;
                 registerCaptcha(uuid).then(res => {
                     this.captchaBase64 = res.result;
-                }).catch(e => {
-                    this.$Message.error(e.msg);
                 }).finally(() => {
                     this.spinShow = false;
                 })

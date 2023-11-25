@@ -1,18 +1,8 @@
 <template>
-    <RadioGroup :size="'small'" type="button" style="margin-bottom: 10px;">
-        <Radio label="1">技术</Radio>
-        <Radio label="2">创意</Radio>
-        <Radio label="3">好玩</Radio>
-        <Radio label="4">Apple</Radio>
-        <Radio label="5">前端开发</Radio>
-        <Radio label="6">后端架构</Radio>
-        <Radio label="7">机器学习</Radio>
-        <Radio label="8">生活</Radio>
-        <Radio label="9">城市</Radio>
-        <Radio label="10">技术</Radio>
-        <Radio label="11">游戏</Radio>
-        <Radio label="12">职场</Radio>
+    <RadioGroup class="catalog_wrapper" :size="'small'" type="button">
+        <Radio :label="section.sectionName" v-for="section in sectionList">{{section.sectionName}}</Radio>
     </RadioGroup>
+    <br/>
 
     <tag color="blue" style="cursor: pointer;margin-bottom: 10px">程序员</tag>
     <tag style="cursor: pointer;margin-bottom: 10px">iDev</tag>
@@ -26,20 +16,40 @@
 </template>
 
 <script>
+    import {sectionList} from "@/apis";
+
     export default {
-        name: "CatalogNav.vue"
+        name: "CatalogNav.vue",
+        data() {
+            return {
+                sectionList: [],
+            }
+        },
+        methods: {
+            getSectionList() {
+                sectionList().then(res => {
+                    this.sectionList = res.result;
+                }).finally(()=>{
+                })
+            }
+        },
+        mounted() {
+            this.getSectionList();
+        }
     }
 </script>
 
 <style scoped>
-    .ivu-tabs-bar {
-        border-bottom: 1px solid #dcdee2;
-        margin-bottom: 0 !important;
-    }
-    .ivu-tabs{
-        height: 38px;
-    }
+
     .ivu-divider-horizontal {
-        margin: 0 0!important;
+        margin: 0 0 !important;
+    }
+
+    .catalog_wrapper {
+        display: inline-block;
+        position: relative;
+        margin-bottom: 10px;
+        height: 24px;
+        width: 100%;
     }
 </style>

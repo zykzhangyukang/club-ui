@@ -26,7 +26,7 @@
                 </Row>
             </FormItem>
             <FormItem>
-                <Button type="primary" @click="handleSubmit('loginForm')" :loading="btnLoading">立即登录</Button>
+                <Button type="primary" @click="handleSubmit('loginForm')" :loading="btnLoading">登录</Button>
                 <Button @click="handleReset('loginForm')" style="margin-left: 8px">重置</Button>
                 <p style="margin-top: 10px">
                     尚未拥有账户？<a @click="this.$router.push('/register')">注册</a>
@@ -36,7 +36,7 @@
     </div>
 </template>
 <script>
-    import {loginCaptcha, userLogin} from "@/api/api";
+    import {loginCaptcha, userLogin} from "@/apis/user";
     import tool from "@/utils/tool";
 
     export default {
@@ -70,13 +70,13 @@
                 }
                 this.btnLoading = true;
                 userLogin(this.loginForm).then(res => {
-                    this.$Message.success('登录成功!');
+                    this.$Message.success('登录成功！');
+                    this.$router.replace('/');
                 }).catch((e) => {
-                    this.tipMsg = e.msg;
-                    this.loginForm.password = '';
-                    this.loginForm.code = '';
-                    this.loginForm.captchaKey = '';
                     this.getLoginCaptcha();
+                    this.loginForm.code = '';
+                    this.loginForm.password = '';
+                    this.tipMsg = e.msg;
                 }).finally(() => {
                     this.btnLoading = false;
                 })
