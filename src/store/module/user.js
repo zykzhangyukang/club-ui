@@ -24,7 +24,9 @@ export default {
             window.localStorage.removeItem('token');
             window.localStorage.removeItem('refreshToken');
             window.localStorage.removeItem('user');
-            window.location.reload();
+            state.token = '';
+            state.refreshToken = '';
+            state.user = '';
         }
     },
     actions: {

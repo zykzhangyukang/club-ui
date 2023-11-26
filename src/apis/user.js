@@ -1,5 +1,14 @@
 import http from '../utils/request'
 
+/**
+ * 获取用户信息
+ */
+export const userInfo = () => {
+    return http({
+        url: `/api/user/info`,
+        method: 'get',
+    })
+}
 
 /**
  * 用户登录
@@ -9,6 +18,16 @@ export const userLogin = data => {
         url: `/api/user/login`,
         method: 'post',
         data: data
+    })
+}
+
+/**
+ * 用户退出登录
+ */
+export const userLogout = (token) => {
+    return http({
+        url: `/api/user/logout?token=${token}`,
+        method: 'post',
     })
 }
 

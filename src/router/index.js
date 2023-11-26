@@ -1,12 +1,12 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout';
-import LoginLayout from "@/layouts/LoginLayout";
 import IndexView from '@/views/index/Index';
 import LoginView from '@/views/login/Login';
 import RegisterView from '@/views/register/Register';
 
 import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css' // progress bar custom style
+import 'nprogress/nprogress.css'
+import {userInfo} from "@/apis/user"; // progress bar custom style
 NProgress.configure({
     easing:'ease', // 动画方式
     speed: 600, // 递增进度条的速度
@@ -25,27 +25,33 @@ const routes = [
             {
                 path: '',
                 name: 'Index',
-                component: IndexView
+                component: IndexView,
+                meta: { title: '首页'}
+            },
+            {
+                path: '/login',
+                name: 'Login',
+                component: LoginView,
+                meta: { title: '登录'}
             },
             {
                 path: '/register',
                 name: 'Register',
-                component: RegisterView
-            },
-        ]
-    },
-    {
-        path: '',
-        component: LoginLayout,
-        children: [
-            {
-                path: '/login',
-                name: 'Login',
-                component: LoginView
+                component: RegisterView,
+                meta: { title: '注册'}
             },
         ]
     }
 ]
+
+
+function getPageTitle(pageTitle) {
+    let titleStr = ''
+    if (pageTitle) {
+        titleStr += `${pageTitle}`
+    }
+    return titleStr + ' - ' + '章鱼社区'
+}
 
 const router = createRouter({
     mode: 'history',
@@ -53,8 +59,31 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach(async(to, from, next) => {
+const whiteUrl = ['/login', '/register', '/'] // 无需鉴权页面
+
+router.beforeEach(async (to, from, next) => {
+
     NProgress.start() // start progress bar
+    document.title = getPageTitle(to.meta.title || to.name); // 设置页面title
+
+    const token = window.localStorage.getItem('token');
+    if (!token) {
+        if (whiteUrl.includes(to.path)) {
+            next()
+        } else {
+            next({ path: '/', query: { redirect: to.fullPath } })
+        }
+    } else {
+        if (to.path === '/login' || to.path === '/register') {
+            next({path: '/'})
+        }
+
+        // 如果有token获取用户信息
+        userInfo().then(res=>{
+            console.log(res)
+        })
+    }
+
     next()
 })
 

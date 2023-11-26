@@ -1,5 +1,5 @@
 <template>
-    <div class="guide_nav">
+    <div class="guide_nav" v-if="!currentUser">
         <strong class="title">Club = way to explore</strong>
         <p class="desc">Club 是一个关于分享和探索的地方</p>
         <Divider/>
@@ -16,7 +16,12 @@
     export default {
         data() {
             return {}
-        }
+        },
+        computed:{
+            currentUser(){
+                return this.$store.state.user.user;
+            }
+        },
     }
 </script>
 
@@ -27,6 +32,7 @@
         height: 158px;
         border: 1px solid #eee;
         cursor: pointer;
+        margin-bottom: 20px;
     }
 
     .ivu-divider-horizontal {

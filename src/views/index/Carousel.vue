@@ -1,16 +1,16 @@
 <template>
     <Carousel v-model="value" loop>
         <CarouselItem>
-            <div class="demo-carousel">1</div>
+            <div class="demo-carousel">轮播图1</div>
         </CarouselItem>
         <CarouselItem>
-            <div class="demo-carousel">2</div>
+            <div class="demo-carousel">轮播图2</div>
         </CarouselItem>
         <CarouselItem>
-            <div class="demo-carousel">3</div>
+            <div class="demo-carousel">轮播图3</div>
         </CarouselItem>
         <CarouselItem>
-            <div class="demo-carousel">4</div>
+            <div class="demo-carousel">轮播图4</div>
         </CarouselItem>
     </Carousel>
 </template>

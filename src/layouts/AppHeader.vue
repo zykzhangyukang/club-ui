@@ -2,44 +2,28 @@
     <div class="navbar">
         <div class="container">
             <div class="left-content">
-                <div class="logo"></div>
+                <div class="logo" @click="goHome"></div>
                 <div class="menu">
                     <a href="#" @click="goHome"> <Icon type="ios-home" />首页</a>
                     <a href="#"> <Icon type="ios-keypad" />主题</a>
                 </div>
             </div>
-            <div class="right-content" v-if="!currentUser">
-                <a href="#" @click="goToLogin" >登录</a>
-                <a href="#" @click="goToRegister">注册</a>
-            </div>
-            <div  class="right-content" v-else>
-                <Notification></Notification>
-                <Dropdown>
-                    <a href="javascript:void(0)">
-                        <Avatar class="avatar"  shape="square" icon="ios-person" :src="currentUser.avatar"></Avatar>
-                    </a>
-                    <template #list>
-                        <DropdownMenu>
-                            <DropdownItem>个人资料</DropdownItem>
-                            <DropdownItem>消息中心</DropdownItem>
-                            <DropdownItem>我的关注</DropdownItem>
-                            <DropdownItem divided @click="logout">注销登录</DropdownItem>
-                        </DropdownMenu>
-                    </template>
-                </Dropdown>
+            <div class="right-content">
+                <!-- 未登录态 -->
+                <a href="#" @click="goToLogin" v-if="!currentUser">登录</a>
+                <a href="#" @click="goToRegister" v-if="!currentUser">注册</a>
+                <!-- 登录态 -->
+                <a href="#"  v-if="currentUser"><Icon style="font-size: 15px" type="md-notifications-outline" /> 通知</a>
+                <a href="#" @click="logout" v-if="currentUser"><Icon type="md-log-out" />登出</a>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import Notification from "@/layouts/Notification";
-    import MyWebSock from "@/utils/socket";
-
     export default {
         name: "AppHeader.vue",
         components:{
-            Notification
         },
         methods: {
             goHome() {
@@ -53,6 +37,8 @@
             },
             logout(){
                 this.$store.commit('user/logout');
+                this.$Message.success('注销登录成功！');
+                this.$router.push('/login')
             }
         },
         computed:{
@@ -60,16 +46,6 @@
                 return this.$store.state.user.user;
             }
         },
-        created() {
-            if(this.$store.state.user.user){
-                this.stompClient = new MyWebSock();
-            }
-        },
-        beforeUnmount() {
-            if(this.stompClient){
-                this.stompClient.disconnect()
-            }
-        }
     }
 </script>
 
@@ -110,6 +86,7 @@
         background-image: url("../assets/logo.png");
         background-size: cover;
         background-position: center;
+        cursor: pointer;
     }
 
     /* 菜单样式 */
@@ -121,7 +98,7 @@
     .menu a {
         color: #515a6e;
         text-decoration: none;
-        margin-right: 20px; /* 添加间距 */
+        margin-right: 30px; /* 添加间距 */
     }
 
     /* 最后一个菜单项样式 */

@@ -1,6 +1,6 @@
 <template>
     <div class="advert_nav">
-        <h3>敬请期待！</h3>
+        <h3>广告位招租！</h3>
     </div>
 </template>
 

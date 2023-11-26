@@ -10,13 +10,13 @@
                     {
                         key: '帮助',
                         title: '帮助',
-                        href: 'https://www.iviewui.com',
+                        href: 'https://www.coderman.love',
                         blankTarget: true
                     },
                     {
                         key: 'github',
                         icon: 'logo-github',
-                        href: 'https://github.com/view-design/ViewUIPlus',
+                        href: 'https://github.com/zykzhangyukang',
                         blankTarget: true
                     },
                     {
