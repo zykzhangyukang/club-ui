@@ -7,3 +7,4 @@ import 'view-ui-plus/dist/styles/viewuiplus.css'
 
 const  app = createApp(App);
 app.use(store).use(router).use(ViewUIPlus).mount('#app')
+app.config.warnHandler = () => null // 去除控制台警告信息

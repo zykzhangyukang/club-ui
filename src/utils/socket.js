@@ -58,11 +58,12 @@ class MyWebSock {
 
     // 监听系统消息
     subSysMsg(msg) {
-        const body = JSON.parse(msg.body)
     }
 
     // 监听用户消息
     subUserMsg(msg) {
+        const body = JSON.parse(msg.body);
+        store.commit('notification/ADD_MSG', body)
     }
 }
 

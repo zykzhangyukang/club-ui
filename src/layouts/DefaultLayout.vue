@@ -4,7 +4,7 @@
         <AppHeader></AppHeader>
         <!-- 主内容区域 -->
         <Content class="layout-content">
-            <router-view/>
+            <router-view></router-view>
         </Content>
         <!-- 网站页尾部分 -->
         <AppFooter></AppFooter>

@@ -1,7 +1,7 @@
 <template>
     <Row :gutter="16">
         <Col span="18">
-            <!-- 主要内容区域 -->
+              <!-- 主要内容区域 -->
             <div class="main_content">
                 <!-- 轮播图部分 -->
                 <Carousel></Carousel>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import CatalogNav from "@/views/index/CatalogNav";
+    import CatalogNav from "@/views/index/SectionNav";
     import PostList from "@/views/index/PostList";
     import Carousel from "@/views/index/Carousel";
     import GuideNav from "@/layouts/GuideNav";

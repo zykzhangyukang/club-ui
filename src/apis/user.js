@@ -11,6 +11,28 @@ export const userInfo = () => {
 }
 
 /**
+ * 修改用户信息初始化
+ */
+export const userUpdateInit = () => {
+    return http({
+        url: `/api/user/update/init`,
+        method: 'get',
+    })
+}
+
+
+/**
+ * 修改用户信息
+ */
+export const userUpdateInfo = (data) => {
+    return http({
+        url: `/api/user/update/info`,
+        method: 'put',
+        data
+    })
+}
+
+/**
  * 用户登录
  */
 export const userLogin = data => {

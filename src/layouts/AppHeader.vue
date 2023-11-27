@@ -13,21 +13,27 @@
                 <a href="#" @click="goToLogin" v-if="!currentUser">登录</a>
                 <a href="#" @click="goToRegister" v-if="!currentUser">注册</a>
                 <!-- 登录态 -->
-                <a href="#"  v-if="currentUser"><Icon style="font-size: 15px" type="md-notifications-outline" /> 通知</a>
-                <a href="#" @click="logout" v-if="currentUser"><Icon type="md-log-out" />登出</a>
+                <a href="#" style="color: #515a6e"  @click="goToSettings" v-if="currentUser"><Icon type="ios-settings" />设置</a>
+                <a href="#"  v-if="currentUser"> <Notification></Notification></a>
+                <a href="#" @click="logout" v-if="currentUser">登出</a>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import Notification from "@/layouts/Notification";
     export default {
         name: "AppHeader.vue",
         components:{
+            Notification
         },
         methods: {
             goHome() {
                 this.$router.push('/');
+            },
+            goToSettings() {
+                this.$router.push('/settings');
             },
             goToLogin() {
                 this.$router.push('/login');
@@ -96,7 +102,7 @@
 
     /* 菜单项样式 */
     .menu a {
-        color: #515a6e;
+        color: #666;
         text-decoration: none;
         margin-right: 30px; /* 添加间距 */
     }
@@ -113,10 +119,9 @@
 
     /* 右侧链接样式 */
     .right-content a {
-        color: #515a6e;
+        color: #666;
         text-decoration: none;
         margin-right: 20px; /* 右侧链接间距 */
-
         align-items: center; /* 垂直居中 */
     }
 

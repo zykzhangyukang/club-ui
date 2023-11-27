@@ -3,10 +3,11 @@ import DefaultLayout from '@/layouts/DefaultLayout';
 import IndexView from '@/views/index/Index';
 import LoginView from '@/views/login/Login';
 import RegisterView from '@/views/register/Register';
+import SettingsView from '@/views/settings/Settings';
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
-import {userInfo} from "@/apis/user"; // progress bar custom style
+import {userInfo} from "@/apis/user";
 NProgress.configure({
     easing:'ease', // 动画方式
     speed: 600, // 递增进度条的速度
@@ -27,6 +28,12 @@ const routes = [
                 name: 'Index',
                 component: IndexView,
                 meta: { title: '首页'}
+            },
+            {
+                path: '/settings',
+                name: 'Settings',
+                component: SettingsView,
+                meta: { title: '设置'}
             },
             {
                 path: '/login',
@@ -80,7 +87,6 @@ router.beforeEach(async (to, from, next) => {
 
         // 如果有token获取用户信息
         userInfo().then(res=>{
-            console.log(res)
         })
     }
 

@@ -19,25 +19,30 @@
         </Row>
         <Divider/>
         <div>
-          <Notification></Notification>
+            <span style="font-size: 11px;margin-top: 5px;display: inline-block"> <Badge color="green" text="在线状态" ></Badge> </span>
         </div>
     </div>
 </template>
 
-<script>
-    import Notification from "@/layouts/Notification";
+<script >
     export default {
+        name: 'UserInfoNav',
         components:{
-          Notification
         },
         data() {
-            return {}
+            return {
+            }
         },
         computed:{
             currentUser(){
                 return this.$store.state.user.user;
+            },
+            noReadCount() {
+                return this.$store.state.notification.noRead
             }
         },
+        methods:{
+        }
     }
 </script>
 
