@@ -4,7 +4,7 @@
               <!-- 主要内容区域 -->
             <div class="main_content">
                 <!-- 轮播图部分 -->
-                <Carousel></Carousel>
+<!--                <Carousel></Carousel>-->
                 <!-- 分类导航 -->
                 <CatalogNav></CatalogNav>
                 <!-- 帖子列表 -->
@@ -42,6 +42,11 @@
             AdvertNav,
             UserInfoNav
         },
+        data(){
+            return{
+                switchValue: true,
+            }
+        },
         computed: {
             currentUser() {
                 return this.$store.state.user.user;
@@ -51,12 +56,4 @@
 </script>
 
 <style scoped>
-    .main_content {
-        padding: 20px;
-        background: #fff !important;
-        border: 1px solid #eee;
-    }
-    .sep20 {
-        height: 20px;
-    }
 </style>

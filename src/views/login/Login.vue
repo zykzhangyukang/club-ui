@@ -30,7 +30,7 @@
                             </Row>
                         </FormItem>
                         <FormItem>
-                            <Button type="primary" @click="handleSubmit('loginForm')" :loading="btnLoading">登录</Button>
+                            <Button type="primary" @click="handleSubmit('loginForm')" :loading="btnLoading">立即登录</Button>
                             <Button @click="handleReset('loginForm')" style="margin-left: 8px">重置</Button>
                             <p style="margin-top: 10px">
                                 尚未拥有账户？<a @click="this.$router.push('/register')">注册</a>

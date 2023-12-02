@@ -12,8 +12,8 @@
                     <Divider type="vertical" />
                     <a href="#">关注 (5)</a>
                 </div>
-                <a style="font-size: 12px;margin-left: 10px;margin-top: 6px;display: inline-block;color: #515a6e;font-family: 'Comic Sans MS',serif">
-                   {{currentUser.username}}
+                <a style="font-size: 12px;margin-left: 10px;margin-top: 6px;display: inline-block;color: #515a6e;">
+                    {{currentUser.username}} <img width="18" height="18" :src="require('@/assets/img/silver.png')"/>  <img width="16" height="16" :src="require('@/assets/img/point.png')"/> (20)
                 </a>
             </Col>
         </Row>

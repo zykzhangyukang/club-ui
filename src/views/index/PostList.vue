@@ -1,4 +1,5 @@
 <template>
+    <div class="list_wrapper">
     <List :loading="false" :border="false">
         <ListItem>
             <ListItemMeta avatar="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/user/2023-11-25/png/1700898910_Dln3.png" title="后端 Python 潮流周刊 #27：应该如何处理程序的错误？" description="超大特大城市名单有了新变化!住房和城乡建设部日前发布。" />
@@ -242,9 +243,17 @@
     <div style="text-align: right">
         <Button size="small" style="display: inline-block">查看更多</Button>
     </div>
+    </div>
 </template>
 <script>
     export default {
 
     }
 </script>
+<style scoped>
+    .list_wrapper{
+        background: #ffffff;
+        padding: 10px;
+        border: 1px solid #e4e6eb;
+    }
+</style>

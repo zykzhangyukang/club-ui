@@ -6,7 +6,7 @@ import http from '../utils/request'
  */
 export const sectionList = () => {
     return http({
-        url: `/api/section/list`,
+        url: `/api/index/sections`,
         method: 'get',
     })
 }
@@ -14,9 +14,9 @@ export const sectionList = () => {
 /**
  * 获取未读消息数量
  */
-export const notificationUnReadCount = () => {
+export const notificationCount = () => {
     return http({
-        url: `/api/notification/getUnReadCount`,
+        url: `/api/notification/count`,
         method: 'get',
     })
 }

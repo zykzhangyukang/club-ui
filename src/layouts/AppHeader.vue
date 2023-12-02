@@ -4,8 +4,9 @@
             <div class="left-content">
                 <div class="logo" @click="goHome"></div>
                 <div class="menu">
-                    <a href="#" @click="goHome"> <Icon type="ios-home" />首页</a>
-                    <a href="#"> <Icon type="ios-keypad" />主题</a>
+                    <a class="active" href="#" @click="goHome"><Icon type="md-home" />首页</a>
+                    <a href="#"><Icon type="md-paper" />文章</a>
+                    <a href="#"> <Icon type="ios-keypad" />话题</a>
                 </div>
             </div>
             <div class="right-content">
@@ -13,8 +14,8 @@
                 <a href="#" @click="goToLogin" v-if="!currentUser">登录</a>
                 <a href="#" @click="goToRegister" v-if="!currentUser">注册</a>
                 <!-- 登录态 -->
-                <a href="#" style="color: #515a6e"  @click="goToSettings" v-if="currentUser"><Icon type="ios-settings" />设置</a>
                 <a href="#"  v-if="currentUser"> <Notification></Notification></a>
+                <a href="#" style="color: #515a6e"  @click="goToSettings" v-if="currentUser">设置</a>
                 <a href="#" @click="logout" v-if="currentUser">登出</a>
             </div>
         </div>
@@ -70,7 +71,7 @@
 
     /* 容器样式 */
     .container {
-        width: 1076px;
+        width: 1100px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -132,5 +133,8 @@
 
     .menu a:hover {
         color: #2d8cf0; /* 悬停时颜色变化 */
+    }
+    .active{
+        color: #2d8cf0!important;
     }
 </style>
