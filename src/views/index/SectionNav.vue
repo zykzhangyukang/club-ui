@@ -1,57 +1,46 @@
 <template>
     <div class="section_nav_wrapper">
         <div class="first_level_section">
-            <a :class="['全部' === activeNameFirst ? 'first_level_item current_active': 'first_level_item']"
-               @click="selectFirstSection('全部')">全部</a>
-            <a :class="[item.sectionName === activeNameFirst ? 'first_level_item current_active': 'first_level_item']"
-               v-for="item in sectionList" @click="selectFirstSection(item.sectionName)">{{item.sectionName}}</a>
+            <a v-for="item in sectionList" :key="item.sectionId"
+               :class="[item === activeFirstSection ? 'first_level_item current_active': 'first_level_item']"
+               @click="selectFirstSection(item)">{{item.sectionName}}</a>
         </div>
         <div class="second_level_section">
-            <a :class="['全部' === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection('全部')">全部</a>
-            <a class="second_level_item"
-               :class="['程序员' === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection('程序员')">程序员</a>
-            <a class="second_level_item"
-               :class="['Python' === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection('Python')">Python</a>
-            <a class="second_level_item"
-               :class="['Java' === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection('Java')">Java</a>
-            <a class="second_level_item"
-               :class="['Android' === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection('Android')">Android</a>
-            <a class="second_level_item"
-               :class="['运维' === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection('运维')">运维</a>
-            <a class="second_level_item"
-               :class="['大数据' === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection('大数据')">大数据</a>
+            <a v-for="subItem in activeFirstSectionChildren" :key="subItem.sectionId"
+               :class="[subItem.sectionName === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
+               @click="selectSecondSection(subItem.sectionName)">{{subItem.sectionName}}</a>
         </div>
     </div>
 </template>
 
 <script>
-    import {sectionList} from "@/apis";
+    import { sectionList } from "@/apis";
 
     export default {
         name: "CatalogNav.vue",
         data() {
             return {
                 sectionList: [],
-                activeNameFirst: '全部',
+                activeFirstSection: null,
                 activeNameSecond: '全部',
+                activeFirstSectionChildren: []
             }
         },
         methods: {
             getSectionList() {
                 sectionList().then(res => {
                     this.sectionList = res.result;
+                    if (this.sectionList.length > 0) {
+                        this.activeFirstSection = this.sectionList[0]; // Set the first section as active on initialization
+                        this.activeFirstSectionChildren = this.activeFirstSection.children || [];
+                    }
                 }).finally(() => {
-                })
+                });
             },
             selectFirstSection(item) {
-                this.activeNameFirst = item;
+                this.activeFirstSection = item;
+                this.activeFirstSectionChildren = item.children || [];
+                this.activeNameSecond = '全部';
             },
             selectSecondSection(item) {
                 this.activeNameSecond = item;
@@ -81,7 +70,7 @@
     }
 
     .second_level_section {
-        height: 42px;
+        height: 40px;
         background: #f9f9f9;
         padding: 10px 10px 10px 20px;
         font-size: 14px;
@@ -113,13 +102,13 @@
         padding: 5px 8px;
         margin-right: 5px;
         border-radius: 3px;
-        background-color: #00b96b;
+        background-color: #334;
         color: #fff;
         transition: all 200ms;
     }
 
     .second_level_section > .current_active {
         text-decoration: underline;
-        color: #515a6e;
+        color: #334;
     }
 </style>
