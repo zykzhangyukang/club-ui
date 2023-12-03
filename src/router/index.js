@@ -4,6 +4,7 @@ import IndexView from '@/views/index/Index';
 import LoginView from '@/views/login/Login';
 import RegisterView from '@/views/register/Register';
 import SettingsView from '@/views/settings/Settings';
+import PostPublishView  from '@/views/post/PostPublish'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
@@ -46,6 +47,12 @@ const routes = [
                 name: 'Register',
                 component: RegisterView,
                 meta: { title: '注册'}
+            },
+            {
+                path: '/post/publish',
+                name: 'PostPublish',
+                component: PostPublishView,
+                meta: { title: '发帖'}
             },
         ]
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="advert_nav">
-        <h3>广告位招租！</h3>
+        <h4>广告位招租！</h4>
     </div>
 </template>
 
@@ -13,11 +13,11 @@
 <style scoped>
 .advert_nav{
     background: #ffffff;
-    height: 225px;
-    border: 1px solid #eee;
+    height: 100px;
     cursor: pointer;
     text-align: center;
     vertical-align: middle;
-    line-height: 225px;
+    line-height: 100px;
+    border: 1px solid #e4e6eb;
 }
 </style>

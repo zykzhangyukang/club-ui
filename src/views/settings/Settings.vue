@@ -95,6 +95,62 @@
                         value: 'JavaScript',
                         label: 'JavaScript'
                     },
+                    {
+                        value: '人文艺术',
+                        label: '人文艺术'
+                    },
+                    {
+                        value: '历史爱好者',
+                        label: '历史爱好者'
+                    },
+                    {
+                        value: '游戏开发',
+                        label: '游戏开发'
+                    },
+                    {
+                        value: '影视剧迷',
+                        label: '影视剧迷'
+                    },
+                    {
+                        value: '健身运动',
+                        label: '健身运动'
+                    },
+                    {
+                        value: '旅行探险',
+                        label: '旅行探险'
+                    },
+                    {
+                        value: '音乐制作',
+                        label: '音乐制作'
+                    },
+                    {
+                        value: '科幻爱好者',
+                        label: '科幻爱好者'
+                    },
+                    {
+                        value: '宠物爱好者',
+                        label: '宠物爱好者'
+                    },
+                    {
+                        value: '环保志愿者',
+                        label: '环保志愿者'
+                    },
+                    {
+                        value: '社交达人',
+                        label: '社交达人'
+                    },
+                    {
+                        value: '心理健康',
+                        label: '心理健康'
+                    },
+                    {
+                        value: '创业者',
+                        label: '创业者'
+                    },
+                    {
+                        value: '摄影师',
+                        label: '摄影师'
+                    }
                 ],
                 userInfoFormRule:[
 

@@ -1,7 +1,7 @@
 <template>
     <div class="user-info-card" v-if="currentUser">
         <div class="user-avatar">
-            <Avatar :size="40" shape="square" :src="currentUser.avatar" icon="ios-person" />
+            <Avatar :size="45" shape="square" :src="currentUser.avatar" icon="ios-person" />
         </div>
         <div class="user-info">
             <div class="user-text">
@@ -13,8 +13,10 @@
             </div>
             <div class="user-description">
                 <a class="username" href="#">
+                    <span style="display: inline-block;width: 80px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
+                           {{ currentUser.nickname }}
+                    </span>
                     <Badge color="green" text="在线" class="online-status ivu-mr-4" />
-                    {{ currentUser.nickname }}
                     <img width="18" height="18" :src="require('@/assets/img/silver.png')" />
                 </a>
             </div>
@@ -37,15 +39,16 @@
     .user-info-card {
         display: flex;
         align-items: center;
-        padding: 20px;
+        padding: 15px;
         background-color: #ffffff;
-        border: 1px solid #eee;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        /*border-radius: 8px;*/
+        margin-bottom: 10px;
+        border: 1px solid #e4e6eb;
     }
 
     .user-avatar {
         margin-right: 20px;
+        align-self: flex-start;
     }
 
     .user-info {
@@ -70,9 +73,18 @@
         margin-bottom: 12px;
     }
 
+    .username {
+        display: flex;
+        align-items: center;
+        color: #252933;
+        font-size: 11px;
+        text-decoration: underline;
+    }
+
     .username img {
         margin-left: 5px;
-        vertical-align: middle;
+        width: 18px;
+        height: 18px;
     }
 
     .online-status {
