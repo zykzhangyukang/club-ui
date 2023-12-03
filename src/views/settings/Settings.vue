@@ -51,6 +51,8 @@
         <Col span="6">
             <div class="right_content">
                 <UserInfoNav></UserInfoNav>
+                <!-- 广告区域-->
+                <AdvertNav></AdvertNav>
             </div>
         </Col>
     </Row>
@@ -58,11 +60,13 @@
 
 <script>
     import UserInfoNav from "@/layouts/UserInfoNav";
+    import AdvertNav from "@/layouts/AdvertNav";
     import {userUpdateInfo, userUpdateInit} from "@/apis/user";
     export default {
         name: "Settings.vue",
         components:{
-          UserInfoNav
+          UserInfoNav,
+            AdvertNav
         },
         data(){
             return {
