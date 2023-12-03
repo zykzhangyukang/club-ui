@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vueup/vue-quill": "^1.2.0",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^0.19.2",
     "core-js": "^3.8.3",
     "nprogress": "^0.2.0",

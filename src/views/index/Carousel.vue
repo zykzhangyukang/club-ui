@@ -1,4 +1,5 @@
 <template>
+    <div class="carousel_wrapper">
     <Carousel v-model="value" loop>
         <CarouselItem>
             <div class="demo-carousel">
@@ -16,6 +17,7 @@
             </div>
         </CarouselItem>
     </Carousel>
+    </div>
 </template>
 <script>
     export default {
@@ -36,6 +38,10 @@
         background: #eeeeee;
         border: 1px solid #efefef;
         margin-bottom: 20px;
+    }
+    .carousel_wrapper{
+        background: #ffffff;
+        border: 1px solid #e4e6eb;
     }
 
 </style>

@@ -12,10 +12,24 @@
                         <Input v-model="postForm.title" placeholder="请输入帖子标题..."></Input>
                     </FormItem>
                     <FormItem label="帖子内容">
-                        <QuillEditor ref="quillEditor" theme="snow" :toolbar="toolbar" style="height: 250px"></QuillEditor>
+                        <div style="border: 1px solid #e4e6eb">
+                            <Toolbar
+                                    style="border-bottom: 1px solid #e4e6eb"
+                                    :editor="editorRef"
+                                    :defaultConfig="toolbarConfig"
+                                    :mode="mode"
+                            />
+                            <Editor
+                                    style="height: 300px; overflow-y: hidden;"
+                                    v-model="postForm.content"
+                                    :defaultConfig="editorConfig"
+                                    :mode="mode"
+                                    @onCreated="handleCreated"
+                            />
+                        </div>
                     </FormItem>
                     <FormItem label="所属板块">
-                        <Cascader :data="data" v-model="postForm.sectionId" v-width="200" trigger="hover"/>
+                        <Cascader :data="selectList" v-model="postForm.sectionId" v-width="200" trigger="hover"/>
                     </FormItem>
                     <FormItem>
                         <Button type="primary" @click="createPost">立即发布</Button>
@@ -36,9 +50,12 @@
     import UserInfoNav from "@/layouts/UserInfoNav";
     import PublishTips from '@/views/post/PublishTips'
     import {sectionList} from "@/apis";
-    import {QuillEditor} from '@vueup/vue-quill'
-    import '@vueup/vue-quill/dist/vue-quill.snow.css';
     import {getPostToken, postPublish} from "@/apis/post";
+    import '@wangeditor/editor/dist/css/style.css' // 引入 css
+    import {onBeforeUnmount, ref, shallowRef, onMounted, reactive} from 'vue'
+    import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
+    import {Message} from 'view-ui-plus'
+    import {useRouter} from 'vue-router'
 
 
     export default {
@@ -46,62 +63,104 @@
         components: {
             UserInfoNav,
             PublishTips,
-            QuillEditor
+            Editor,
+            Toolbar
         },
-        data() {
-            return {
-                postForm: {
-                    title: '',
-                    token: '',
-                    content: '',
-                    sectionId: [],
-                },
-                data: [],
-                toolbar: [
-                    [{'header': [1, 2, 3, 4, 5, 6, false]}],               // custom button values
-                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                    ['blockquote', 'code-block'],
-                    [{'list': 'ordered'}, {'list': 'bullet'}],
-                    [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
-                    [{'direction': 'rtl'}],                         // text direction
-                    ['link', 'image']
-                ]
+        setup() {
+            const router = useRouter();
+            // 编辑器实例，必须用 shallowRef
+            const editorRef = shallowRef()
+            // 栏目数据
+            const selectList = ref([]);
+            // 表单数据
+            const postForm = reactive({
+                title: '',
+                token: '',
+                content: '',
+                sectionId: [],
+            })
+
+            const toolbarConfig = {}
+            const editorConfig = {
+                placeholder: '请输入内容...',
+                MENU_CONF: {
+                    uploadImage: {
+                        server: process.env.VUE_APP_API + '/api/post/upload/image',
+                        allowedFileTypes: ['image/*'],
+                        fieldName: 'file',
+                        maxNumberOfFiles: 1,
+                        maxFileSize: 1024 * 1024,
+                        headers: {
+                            Authorization: localStorage.getItem('token') || ''
+                        },
+                        onSuccess(file, res) {
+                            Message.success("上传图片成功！");
+                        },
+                        onError(file, err, res) {
+                            Message.warning("上传图片错误！")
+                        },
+                        onFailed(file, res) {
+                            Message.warning("上传图片失败！")
+                        },
+                        customInsert(res , insertFn) {
+                            insertFn(res.result, '', '')
+                        },
+                    }
+                }
             }
-        }, methods: {
-            getSectionList() {
+
+            // 组件销毁时，也及时销毁编辑器
+            onBeforeUnmount(() => {
+                const editor = editorRef.value
+                if (editor == null) return
+                editor.destroy()
+            })
+
+            onMounted(() => {
+                initPostToken();
+                initSectionList();
+            })
+
+            const handleCreated = (editor) => {
+                editorRef.value = editor // 记录 editor 实例，重要！
+            }
+
+            function initSectionList() {
                 sectionList().then(res => {
-                    this.data = this.transformData(res.result);
+                    selectList.value = transformData(res.result);
                 })
-            },
-            getPostToken() {
+            }
+
+            function initPostToken() {
                 getPostToken().then(res => {
-                    this.postForm.token = res.result;
+                    postForm.token = res.result;
                 })
-            },
-            createPost() {
-                if (!this.postForm.title) {
-                    return this.$Message.warning("帖子标题不能为空！");
+            }
+
+            function createPost() {
+                if (!postForm.title) {
+                    return Message.warning("帖子标题不能为空！");
                 }
-                const text = this.$refs.quillEditor.getText();
-                const html = this.$refs.quillEditor.getHTML();
-                if (!text || text === '' || text.trim().length ===0) {
-                    return this.$Message.warning("帖子内容不能为空！");
+                if (!postForm.content) {
+                    return Message.warning("帖子内容不能为空！");
                 }
-                const sectionArr = this.postForm.sectionId;
+                const sectionArr = postForm.sectionId;
                 if (!sectionArr || sectionArr.length === 0 || sectionArr.length !== 2) {
-                    return this.$Message.warning("所属栏目不能为空！");
+                    return Message.warning("所属栏目不能为空！");
                 }
                 const param = {
-                    title: this.postForm.title,
-                    token: this.postForm.token,
-                    content: html,
+                    title: postForm.title,
+                    token: postForm.token,
+                    content: postForm.content,
                     sectionId: sectionArr[1]
                 }
-                postPublish(param).then(res=>{
-                    console.log(res)
+                postPublish(param).then(res => {
+                    Message.success("创建帖子成功！");
+                    router.push('/')
                 })
-            },
-            transformData(res) {
+            }
+
+            function transformData(res) {
                 const transformedData = [];
                 res.forEach(section => {
                     const newSection = {
@@ -121,24 +180,29 @@
                     transformedData.push(newSection);
                 });
                 return transformedData;
-            },
+            }
+
+            return {
+                editorRef,
+                selectList,
+                postForm,
+                mode: 'simple',
+                toolbarConfig,
+                editorConfig,
+                handleCreated,
+                createPost
+            };
         },
-        created() {
-            this.getSectionList();
-            this.getPostToken();
-        }
     }
 </script>
-<style>
-    .ql-toolbar.ql-snow {
-        padding: 2px !important;
-        font-family: "Comic Sans MS", serif;
-    }
-</style>
 <style scoped>
     .main_content {
         padding: 20px;
         background: #fff !important;
         border: 1px solid #e4e6eb;
+    }
+
+    .w-e-full-screen-container {
+        z-index: 1000 !important;
     }
 </style>
