@@ -6,7 +6,11 @@
             <template #default>
                 <List :loading="loading" :border="false">
                     <ListItem v-for="item in postList" :key="item.postId">
-                        <ListItemMeta :avatar="item.avatar" :title="item.title" description="超大特大城市名单有了新变化!住房和城乡建设部日前发布。"/>
+                        <ListItemMeta :avatar="item.avatar" :title="item.title" description="超大特大城市名单有了新变化!住房和城乡建设部日前发布。">
+                            <template v-slot:avatar>
+                                <Avatar  :src="item.avatar" size="35"  />
+                            </template>
+                        </ListItemMeta>
                         <template #action>
                             <li>
                                 <Icon type="ios-star-outline"/>
