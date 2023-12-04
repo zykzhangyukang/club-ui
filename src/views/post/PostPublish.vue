@@ -1,4 +1,5 @@
 <template>
+    <Content class="layout-content">
     <Row :gutter="16">
         <Col span="18">
             <div class="main_content">
@@ -44,6 +45,7 @@
             </div>
         </Col>
     </Row>
+    </Content>
 </template>
 
 <script>
@@ -97,7 +99,7 @@
                             Message.success("上传图片成功！");
                         },
                         onError(file, err, res) {
-                            Message.warning("上传图片错误！")
+                            Message.warning("上传图片错误！"+ err)
                         },
                         onFailed(file, res) {
                             Message.warning("上传图片失败！")
@@ -105,6 +107,13 @@
                         customInsert(res , insertFn) {
                             insertFn(res.result, '', '')
                         },
+                    },
+                    codeSelectLang: {
+                        codeLangs: [
+                            { text: 'CSS', value: 'css' },
+                            { text: 'HTML', value: 'html' },
+                            { text: 'XML', value: 'xml' },
+                        ]
                     }
                 }
             }
@@ -204,5 +213,10 @@
 
     .w-e-full-screen-container {
         z-index: 1000 !important;
+    }
+    .layout-content {
+        background: #f6f8fa !important;
+        width: 1060px;
+        margin: 20px auto;
     }
 </style>

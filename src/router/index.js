@@ -4,7 +4,7 @@ import IndexView from '@/views/index/Index';
 import LoginView from '@/views/login/Login';
 import RegisterView from '@/views/register/Register';
 import SettingsView from '@/views/settings/Settings';
-import PostPublishView  from '@/views/post/PostPublish'
+import PostPublishView from '@/views/post/PostPublish'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
@@ -85,7 +85,7 @@ router.beforeEach(async (to, from, next) => {
         if (whiteUrl.includes(to.path)) {
             next()
         } else {
-            next({ path: '/', query: { redirect: to.fullPath } })
+            next({path: '/', query: {redirect: to.fullPath}})
         }
     } else {
         if (to.path === '/login' || to.path === '/register') {
@@ -93,14 +93,14 @@ router.beforeEach(async (to, from, next) => {
         }
 
         // 如果有token获取用户信息
-        userInfo().then(res=>{
+        userInfo().then(res => {
         })
     }
 
     next()
 })
 
-router.afterEach(async(to, from) => {
+router.afterEach(async (to, from) => {
     NProgress.done() // finish progress bar
 })
 

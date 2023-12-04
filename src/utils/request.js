@@ -49,7 +49,13 @@ http.interceptors.response.use(
             if (error.response.status === 400) {
                 Message.warning('请求参数错误！');
 
-            }else if (error.response.status === 403) {
+            }else if (error.response.status === 401) {
+
+                Message.error('用户会话已过期！');
+                window.localStorage.clear();
+                this.$router.push('/login')
+
+            } else if (error.response.status === 403) {
                 Message.error('您没有访问该资源的权限！');
 
             } else if (error.response.status === 404) {

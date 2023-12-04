@@ -1,5 +1,5 @@
 <template>
-
+    <Content class="layout-content">
     <Row :gutter="16">
         <Col span="18">
             <!-- 主要内容区域 -->
@@ -51,6 +51,7 @@
             </div>
         </Col>
     </Row>
+    </Content>
 </template>
 <script>
     import tool from "@/utils/tool";
@@ -144,7 +145,9 @@
         background: #fff !important;
         border: 1px solid #eee;
     }
-    .sep20 {
-        height: 20px;
+    .layout-content {
+        background: #f6f8fa !important;
+        width: 1060px;
+        margin: 20px auto;
     }
 </style>

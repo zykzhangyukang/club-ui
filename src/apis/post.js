@@ -1,5 +1,17 @@
 import http from '../utils/request'
 
+
+/**
+ * 获取帖子列表
+ */
+export const getPostPage = (data) => {
+    return http({
+        url: `/api/post/page`,
+        method: 'post',
+        data
+    })
+}
+
 /**
  * 获取创建帖子token
  */
