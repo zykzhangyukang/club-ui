@@ -1,6 +1,6 @@
 <template>
     <div class="list_wrapper">
-        <Skeleton :loading="loading" animated avatar>
+        <Skeleton :loading="loading" animated avatar style="margin-top: 12px">
             <template #template>
             </template>
             <template #default>
@@ -9,6 +9,9 @@
                         <ListItemMeta :avatar="item.avatar" :title="item.title" description="超大特大城市名单有了新变化!住房和城乡建设部日前发布。">
                             <template v-slot:avatar>
                                 <Avatar  :src="item.avatar" size="35"  />
+                            </template>
+                            <template v-slot:description>
+                                {{item.nickname}} • 发布于  • {{item.createdAtStr}}
                             </template>
                         </ListItemMeta>
                         <template #action>
@@ -33,6 +36,7 @@
 </template>
 <script>
     import {getPostPage} from "@/apis/post";
+    import tool from "@/utils/tool";
 
     export default {
         data() {
@@ -50,6 +54,9 @@
                 this.loading = true;
                 getPostPage(this.searchForm).then(res => {
                     this.postList = res.result.dataList;
+                    this.postList.forEach(item=>{
+                        item.createdAtStr = tool.showTime(item.createdAt);
+                    })
                 }).finally(() => {
                     this.loading = false;
                 })

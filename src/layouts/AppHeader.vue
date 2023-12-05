@@ -4,7 +4,7 @@
             <div class="left-content">
                 <div class="logo" @click="goHome"></div>
                 <div class="menu">
-                    <a class="active" href="#" @click="goHome"><Icon type="md-home" />首页</a>
+                    <a :class="[this.$route.meta.title === '首页' ? 'active': '']" href="#" @click="goHome"><Icon type="md-home" />首页</a>
                     <a href="#"><Icon type="md-paper" />文章</a>
                     <a href="#"> <Icon type="ios-keypad" />话题</a>
                 </div>
@@ -15,7 +15,7 @@
                 <a href="#" @click="goToRegister" v-if="!currentUser">注册</a>
                 <!-- 登录态 -->
                 <a href="#"  v-if="currentUser"> <Notification></Notification></a>
-                <a href="#" style="color: #515a6e"  @click="goToSettings" v-if="currentUser">设置</a>
+                <a href="#"   style="color: #515a6e"  @click="goToSettings" v-if="currentUser">设置</a>
                 <a href="#" @click="logout" v-if="currentUser">登出</a>
             </div>
         </div>
@@ -53,6 +53,9 @@
                 return this.$store.state.user.user;
             }
         },
+        created() {
+            console.log(this.$router)
+        }
     }
 </script>
 
