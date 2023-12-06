@@ -8,11 +8,11 @@
                     发帖
                 </h3>
                 <Divider/>
-                <Form :model="postForm" label-position="right" :label-width="80">
-                    <FormItem label="帖子标题">
+                <Form :model="postForm" label-position="right" :label-width="80" :rules="ruleValidate">
+                    <FormItem label="帖子标题" prop="title">
                         <Input v-model="postForm.title" placeholder="请输入帖子标题..."></Input>
                     </FormItem>
-                    <FormItem label="帖子内容">
+                    <FormItem label="帖子内容" prop="content">
                         <div style="border: 1px solid #e4e6eb">
                             <Toolbar
                                     style="border-bottom: 1px solid #e4e6eb"
@@ -29,7 +29,17 @@
                             />
                         </div>
                     </FormItem>
-                    <FormItem label="所属板块">
+                    <FormItem label="添加标签" prop="tags">
+                        <Select v-model="postForm.tags" filterable multiple allow-create :max-tag-count="6" @on-create="selectPostTags" placeholder="按回车键Enter创建标签">
+                            <template #prefix>
+                                <Icon type="ios-pricetags-outline" />
+                            </template>
+                            <Option v-for="item in defaultUserTags" :value="item.value"
+                                    :key="item.value">{{ item.label }}
+                            </Option>
+                        </Select>
+                    </FormItem>
+                    <FormItem label="所属板块" prop="sectionId">
                         <Cascader :data="selectList" v-model="postForm.sectionId" v-width="200" trigger="hover"/>
                     </FormItem>
                     <FormItem>
@@ -69,6 +79,16 @@
             Toolbar
         },
         setup() {
+            const defaultUserTags =    [
+                {
+                    value: '后端开发',
+                    label: '后端开发'
+                },
+                {
+                    value: '前端开发',
+                    label: '前端开发'
+                }
+            ];
             const router = useRouter();
             // 编辑器实例，必须用 shallowRef
             const editorRef = shallowRef()
@@ -79,7 +99,20 @@
                 title: '',
                 token: '',
                 content: '',
-                sectionId: [],
+                sectionId: null,
+                tags: [],
+            })
+            // 规则校验
+            const ruleValidate =reactive({
+                title: [
+                    { required: true, message: '帖子标题不能为空！', trigger: 'blur' }
+                ],
+                content: [
+                    { required: true, message: '帖子内容不能为空！', trigger: 'blur' }
+                ],
+                sectionId: [
+                    { required: true, message: '帖子所属栏目不能为空！', trigger: 'blur' }
+                ],
             })
 
             const toolbarConfig = {}
@@ -161,7 +194,8 @@
                     title: postForm.title,
                     token: postForm.token,
                     content: postForm.content,
-                    sectionId: sectionArr[1]
+                    sectionId: sectionArr[1],
+                    tags: postForm.tags
                 }
                 postPublish(param).then(res => {
                     Message.success("创建帖子成功！");
@@ -191,6 +225,13 @@
                 return transformedData;
             }
 
+            function selectPostTags(val) {
+                defaultUserTags.push({
+                    value: val,
+                    label: val
+                });
+            }
+
             return {
                 editorRef,
                 selectList,
@@ -198,8 +239,11 @@
                 mode: 'simple',
                 toolbarConfig,
                 editorConfig,
+                ruleValidate,
                 handleCreated,
-                createPost
+                defaultUserTags,
+                createPost,
+                selectPostTags
             };
         },
     }

@@ -52,9 +52,6 @@
             currentUser(){
                 return this.$store.state.user.user;
             }
-        },
-        created() {
-            console.log(this.$router)
         }
     }
 </script>

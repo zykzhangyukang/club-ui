@@ -11,21 +11,21 @@
                                 <Avatar  :src="item.avatar" size="35"  />
                             </template>
                             <template v-slot:description>
-                                {{item.nickname}} • 发布于  • {{item.createdAtStr}}
+                                <span class="section_name">{{item.sectionName}} </span> •  <span class="username">{{item.username}}</span> • <span style="font-size: 12px;color: #778087">{{item.createdAtStr}}</span>
                             </template>
                         </ListItemMeta>
                         <template #action>
                             <li>
                                 <Icon type="ios-star-outline"/>
-                                1
+                                {{item.favoritesCount}}
                             </li>
                             <li>
                                 <Icon type="ios-thumbs-up-outline"/>
-                                23
+                                {{item.likesCount}}
                             </li>
                             <li>
                                 <Icon type="ios-chatbubbles-outline"/>
-                                57
+                                {{item.commentsCount}}
                             </li>
                         </template>
                     </ListItem>
@@ -72,5 +72,22 @@
         background: #ffffff;
         padding: 0 10px 10px 10px;
         border: 1px solid #e4e6eb;
+    }
+    .section_name{
+        background: #f5f5f5;
+        font-size: 12px;
+        padding: 0 4px;
+        display: inline-block;
+        border-radius: 2px;
+        color: #999;
+    }
+    .username{
+        font-weight: bold;
+        font-size: 12px;
+        color: #778087;
+        cursor: pointer;
+    }
+    .username:hover{
+        text-decoration: underline;
     }
 </style>
