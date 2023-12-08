@@ -2,7 +2,7 @@
     <div class="navbar">
         <div class="container">
             <div class="left-content">
-                <div class="logo" @click="goHome"></div>
+                <div class="logo" @click="getHomeReload()"></div>
                 <div class="menu">
                     <a :class="[this.$route.meta.title === '首页' ? 'active': '']" href="#" @click="goHome"><Icon type="md-home" />首页</a>
                     <a href="#"><Icon type="md-paper" />文章</a>
@@ -32,6 +32,9 @@
         methods: {
             goHome() {
                 this.$router.push('/');
+            },
+            getHomeReload(){
+              window.location.href = '/'
             },
             goToSettings() {
                 this.$router.push('/settings');
@@ -71,7 +74,7 @@
 
     /* 容器样式 */
     .container {
-        width: 1100px;
+        width: 1080px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -90,7 +93,8 @@
         width: 100px;
         height: 30px;
         border-radius: 3px;
-        background-image: url("../assets/logo.png");
+        /*background-image: url("../assets/logo.png");*/
+        background-image: url("https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/logo.png");
         background-size: cover;
         background-position: center;
         cursor: pointer;

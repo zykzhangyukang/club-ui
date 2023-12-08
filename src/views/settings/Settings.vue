@@ -18,10 +18,8 @@
                                                disabled></Input>
                                     </FormItem>
                                     <FormItem label="用户标签" prop="userTags">
-                                        <Select v-model="userInfoForm.userTags" filterable multiple allow-create
-                                                @on-create="selectUserTags">
-                                            <Option v-for="item in defaultUserTags" :value="item.value"
-                                                    :key="item.value">{{ item.label }}
+                                        <Select v-model="userInfoForm.userTags" filterable multiple allow-create :max-tag-count="13" @on-create="selectUserTags">
+                                            <Option v-for="item in defaultUserTags" :value="item.value" :key="item.value">{{ item.label }}
                                             </Option>
                                         </Select>
                                     </FormItem>

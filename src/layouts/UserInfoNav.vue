@@ -17,7 +17,8 @@
                            {{ currentUser.nickname }}
                     </span>
                     <Badge color="green" text="在线" class="online-status ivu-mr-4" />
-                    <img width="18" height="18" :src="require('@/assets/img/silver.png')" />
+<!--                    <img width="18" height="18" :src="require('@/assets/img/silver.png')" />-->
+                    <img width="18" height="18" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/silver.png" />
                 </a>
             </div>
         </div>

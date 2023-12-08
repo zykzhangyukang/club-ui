@@ -2,19 +2,20 @@
     <div class="section_nav_wrapper">
         <div class="first_level_section">
             <a v-for="item in sectionList" :key="item.sectionId"
-               :class="[item === activeFirstSection ? 'first_level_item current_active': 'first_level_item']"
+               :class="[item.sectionId === activeFirstSection ? 'first_level_item current_active': 'first_level_item']"
                @click="selectFirstSection(item)">{{item.sectionName}}</a>
         </div>
         <div class="second_level_section">
             <a v-for="subItem in activeFirstSectionChildren" :key="subItem.sectionId"
-               :class="[subItem.sectionName === activeNameSecond ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection(subItem.sectionName)">{{subItem.sectionName}}</a>
+               :class="[subItem.sectionId === activeSecondSection ? 'second_level_item current_active': 'second_level_item']"
+               @click="selectSecondSection(subItem)">{{subItem.sectionName}}</a>
         </div>
     </div>
 </template>
 
 <script>
     import { sectionList } from "@/apis";
+    import EventBus from '@/utils/eventBus';
 
     export default {
         name: "CatalogNav.vue",
@@ -22,7 +23,7 @@
             return {
                 sectionList: [],
                 activeFirstSection: null,
-                activeNameSecond: '全部',
+                activeSecondSection: null,
                 activeFirstSectionChildren: []
             }
         },
@@ -31,19 +32,21 @@
                 sectionList().then(res => {
                     this.sectionList = res.result;
                     if (this.sectionList.length > 0) {
-                        this.activeFirstSection = this.sectionList[0]; // Set the first section as active on initialization
-                        this.activeFirstSectionChildren = this.activeFirstSection.children || [];
+                        this.activeFirstSection = this.sectionList[0].sectionId; // Set the first section as active on initialization
+                        this.activeFirstSectionChildren = this.sectionList[0].children || [];
                     }
                 }).finally(() => {
                 });
             },
             selectFirstSection(item) {
-                this.activeFirstSection = item;
+                this.activeFirstSection = item.sectionId;
                 this.activeFirstSectionChildren = item.children || [];
-                this.activeNameSecond = '全部';
+                this.activeSecondSection = null;
+                EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
             },
             selectSecondSection(item) {
-                this.activeNameSecond = item;
+                this.activeSecondSection = item.sectionId;
+                EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
             }
         },
         mounted() {
@@ -67,6 +70,8 @@
         padding: 10px;
         font-size: 14px;
         line-height: 150%;
+        user-select: none;
+        -webkit-user-drag: none;
     }
 
     .second_level_section {
@@ -76,6 +81,8 @@
         font-size: 14px;
         line-height: 150%;
         text-align: left;
+        user-select: none;
+        -webkit-user-drag: none;
     }
 
     .second_level_section > .second_level_item {
@@ -110,5 +117,6 @@
     .second_level_section > .current_active {
         text-decoration: underline;
         color: #334;
+        font-weight: bold;
     }
 </style>

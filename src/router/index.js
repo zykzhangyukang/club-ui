@@ -5,6 +5,7 @@ import LoginView from '@/views/login/Login';
 import RegisterView from '@/views/register/Register';
 import SettingsView from '@/views/settings/Settings';
 import PostPublishView from '@/views/post/PostPublish'
+import PostDetailView from '@/views/post/PostDetail'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
@@ -54,6 +55,12 @@ const routes = [
                 component: PostPublishView,
                 meta: { title: '发帖'}
             },
+            {
+                path: '/post/detail',
+                name: 'PostDetail',
+                component: PostDetailView,
+                meta: { title: '帖子详情'}
+            },
         ]
     }
 ]
@@ -73,7 +80,7 @@ const router = createRouter({
     routes
 })
 
-const whiteUrl = ['/login', '/register', '/'] // 无需鉴权页面
+const whiteUrl = ['/post/detail','/login', '/register', '/'] // 无需鉴权页面
 
 router.beforeEach(async (to, from, next) => {
 

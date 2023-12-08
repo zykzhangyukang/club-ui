@@ -1,27 +1,33 @@
 <template>
     <div class="grid_wrapper">
         <div @click="goCreatePost">
-            <img class="icon" :src="require('@/assets/img/ft.png')" alt="发帖"  />
+<!--            <img class="icon" :src="require('@/assets/img/ft.png')" alt="发帖"  />-->
+            <img class="icon" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/ft.png" alt="发帖"  />
             <span>发帖</span>
         </div>
         <div>
-            <img class="icon" :src="require('@/assets/img/qa.png')" alt="提问" />
+<!--            <img class="icon" :src="require('@/assets/img/qa.png')" alt="提问" />-->
+            <img class="icon" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/qa.png" alt="提问" />
             <span>提问</span>
         </div>
         <div>
-            <img class="icon" :src="require('@/assets/img/wz.png')" alt="文章" />
+<!--            <img class="icon" :src="require('@/assets/img/wz.png')" alt="文章" />-->
+            <img class="icon" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/wz.png" alt="文章" />
             <span>文章</span>
         </div>
         <div>
-            <img class="icon" :src="require('@/assets/img/ht.png')" alt="话题" />
+<!--            <img class="icon" :src="require('@/assets/img/ht.png')" alt="话题" />-->
+            <img class="icon" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/ht.png" alt="话题" />
             <span>话题</span>
         </div>
         <div>
-            <img class="icon" :src="require('@/assets/img/qt.png')" alt="其他" />
+<!--            <img class="icon" :src="require('@/assets/img/qt.png')" alt="其他" />-->
+            <img class="icon" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/qt.png" alt="其他" />
             <span>其他</span>
         </div>
         <div>
-            <img class="icon" :src="require('@/assets/img/gd.png')" alt="更多" />
+<!--            <img class="icon" :src="require('@/assets/img/gd.png')" alt="更多" />-->
+            <img class="icon" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/gd.png" alt="更多" />
             <span>更多</span>
         </div>
     </div>

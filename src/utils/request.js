@@ -53,7 +53,6 @@ http.interceptors.response.use(
 
                 Message.error('用户会话已过期！');
                 window.localStorage.clear();
-                this.$router.push('/login')
 
             } else if (error.response.status === 403) {
                 Message.error('您没有访问该资源的权限！');
