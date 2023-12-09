@@ -129,13 +129,13 @@
 </script>
 <style scoped>
     .captcha_img {
-        width: 105px;
-        height: 35px;
+        width: 108px;
+        height: 36px;
         vertical-align: middle;
         cursor: pointer;
         display: inline-block;
         position: relative;
-        border: 1px solid #eee;
+        border: 1px solid #666;
     }
     .main_content {
         padding: 20px;
