@@ -1,5 +1,14 @@
 import http from '../utils/request'
 
+/**
+ * 获取帖子详情
+ */
+export const getPostDetail = (id) => {
+    return http({
+        url: `/api/post/detail?id=${id}`,
+        method: 'get',
+    })
+}
 
 /**
  * 获取帖子列表
