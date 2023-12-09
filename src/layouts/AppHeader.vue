@@ -14,7 +14,7 @@
                 <a href="#" @click="goToLogin" v-if="!currentUser">登录</a>
                 <a href="#" @click="goToRegister" v-if="!currentUser">注册</a>
                 <!-- 登录态 -->
-                <a href="#"  v-if="currentUser"> <Notification></Notification></a>
+                <a href="javascript:void(0)"  v-if="currentUser"> <Notification></Notification></a>
                 <a href="#"   style="color: #515a6e"  @click="goToSettings" v-if="currentUser">设置</a>
                 <a href="#" @click="logout" v-if="currentUser">登出</a>
             </div>

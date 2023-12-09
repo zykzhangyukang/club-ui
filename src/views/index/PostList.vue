@@ -99,9 +99,6 @@
                 this.getPage();
             });
         },
-        created() {
-            this.getPage();
-        }
     }
 </script>
 <style scoped>

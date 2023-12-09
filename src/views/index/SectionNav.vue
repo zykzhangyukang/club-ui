@@ -35,6 +35,7 @@
                         this.activeFirstSection = this.sectionList[0].sectionId; // Set the first section as active on initialization
                         this.activeFirstSectionChildren = this.sectionList[0].children || [];
                     }
+                    EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
                 }).finally(() => {
                 });
             },

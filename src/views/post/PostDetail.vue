@@ -43,11 +43,11 @@
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
     import {getPostDetail} from "@/apis/post";
-    import tool from "@/utils/tool";
+
     export default {
         components:{
             GuideNav,
-            AdvertNav
+            AdvertNav,
         },
         data(){
           return {

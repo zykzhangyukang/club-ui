@@ -115,7 +115,13 @@
                 ],
             })
 
-            const toolbarConfig = {}
+            const toolbarConfig = {
+                excludeKeys: [
+                    'insertTable', 'deleteTable',
+                    'insertTableRow', 'deleteTableRow', 'insertTableCol', 'deleteTableCol',
+                    'insertVideo', 'uploadVideo', 'editVideoSize','codeBlock'
+                ]
+            }
             const editorConfig = {
                 placeholder: '请输入内容...',
                 MENU_CONF: {

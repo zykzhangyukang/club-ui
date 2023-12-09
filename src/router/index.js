@@ -92,7 +92,7 @@ router.beforeEach(async (to, from, next) => {
         if (whiteUrl.includes(to.path)) {
             next()
         } else {
-            next({path: '/', query: {redirect: to.fullPath}})
+            next({path: '/login', query: {redirect: to.fullPath}})
         }
     } else {
         if (to.path === '/login' || to.path === '/register') {
