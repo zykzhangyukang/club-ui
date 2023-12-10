@@ -1,5 +1,7 @@
 <template>
-    <div class="section_nav_wrapper">
+    <div class="section_nav_wrapper" style="position: relative">
+        <Spin fix  size="large" :show="loading">
+        </Spin>
         <div class="first_level_section">
             <a v-for="item in sectionList" :key="item.sectionId"
                :class="[item.sectionId === activeFirstSection ? 'first_level_item current_active': 'first_level_item']"
@@ -21,6 +23,7 @@
         name: "CatalogNav.vue",
         data() {
             return {
+                loading: false,
                 sectionList: [],
                 activeFirstSection: null,
                 activeSecondSection: null,
@@ -29,6 +32,7 @@
         },
         methods: {
             getSectionList() {
+                this.loading = true;
                 sectionList().then(res => {
                     this.sectionList = res.result;
                     if (this.sectionList.length > 0) {
@@ -37,6 +41,7 @@
                     }
                     EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
                 }).finally(() => {
+                    this.loading = false;
                 });
             },
             selectFirstSection(item) {
@@ -59,7 +64,7 @@
 <style scoped>
     .section_nav_wrapper {
         height: 86px;
-        box-shadow: 0 2px 3px rgba(0, 0, 0, .1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
     }
 
     .first_level_section {

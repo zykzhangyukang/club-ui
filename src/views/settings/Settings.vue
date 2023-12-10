@@ -10,6 +10,8 @@
                             设置
                         </h3>
                         <Tabs value="userInfoSettings" :animated="false" size="small">
+                            <Spin fix  size="large" :show="loading">
+                            </Spin>
                             <TabPane label="基本资料" name="userInfoSettings">
                                 <Form ref="userInfoForm" :model="userInfoForm" :rules="userInfoFormRule"
                                       :label-width="80">
@@ -81,6 +83,7 @@
         },
         data() {
             return {
+                loading: false,
                 userInfoForm: {
                     userTags: [],
                     gender: '',
@@ -181,13 +184,19 @@
                 });
             },
             getUserInfoInit() {
+                this.loading = true
                 userUpdateInit().then(res => {
                     this.userInfoForm = res.result;
+                }).finally(()=>{
+                    this.loading = false;
                 })
             },
             updateUserInfo() {
+                this.loading = true;
                 userUpdateInfo(this.userInfoForm).then(res => {
                     this.$Message.success("修改信息成功！");
+                }).finally(()=>{
+                    this.loading = false;
                 })
             }
         },
