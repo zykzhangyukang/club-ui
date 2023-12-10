@@ -51,7 +51,7 @@ http.interceptors.response.use(
 
             }else if (error.response.status === 401) {
 
-                Message.error('用户会话已过期！');
+                Message.warning('请登录后访问！');
                 window.localStorage.clear();
 
             } else if (error.response.status === 403) {

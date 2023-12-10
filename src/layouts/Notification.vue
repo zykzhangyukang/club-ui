@@ -7,11 +7,11 @@
         </span>
         <template #list>
             <DropdownMenu>
-                <DropdownItem><Badge :count="replyCount" :class-name="'badge_count'">回复我的</Badge></DropdownItem>
-                <DropdownItem><Badge :count="atCount" :class-name="'badge_count'">@ 我的</Badge></DropdownItem>
-                <DropdownItem><Badge :count="zanCount" :class-name="'badge_count'">收到的赞</Badge></DropdownItem>
-                <DropdownItem><Badge :count="sysCount" :class-name="'badge_count'">系统消息</Badge></DropdownItem>
-                <DropdownItem><Badge :count="myMsgCount" :class-name="'badge_count'">我的消息</Badge></DropdownItem>
+                <DropdownItem @click="getToNotification('reply')"><Badge :count="replyCount" :class-name="'badge_count'">回复我的</Badge></DropdownItem>
+                <DropdownItem @click="getToNotification('at')"><Badge :count="atCount" :class-name="'badge_count'">@ 我的</Badge></DropdownItem>
+                <DropdownItem @click="getToNotification('zan')"><Badge :count="zanCount" :class-name="'badge_count'">收到的赞</Badge></DropdownItem>
+                <DropdownItem @click="getToNotification('sys')"><Badge :count="sysCount" :class-name="'badge_count'">系统消息</Badge></DropdownItem>
+                <DropdownItem @click="getToNotification('myMsg')"><Badge :count="myMsgCount" :class-name="'badge_count'">我的消息</Badge></DropdownItem>
             </DropdownMenu>
         </template>
     </Dropdown>
@@ -65,6 +65,12 @@
         methods:{
             async getMessage(){
                 await this.$store.dispatch('notification/getNotificationCount')
+            },
+            getToNotification(tab){
+                this.$router.push({
+                    path: '/notification',
+                    query: { tab: tab }
+                });
             }
         },
     }

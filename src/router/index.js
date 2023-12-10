@@ -6,6 +6,7 @@ import RegisterView from '@/views/register/Register';
 import SettingsView from '@/views/settings/Settings';
 import PostPublishView from '@/views/post/PostPublish'
 import PostDetailView from '@/views/post/PostDetail'
+import NotificationView from '@/views/notification/Notification'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
@@ -60,6 +61,12 @@ const routes = [
                 name: 'PostDetail',
                 component: PostDetailView,
                 meta: { title: '帖子详情'}
+            },
+            {
+                path: '/notification',
+                name: 'Notification',
+                component: NotificationView,
+                meta: { title: '消息通知'}
             },
         ]
     }
