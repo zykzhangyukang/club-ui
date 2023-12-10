@@ -135,7 +135,7 @@
         cursor: pointer;
         display: inline-block;
         position: relative;
-        border: 1px solid #666;
+        border: 1px solid #eee;
     }
     .main_content {
         padding: 20px;
