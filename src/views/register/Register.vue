@@ -34,10 +34,10 @@
                             </Row>
                         </FormItem>
                         <FormItem>
-                            <Button type="primary" @click="handleSubmit('registerForm')">注册</Button>
+                            <Button type="primary" @click="handleSubmit('registerForm')" :loading="btnLoading">注册</Button>
                             <Button @click="handleReset('registerForm')" style="margin-left: 8px">重置</Button>
                             <p style="margin-top: 10px">
-                                已经拥有账户？<a @click="this.$router.push('/login')" :loading="btnLoading">登录</a>
+                                已经拥有账户？<a @click="this.$router.push('/login')" >登录</a>
                             </p>
                         </FormItem>
                     </Form>

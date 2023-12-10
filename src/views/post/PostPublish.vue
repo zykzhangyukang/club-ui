@@ -43,7 +43,7 @@
                         <Cascader :data="selectList" v-model="postForm.sectionId" v-width="200" trigger="hover"/>
                     </FormItem>
                     <FormItem>
-                        <Button type="primary" @click="createPost">立即发布</Button>
+                        <Button type="primary" @click="createPost" :loading="loading">立即发布</Button>
                         <Button class="ivu-ml-8">保存草稿</Button>
                     </FormItem>
                 </Form>
@@ -94,6 +94,7 @@
             const editorRef = shallowRef()
             // 栏目数据
             const selectList = ref([]);
+            const loading = ref(false);
             // 表单数据
             const postForm = reactive({
                 title: '',
@@ -203,9 +204,12 @@
                     sectionId: sectionArr[1],
                     tags: postForm.tags
                 }
+                loading.value = true;
                 postPublish(param).then(res => {
                     Message.success("创建帖子成功！");
                     router.push('/')
+                }).finally(()=>{
+                    loading.value = false;
                 })
             }
 
@@ -242,6 +246,7 @@
                 editorRef,
                 selectList,
                 postForm,
+                loading,
                 mode: 'simple',
                 toolbarConfig,
                 editorConfig,

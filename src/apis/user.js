@@ -11,6 +11,29 @@ export const userInfo = () => {
 }
 
 /**
+ * 关注用户
+ */
+export const userFollow = (userId) => {
+    return http({
+        url: `/api/user/follow/${userId}`,
+        method: 'post',
+    })
+}
+
+
+/**
+ * 取消用户
+ */
+export const userUnFollow = (userId) => {
+    return http({
+        url: `/api/user/unfollow/${userId}`,
+        method: 'post',
+    })
+}
+
+
+
+/**
  * 修改用户信息初始化
  */
 export const userUpdateInit = () => {
