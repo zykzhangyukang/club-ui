@@ -10,19 +10,19 @@
                     <Form ref="registerForm" :model="registerForm" :label-width="80">
                         <Alert type="warning" show-icon v-if="tipMsg" :fade="false" :closable="false">{{tipMsg}}</Alert>
                         <FormItem label="用户账号" prop="username">
-                            <Input  v-model="registerForm.username"  placeholder="请输入登录账号" maxlength="16"></Input>
+                            <Input  v-model="registerForm.username"  placeholder="请输入登录账号" maxlength="16" autocomplete="off"></Input>
                         </FormItem>
                         <FormItem label="登录密码" prop="password">
-                            <Input type="password" v-model="registerForm.password"  placeholder="请输入登录密码" maxlength="20"></Input>
+                            <Input type="password" v-model="registerForm.password"  placeholder="请输入登录密码" maxlength="20" autocomplete="off"></Input>
                         </FormItem>
                         <FormItem label="注册邮箱" prop="email">
-                            <Input  type="email" v-model="registerForm.email"  placeholder="请输入注册邮箱" maxlength="64"></Input>
+                            <Input  type="email" v-model="registerForm.email"  placeholder="请输入注册邮箱" maxlength="64" autocomplete="off"></Input>
                         </FormItem>
                         <FormItem label="验证码" prop="code">
                             <Row :gutter="16">
                                 <Col span="8">
                                     <div>
-                                        <Input v-model="registerForm.code" placeholder="请输入验证码" maxlength="5"></Input>
+                                        <Input v-model="registerForm.code" placeholder="请输入验证码" maxlength="5" autocomplete="off"></Input>
                                     </div>
                                 </Col>
                                 <Col span="6">
