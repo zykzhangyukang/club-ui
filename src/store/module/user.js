@@ -8,6 +8,14 @@ export default {
     getters: {
     },
     mutations: {
+        setAvatar(state, avatar){
+          state.user.avatar = avatar;
+          window.localStorage.setItem("user", JSON.stringify(state.user))
+        },
+        setBasicInfo(state, nickname){
+            state.user.nickname = nickname;
+            window.localStorage.setItem("user", JSON.stringify(state.user))
+        },
         setToken(state, token) {
             state.token = token;
             window.localStorage.setItem('token', token);

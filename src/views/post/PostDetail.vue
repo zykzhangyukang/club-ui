@@ -24,7 +24,7 @@
                                     <div class="author-info">
                                         <div class="author-actions">
                                             <Avatar icon="ios-person" shape="square" :src="post.avatar" class="ivu-mr-16 ivu-tag-border"/>
-                                            <Button class="follow-btn" size="small" :type="post.isFollowed? '': 'success'" @click="followUser(post.userId,post.isFollowed)">
+                                            <Button class="follow-btn" size="small" :type="post.isFollowed? '': 'success'" @click="followUser(post.userId,post.isFollowed)" :loading="followLoading">
                                                 <Icon type="md-star-outline"/>
                                                 {{post.isFollowed ? '已关注': '关注'}}
                                             </Button>
@@ -85,6 +85,7 @@
         data() {
             return {
                 loading: false,
+                followLoading: false,
                 post: {}
             }
         },
@@ -106,20 +107,26 @@
                         title: '取消关注',
                         content: '您确定要取关该用户吗？',
                         onOk: () => {
+                            this.followLoading = true;
                             userUnFollow(userId).then(res=>{
                                 this.$Message.success("取消关注成功！");
                                 this.post.isFollowed = false;
+                            }).finally(()=>{
+                                this.followLoading = false;
                             })
                         },
                         onCancel: () => {
-                            this.$Message.info('已取消');
+                            this.$Message.info('操作已取消');
                         }
                     });
 
                 }else {
+                    this.followLoading = true;
                     userFollow(userId).then(res=>{
                         this.$Message.success("关注成功！");
                         this.post.isFollowed = true;
+                    }).finally(()=>{
+                        this.followLoading = false;
                     })
                 }
             },

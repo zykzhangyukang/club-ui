@@ -45,16 +45,30 @@
                                                placeholder="个人简介"/>
                                     </FormItem>
                                     <FormItem>
-                                        <Button type="primary" @click="updateUserInfo">修改</Button>
+                                        <Button type="primary" @click="updateUserInfo">立即修改</Button>
                                         <Button style="margin-left: 8px" @click="handleReset('userInfoForm')">重置
                                         </Button>
                                     </FormItem>
                                 </Form>
 
                             </TabPane>
-                            <TabPane label="通知设置" name="name2">标签二的内容</TabPane>
-                            <TabPane label="头像修改" name="name3">标签三的内容</TabPane>
-                            <TabPane label="密码重置" name="name4">标签三的内容</TabPane>
+                            <TabPane label="通知设置" name="name2">
+
+                            </TabPane>
+                            <TabPane label="头像修改" name="name3">
+                                <Image width="100px" height="100px" class="ivu-card-bordered ivu-mb-8" :src="userInfoForm.avatar">
+                                    <template #error>
+                                        <Icon type="ios-image-outline" size="24" color="#ccc" />
+                                    </template>
+                                </Image>
+                                <Upload :action="uploadAvatarUrl" :show-upload-list="false" :on-success="uploadAvatarSuccess" :on-error="uploadAvatarError" :on-progress="updateAvatarProgress" :headers="uploadAvatarHeaders">
+                                    <Button icon="ios-cloud-upload-outline" >上传头像</Button>
+                                </Upload>
+                                <Progress :percent="uploadPercent" v-if="uploadPercent > 0 && uploadPercent !==100" />
+                            </TabPane>
+                            <TabPane label="密码重置" name="name4">
+
+                            </TabPane>
                         </Tabs>
                     </div>
                 </div>
@@ -84,6 +98,12 @@
         data() {
             return {
                 loading: false,
+                uploading: false,
+                uploadPercent: 0,
+                uploadAvatarUrl: process.env.VUE_APP_API +'/api/user/upload/avatar',
+                uploadAvatarHeaders: {
+                    Authorization: localStorage.getItem('token') || ''
+                },
                 userInfoForm: {
                     userTags: [],
                     gender: '',
@@ -174,6 +194,24 @@
             }
         }
         , methods: {
+            uploadAvatarSuccess(response, file, fileList) {
+                if (response && response.code === 200) {
+                    this.$Message.success("上传头像成功！");
+                    this.uploadPercent = 100;
+                    this.userInfoForm.avatar = response.result;
+                    this.$store.commit('user/setAvatar', response.result);
+                } else {
+                    this.$Message.error("上传头像失败！");
+                    this.uploadPercent = 0;
+                }
+            },
+            uploadAvatarError(response, file, fileList) {
+                this.uploadPercent = 0;
+                this.$Message.error("上传头像失败！msg=" + response);
+            },
+            updateAvatarProgress(event, file, fileList) {
+                this.uploadPercent = Math.floor(event.percent);
+            },
             handleReset(name) {
                 this.$refs[name].resetFields();
             },
@@ -195,6 +233,7 @@
                 this.loading = true;
                 userUpdateInfo(this.userInfoForm).then(res => {
                     this.$Message.success("修改信息成功！");
+                    this.$store.commit('user/setBasicInfo', this.userInfoForm.nickname);
                 }).finally(()=>{
                     this.loading = false;
                 })

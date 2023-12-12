@@ -64,7 +64,8 @@
 <style scoped>
     .section_nav_wrapper {
         height: 86px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+        /*box-shadow: 0 1px 1px rgba(0, 0, 0, .1);*/
+        border: 1px solid #efefef;
     }
 
     .first_level_section {
