@@ -7,17 +7,23 @@ import SettingsView from '@/views/settings/Settings';
 import PostPublishView from '@/views/post/PostPublish'
 import PostDetailView from '@/views/post/PostDetail'
 import NotificationView from '@/views/notification/Notification'
+import SystemNotification from '@/views/notification/SystemNotification'
+import AtNotification from '@/views/notification/AtNotification'
+import ZanNotification from '@/views/notification/ZanNotification'
+import MyMsgNotification from '@/views/notification/MyMsgNotification'
+import ReplyMsgNotification from '@/views/notification/ReplyNotification'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
 import {userInfo} from "@/apis/user";
+
 NProgress.configure({
-    easing:'ease', // 动画方式
-    speed: 600, // 递增进度条的速度
-    showSpinner: false, // 是否显示加载ico
-    trickleSpeed: 200, // 自动递增间隔
-    minimum: 0.3 // 初始化时的最小百分比
-}) // NProgress Configuration
+    easing:'ease',
+    speed: 600,
+    showSpinner: true,
+    trickleSpeed: 200,
+    minimum: 0.3
+})
 
 const routes = [
     {
@@ -66,7 +72,38 @@ const routes = [
                 path: '/notification',
                 name: 'Notification',
                 component: NotificationView,
-                meta: { title: '消息通知'}
+                meta: {title: '消息通知'},
+                children: [
+                    {
+                        path: 'system',
+                        name: 'SystemNotification',
+                        component: SystemNotification,
+                        meta: {title: '消息通知' , progress: false}
+                    },
+                    {
+                        path: 'zan',
+                        name: 'ZanNotification',
+                        component: ZanNotification,
+                        meta: {title: '消息通知', progress: false}
+                    },
+                    {
+                        path: 'at',
+                        name: 'AtNotification',
+                        component: AtNotification,
+                        meta: {title: '消息通知', progress: false}
+                    },
+                    {
+                        path: 'reply',
+                        name: 'ReplyNotification',
+                        component: ReplyMsgNotification,
+                        meta: {title: '消息通知', progress: false}
+                    }, {
+                        path: 'MyMsg',
+                        name: 'MyMsgNotification',
+                        component: MyMsgNotification,
+                        meta: {title: '我的私信', progress: false}
+                    }
+                ]
             },
         ]
     }
@@ -91,8 +128,12 @@ const whiteUrl = ['/post/detail','/login', '/register', '/'] // 无需鉴权页�
 
 router.beforeEach(async (to, from, next) => {
 
-    NProgress.start() // start progress bar
-    document.title = getPageTitle(to.meta.title || to.name); // 设置页面title
+    let flag = to.meta.progress;
+    if(flag!==false){
+        NProgress.start()
+    }
+
+    document.title = getPageTitle(to.meta.title || to.name);
 
     const token = window.localStorage.getItem('token');
     if (!token) {
@@ -115,7 +156,7 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach(async (to, from) => {
-    NProgress.done() // finish progress bar
+    NProgress.done();
 })
 
 
