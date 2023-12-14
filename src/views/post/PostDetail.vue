@@ -110,7 +110,7 @@
                 if(isFollowed){
                     this.followLoading = true;
                     userUnFollow(userId).then(res=>{
-                        this.$Message.success("取消关注成功！");
+                        this.$Message.success("取关成功！");
                         this.post.isFollowed = false;
                     }).finally(()=>{
                         this.followLoading = false;
