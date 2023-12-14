@@ -24,9 +24,9 @@
                                     <div class="author-info">
                                         <div class="author-actions">
                                             <Avatar icon="ios-person" shape="square" :src="post.avatar" class="ivu-mr-16 ivu-tag-border"/>
-                                            <Button class="follow-btn" size="small" :type="post.isFollowed? '': 'success'" @click="followUser(post.userId,post.isFollowed)" :loading="followLoading">
+                                            <Button class="follow-btn" size="small" :type="post.isFollowed? '': 'success'" @click="followUser(post.userId,post.isFollowed)" :loading="followLoading" :disabled="null!=currentUser && currentUser.userId === post.userId">
                                                 <Icon type="md-star-outline"/>
-                                                {{post.isFollowed ? '已关注': '关注'}}
+                                                {{post.isFollowed ? '取消关注': '关注作者'}}
                                             </Button>
                                             <Button class="message-btn" size="small">
                                                 <Icon type="ios-chatboxes-outline"/>
@@ -89,6 +89,11 @@
                 post: {}
             }
         },
+        computed:{
+            currentUser(){
+                return this.$store.state.user.user;
+            }
+        },
         methods: {
             postDetail() {
                 let id = this.$route.query.id;
@@ -103,23 +108,13 @@
 
                 // 如果关注了，则取消关注
                 if(isFollowed){
-                    this.$Modal.confirm({
-                        title: '取消关注',
-                        content: '您确定要取关该用户吗？',
-                        onOk: () => {
-                            this.followLoading = true;
-                            userUnFollow(userId).then(res=>{
-                                this.$Message.success("取消关注成功！");
-                                this.post.isFollowed = false;
-                            }).finally(()=>{
-                                this.followLoading = false;
-                            })
-                        },
-                        onCancel: () => {
-                            this.$Message.info('操作已取消');
-                        }
-                    });
-
+                    this.followLoading = true;
+                    userUnFollow(userId).then(res=>{
+                        this.$Message.success("取消关注成功！");
+                        this.post.isFollowed = false;
+                    }).finally(()=>{
+                        this.followLoading = false;
+                    })
                 }else {
                     this.followLoading = true;
                     userFollow(userId).then(res=>{

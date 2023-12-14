@@ -199,7 +199,7 @@
                     this.$Message.success("上传头像成功！");
                     this.uploadPercent = 100;
                     this.userInfoForm.avatar = response.result;
-                    this.$store.commit('user/setAvatar', response.result);
+                    this.$store.dispatch('user/loadUserInfo')
                 } else {
                     this.$Message.error("上传头像失败！");
                     this.uploadPercent = 0;
@@ -233,7 +233,7 @@
                 this.loading = true;
                 userUpdateInfo(this.userInfoForm).then(res => {
                     this.$Message.success("修改信息成功！");
-                    this.$store.commit('user/setBasicInfo', this.userInfoForm.nickname);
+                    this.$store.dispatch('user/loadUserInfo')
                 }).finally(()=>{
                     this.loading = false;
                 })

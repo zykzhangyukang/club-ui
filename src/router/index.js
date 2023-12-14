@@ -16,7 +16,6 @@ import ReplyMsgNotification from '@/views/notification/Reply'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
-import {userInfo} from "@/apis/user";
 
 const routes = [
     {
@@ -137,9 +136,7 @@ router.beforeEach(async (to, from, next) => {
             next({path: '/'})
         }
 
-        userInfo().then(res => {
-            store.commit('user/setUser', res.result);
-        })
+        store.dispatch('user/loadUserInfo');
     }
 
     next()

@@ -1,3 +1,5 @@
+import {userInfo} from "@/apis/user";
+
 export default {
     namespaced: true,
     state: {
@@ -8,14 +10,6 @@ export default {
     getters: {
     },
     mutations: {
-        setAvatar(state, avatar){
-          state.user.avatar = avatar;
-          window.localStorage.setItem("user", JSON.stringify(state.user))
-        },
-        setBasicInfo(state, nickname){
-            state.user.nickname = nickname;
-            window.localStorage.setItem("user", JSON.stringify(state.user))
-        },
         setToken(state, token) {
             state.token = token;
             window.localStorage.setItem('token', token);
@@ -38,5 +32,10 @@ export default {
         }
     },
     actions: {
+        async loadUserInfo({ state }){
+            const [res] = await Promise.all([ userInfo()]);
+            state.user = res.result;
+            window.localStorage.setItem('user', JSON.stringify(res.result));
+        }
     }
 }

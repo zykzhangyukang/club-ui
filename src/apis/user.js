@@ -49,7 +49,7 @@ export const userUpdateInit = () => {
  */
 export const userUpdateInfo = (data) => {
     return http({
-        url: `/api/user/update/info`,
+        url: `/api/user/update`,
         method: 'put',
         data
     })
