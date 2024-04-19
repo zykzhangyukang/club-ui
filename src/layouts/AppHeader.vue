@@ -47,7 +47,7 @@
             },
             logout(){
                 this.$store.commit('user/logout');
-                this.$Message.success('注销登录成功！');
+                this.$Message.success('注销成功！');
                 this.$router.push('/login')
             }
         },

@@ -45,7 +45,7 @@
                                                placeholder="个人简介"/>
                                     </FormItem>
                                     <FormItem>
-                                        <Button type="primary" @click="updateUserInfo">立即修改</Button>
+                                        <Button type="primary" @click="updateUserInfo" :loading="updateUserLoading">立即修改</Button>
                                         <Button style="margin-left: 8px" @click="handleReset('userInfoForm')">重置
                                         </Button>
                                     </FormItem>
@@ -99,6 +99,7 @@
             return {
                 loading: false,
                 uploading: false,
+                updateUserLoading: false,
                 uploadPercent: 0,
                 uploadAvatarUrl: process.env.VUE_APP_API +'/api/user/upload/avatar',
                 uploadAvatarHeaders: {
@@ -230,12 +231,12 @@
                 })
             },
             updateUserInfo() {
-                this.loading = true;
+                this.updateUserLoading = true;
                 userUpdateInfo(this.userInfoForm).then(res => {
                     this.$Message.success("修改信息成功！");
                     this.$store.dispatch('user/loadUserInfo')
                 }).finally(()=>{
-                    this.loading = false;
+                    this.updateUserLoading = false;
                 })
             }
         },

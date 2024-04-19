@@ -26,7 +26,7 @@
                                             <Avatar icon="ios-person" shape="square" :src="post.avatar" class="ivu-mr-16 ivu-tag-border"/>
                                             <Button class="follow-btn" size="small" :type="post.isFollowed? '': 'success'" @click="followUser(post.userId,post.isFollowed)" :loading="followLoading" :disabled="null!=currentUser && currentUser.userId === post.userId">
                                                 <Icon type="md-star-outline"/>
-                                                {{post.isFollowed ? '取消关注': '关注作者'}}
+                                                {{post.isFollowed ? '取消关注': '关注TA'}}
                                             </Button>
                                             <Button class="message-btn" size="small">
                                                 <Icon type="ios-chatboxes-outline"/>
