@@ -5,15 +5,20 @@
             <!-- 主要内容区域 -->
             <div class="main_content">
                 <div class="login-wrapper">
-                    <h3>欢迎登录</h3>
+                    <h3>
+                        <RadioGroup v-model="loginType">
+                            <Radio label="账号登录" border></Radio>
+                            <Radio label="扫码登录" border></Radio>
+                        </RadioGroup>
+                    </h3>
                     <Divider/>
-                    <Form ref="loginForm" :model="loginForm" :label-width="80">
+                    <Form  ref="loginForm" v-if="loginType==='账号登录'" :model="loginForm" :label-width="80">
                         <Alert type="warning" show-icon v-if="tipMsg" :fade="false" :closable="false">{{tipMsg}}</Alert>
-                        <FormItem label="用户账号" prop="username">
-                            <Input v-model="loginForm.username" placeholder="请输入登录账号" maxlength="16" autocomplete="off"></Input>
+                        <FormItem label="用户名" prop="username">
+                            <Input v-model="loginForm.username" placeholder="请输入用户名" maxlength="16" autocomplete="off"></Input>
                         </FormItem>
-                        <FormItem label="登录密码" prop="password">
-                            <Input type="password" v-model="loginForm.password" placeholder="请输入登录密码" maxlength="20" autocomplete="off"></Input>
+                        <FormItem label="密码" prop="password">
+                            <Input type="password" v-model="loginForm.password" placeholder="请输入密码" maxlength="20" autocomplete="off"></Input>
                         </FormItem>
                         <FormItem label="验证码" prop="code">
                             <Row :gutter="16">
@@ -38,6 +43,10 @@
                             </p>
                         </FormItem>
                     </Form>
+                    <div v-if="loginType === '扫码登录'" style="text-align: center">
+                        <h3 style="user-select: none">关注公众号，输入验证码 <span style="color: red" >{{eventCode}}</span>  <small><a @click="refreshEventCode" type="text">刷新</a></small></h3>
+                        <img src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/qrcode.jpg" />
+                    </div>
                 </div>
             </div>
         </Col>
@@ -55,6 +64,7 @@
     import tool from "@/utils/tool";
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
+    import {getEventCode, subEventCode} from "@/apis/wechat";
 
     export default {
         components:{
@@ -63,6 +73,7 @@
         },
         data() {
             return {
+                scanTimer: null,
                 loginForm: {
                     username: '',
                     password: '',
@@ -73,16 +84,53 @@
                 btnLoading: false,
                 spinShow: false,
                 captchaBase64: '',
+                loginType: '账号登录',
+                deviceId: tool.uuid(),
+                eventCode: "",
             }
         },
+        watch: {
+            loginType(newVal) {
+                if (newVal === '扫码登录') {
+                    getEventCode(this.deviceId).then(res=>{
+                        this.eventCode = res.result;
+                        this.startScanTimer();
+                    })
+                } else {
+                    this.stopScanTimer();
+                }
+            },
+        },
+        beforeUnmount() {
+            this.stopScanTimer();
+        },
         methods: {
+            startScanTimer() {
+                this.scanTimer = setInterval(this.checkScanStatus, 2000);
+            },
+            refreshEventCode(){
+                getEventCode(this.deviceId).then(res=>{
+                    this.eventCode = res.result;
+                })
+            },
+            stopScanTimer() {
+                clearInterval(this.scanTimer);
+            },
+            checkScanStatus(){
+                subEventCode(this.deviceId).then(res=>{
+                    if(res.result){
+                        this.stopScanTimer();
+                        this.$Message.success("登录成功！");
+                    }
+                })
+            },
             handleSubmit() {
                 if (!this.loginForm.username || this.loginForm.username === '') {
-                    this.tipMsg = "登录账号不能为空！";
+                    this.tipMsg = "用户名不能为空！";
                     return;
                 }
                 if (!this.loginForm.password || this.loginForm.password === '') {
-                    this.tipMsg = "登录密码不能为空！";
+                    this.tipMsg = "密码不能为空！";
                     return
                 }
                 if (!this.loginForm.code || this.loginForm.code === '') {
@@ -110,7 +158,7 @@
                 this.tipMsg = "";
             },
             getLoginCaptcha() {
-                let uuid = tool.uuid();
+                let uuid = this.deviceId;
                 this.spinShow = true;
                 this.loginForm.captchaKey = uuid;
                 loginCaptcha(uuid).then(res => {
