@@ -8,7 +8,7 @@ export default {
         replyCount: 0,
         zanCount: 0,
         sysCount: 0,
-        myMsgCount: 0,
+        chatCount: 0,
     },
     getters: {
     },
@@ -30,7 +30,7 @@ export default {
             state.zanCount = res.result.zanCount;
             state.sysCount = res.result.sysCount;
             state.followCount = res.result.followCount;
-            state.myMsgCount = res.result.myMsgCount;
+            state.chatCount = res.result.chatCount;
         },
     }
 }

@@ -5,7 +5,8 @@
             <!-- 主要内容区域 -->
             <div class="main_content">
                 <div class="register-wrapper">
-                    <h3>注册账号</h3>
+                    <h3 v-if="this.registerForm.mpOpenId">绑定公众号</h3>
+                    <h3 v-else>注册账号</h3>
                     <Divider/>
                     <Form ref="registerForm" :model="registerForm" :label-width="80">
                         <Alert type="warning" show-icon v-if="tipMsg" :fade="false" :closable="false">{{tipMsg}}</Alert>
@@ -71,7 +72,8 @@
                     password: '',
                     code: '',
                     email: '',
-                    captchaKey: ''
+                    captchaKey: '',
+                    mpOpenId: '',
                 },
                 spinShow: false,
                 captchaBase64: '',
@@ -99,8 +101,12 @@
                 }
                 this.btnLoading = true;
                 userRegister(this.registerForm).then(res => {
-                    this.$Message.success('注册成功!');
-                    this.$router.push("/login");
+                    if(res.code === 200){
+                        this.$Message.success('注册成功!');
+                        this.$router.push("/login");
+                    }else {
+                        this.$Message.error(res.msg);
+                    }
                 }).catch((e) => {
                     this.registerForm.code = '';
                     this.tipMsg  = e.msg;
@@ -126,6 +132,7 @@
             },
         },
         created() {
+            this.registerForm.mpOpenId = this.$route.query.mpOpenId;
             this.getRegisterCaptcha();
         }
     }

@@ -11,7 +11,7 @@ import NotificationView from '@/views/notification/Notification'
 import SystemNotification from '@/views/notification/System'
 import AtNotification from '@/views/notification/At'
 import ZanNotification from '@/views/notification/Zan'
-import MyMsgNotification from '@/views/notification/MyMsg'
+import ChatNotification from '@/views/notification/Chat'
 import ReplyMsgNotification from '@/views/notification/Reply'
 
 import NProgress from 'nprogress' // progress bar
@@ -90,9 +90,9 @@ const routes = [
                         component: ReplyMsgNotification,
                         meta: {title: '消息通知'}
                     }, {
-                        path: 'MyMsg',
-                        name: 'MyMsgNotification',
-                        component: MyMsgNotification,
+                        path: 'Chat',
+                        name: 'ChatNotification',
+                        component: ChatNotification,
                         meta: {title: '我的私信'}
                     }
                 ]

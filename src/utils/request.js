@@ -24,19 +24,19 @@ http.interceptors.request.use(
 http.interceptors.response.use(
     (response) => {
 
-        if (response.data.code === 200) {
+        // if (response.data.code === 200) {
+        //
+        //     return Promise.resolve(response.data);
+        //
+        // } else if (response.data.code === 405) {
+        //
+        //     Message.warning(response.data.msg);
+        //
+        // } else {
+        //     Message.error(response.data.msg ? response.data.msg : '接口其他错误！');
+        // }
 
-            return Promise.resolve(response.data);
-
-        } else if (response.data.code === 405) {
-
-            Message.warning(response.data.msg);
-
-        } else {
-            Message.error(response.data.msg ? response.data.msg : '接口其他错误！');
-        }
-
-        return Promise.reject(response.data);
+        return Promise.resolve(response.data);
     },
     (error) => {
 

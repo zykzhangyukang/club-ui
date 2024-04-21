@@ -9,7 +9,7 @@
                         <TabPane label="@ 我的" name="/notification/at"></TabPane>
                         <TabPane label="收到的赞" name="/notification/zan"></TabPane>
                         <TabPane label="系统消息" name="/notification/system"></TabPane>
-                        <TabPane label="我的私信" name="/notification/myMsg"></TabPane>
+                        <TabPane label="我的私信" name="/notification/chat"></TabPane>
                     </Tabs>
                     <router-view/>
                 </div>

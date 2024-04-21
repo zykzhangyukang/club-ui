@@ -11,7 +11,7 @@
                 <DropdownItem @click="getToNotification('/notification/at')"><Badge :count="atCount" :class-name="'badge_count'">@ 我的</Badge></DropdownItem>
                 <DropdownItem @click="getToNotification('/notification/zan')"><Badge :count="zanCount" :class-name="'badge_count'">收到的赞</Badge></DropdownItem>
                 <DropdownItem @click="getToNotification('/notification/system')"><Badge :count="sysCount" :class-name="'badge_count'">系统消息</Badge></DropdownItem>
-                <DropdownItem @click="getToNotification('/notification/myMsg')"><Badge :count="myMsgCount" :class-name="'badge_count'">我的消息</Badge></DropdownItem>
+                <DropdownItem @click="getToNotification('/notification/chat')"><Badge :count="chatCount" :class-name="'badge_count'">我的消息</Badge></DropdownItem>
             </DropdownMenu>
         </template>
     </Dropdown>
@@ -49,8 +49,8 @@
             followCount() {
                 return this.$store.state.notification.followCount
             },
-            myMsgCount() {
-                return this.$store.state.notification.myMsgCount
+            chatCount() {
+                return this.$store.state.notification.chatCount
             },
         },
         beforeUnmount() {
