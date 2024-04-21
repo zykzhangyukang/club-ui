@@ -4,7 +4,7 @@
             <Col span="24">
                 <!-- 主要内容区域 -->
                 <div class="main_content" >
-                    <Tabs :animated="false" @on-click="tabClick" size="large">
+                    <Tabs :animated="false" @on-click="tabClick" size="large" :model-value="currentTab">
                         <TabPane label="回复我的" name="/notification/reply"></TabPane>
                         <TabPane label="@ 我的" name="/notification/at"></TabPane>
                         <TabPane label="收到的赞" name="/notification/zan"></TabPane>
@@ -21,12 +21,26 @@
 <script>
     export default {
         name: "Notification.vue",
+        data(){
+          return {
+              currentTab: ''
+          }
+        },
+        watch: {
+            '$route'() {
+                this.currentTab = this.$route.path;
+            }
+        },
         methods: {
             tabClick(path) {
+                this.name = path;
                 this.$router.push({
                     path: path,
                 });
             }
+        },
+        created() {
+            this.currentTab = this.$route.path;
         }
     }
 </script>

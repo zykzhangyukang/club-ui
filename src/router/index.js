@@ -16,6 +16,7 @@ import ReplyMsgNotification from '@/views/notification/Reply'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
+import user from "@/store/module/user";
 
 const routes = [
     {
@@ -124,22 +125,28 @@ router.beforeEach(async (to, from, next) => {
     document.title = getPageTitle(to.meta.title || to.name);
 
     const token = window.localStorage.getItem('token');
-    if (!token) {
-        if (whiteUrl.includes(to.path)) {
-            next()
-        } else {
-            next({path: '/login', query: {redirect: to.fullPath}})
-        }
-    } else {
+    if(token){
 
         if (to.path === '/login' || to.path === '/register') {
             next({path: '/'})
+        }else {
+
+            let userInfo = store.state.user;
+            if(userInfo){
+                next()
+            }else {
+                await store.dispatch('user/loadUserInfo');
+            }
         }
+    }else {
 
-        store.dispatch('user/loadUserInfo');
+        if (whiteUrl.indexOf(to.path) !== -1) {
+            next()
+        } else {
+            NProgress.done();
+            next(`/`)
+        }
     }
-
-    next()
 })
 
 router.afterEach(async (to, from) => {

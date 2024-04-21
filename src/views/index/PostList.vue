@@ -99,6 +99,10 @@
                 this.getPage();
             });
         },
+        beforeUnmount() {
+            const eventBus = EventBus.config.globalProperties.$eventBus;
+            eventBus.$off('sectionChange');
+        },
     }
 </script>
 <style scoped>
