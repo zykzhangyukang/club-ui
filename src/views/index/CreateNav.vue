@@ -72,9 +72,9 @@
     }
 
     .icon {
-        width: 20px;
-        height: 20px;
-        margin-bottom: 5px; /* 图标底部留出一些空白 */
+        width: 25px;
+        height: 25px;
+        margin-bottom: 2px; /* 图标底部留出一些空白 */
     }
 
     span {

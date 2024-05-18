@@ -30,7 +30,7 @@
         name: 'UserInfoCard',
         computed: {
             currentUser() {
-                return this.$store.state.user.user;
+                return this.$store.state.user.info;
             },
         },
     };

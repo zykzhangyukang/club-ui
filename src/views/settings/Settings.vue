@@ -87,7 +87,8 @@
 <script>
     import UserInfoNav from "@/layouts/UserInfoNav";
     import AdvertNav from "@/layouts/AdvertNav";
-    import {userUpdateInfo, userUpdateInit} from "@/apis/user";
+    import {userInfo, userUpdateInfo, userUpdateInit} from "@/apis/user";
+    import store from "@/store";
 
     export default {
         name: "Settings.vue",
@@ -232,9 +233,12 @@
             },
             updateUserInfo() {
                 this.updateUserLoading = true;
-                userUpdateInfo(this.userInfoForm).then(res => {
-                    this.$Message.success("修改信息成功！");
-                    this.$store.dispatch('user/loadUserInfo')
+                userUpdateInfo(this.userInfoForm).then(async  res => {
+                    this.$Message.success("修改成功！");
+
+                    let response = await userInfo();
+                    store.commit('user/setUserInfo', response.result);
+
                 }).finally(()=>{
                     this.updateUserLoading = false;
                 })

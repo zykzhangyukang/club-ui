@@ -1,5 +1,7 @@
 import axios from 'axios'
 import {Message} from 'view-ui-plus'
+import store from "@/store";
+import router from "@/router";
 
 const http = axios.create({
     baseURL: process.env.VUE_APP_API,
@@ -13,7 +15,10 @@ const http = axios.create({
 
 http.interceptors.request.use(
     config => {
-        config.headers['Authorization'] = localStorage.getItem('token') || '';
+        let token = localStorage.getItem('token') || '';
+        if(token){
+            config.headers['Authorization'] = token;
+        }
         return config
     },
     error => {
@@ -23,18 +28,6 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
     (response) => {
-
-        // if (response.data.code === 200) {
-        //
-        //     return Promise.resolve(response.data);
-        //
-        // } else if (response.data.code === 405) {
-        //
-        //     Message.warning(response.data.msg);
-        //
-        // } else {
-        //     Message.error(response.data.msg ? response.data.msg : '接口其他错误！');
-        // }
 
         return Promise.resolve(response.data);
     },
@@ -47,12 +40,15 @@ http.interceptors.response.use(
         } else {
 
             if (error.response.status === 400) {
+
                 Message.warning('请求参数错误！');
 
             }else if (error.response.status === 401) {
 
-                Message.warning('用户未登录！');
-                window.localStorage.clear();
+                store.commit('user/logout');
+                router.push('/').then(r => {
+                    Message.warning('会话已失效！');
+                })
 
             } else if (error.response.status === 403) {
                 Message.error('您没有访问该资源的权限！');

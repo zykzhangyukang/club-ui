@@ -91,7 +91,7 @@
         },
         computed:{
             currentUser(){
-                return this.$store.state.user.user;
+                return this.$store.state.user.info;
             }
         },
         methods: {
@@ -99,13 +99,23 @@
                 let id = this.$route.query.id;
                 this.loading = true;
                 getPostDetail(id).then(res => {
-                    this.post = res.result;
+
+                    if(res.code === 200){
+                        this.post = res.result;
+                    }else {
+                        this.$Message.warning(res.msg);
+                        this.$router.push('/');
+                    }
+
                 }).finally(() => {
                     this.loading = false;
                 })
             },
             followUser(userId,isFollowed){
-
+                let isLogin = this.$store.state.user.isLogin;
+                if(!isLogin){
+                    return this.$Message.warning('用户未登录！');
+                }
                 // 如果关注了，则取消关注
                 if(isFollowed){
                     this.followLoading = true;

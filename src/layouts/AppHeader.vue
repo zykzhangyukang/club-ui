@@ -34,7 +34,8 @@
                 this.$router.push('/');
             },
             getHomeReload(){
-              window.location.href = '/'
+              // window.location.href = '/'
+                this.$router.push('/');
             },
             goToSettings() {
                 this.$router.push('/settings');
@@ -48,12 +49,12 @@
             logout(){
                 this.$store.commit('user/logout');
                 this.$Message.success('注销成功！');
-                this.$router.push('/login')
+                this.$router.push('/')
             }
         },
         computed:{
             currentUser(){
-                return this.$store.state.user.user;
+                return this.$store.state.user.info;
             }
         }
     }

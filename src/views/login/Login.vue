@@ -132,9 +132,8 @@
             checkScanStatus() {
                 subEventCode(this.deviceId).then(res => {
                     if (res.code === 200) {
-                        this.$store.commit('user/setToken', res.result.token);
-                        this.$store.commit('user/setRefreshToken', res.result.refreshToken);
-                        this.$store.commit('user/setUser', res.result);
+                        this.$store.commit('user/setUserInfo', res.result);
+                        this.$store.commit('user/setUserToken', res.result.token);
                         this.$router.push('/');
                         this.$Message.success('登录成功！');
                         this.stopScanTimer();
@@ -162,9 +161,8 @@
                 this.btnLoading = true;
                 userLogin(this.loginForm).then(res => {
                     if(res.code === 200){
-                        this.$store.commit('user/setToken', res.result.token);
-                        this.$store.commit('user/setRefreshToken', res.result.refreshToken);
-                        this.$store.commit('user/setUser', res.result);
+                        this.$store.commit('user/setUserInfo', res.result);
+                        this.$store.commit('user/setUserToken', res.result.token);
                         this.$router.push('/');
                         this.$Message.success('登录成功！');
                     }else {

@@ -16,7 +16,7 @@ import ReplyMsgNotification from '@/views/notification/Reply'
 
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
-import user from "@/store/module/user";
+import {userInfo} from "@/apis/user";
 
 const routes = [
     {
@@ -124,27 +124,30 @@ router.beforeEach(async (to, from, next) => {
     NProgress.start()
     document.title = getPageTitle(to.meta.title || to.name);
 
-    const token = window.localStorage.getItem('token');
-    if(token){
+    let userToken = window.localStorage.getItem('token');
+    if (userToken) {
 
         if (to.path === '/login' || to.path === '/register') {
             next({path: '/'})
-        }else {
+        } else {
 
-            let userInfo = store.state.user;
-            if(userInfo){
-                next()
-            }else {
-                await store.dispatch('user/loadUserInfo');
+            let info = store.state.user.info;
+            if (info) {
+                next();
+            } else {
+
+                let res = await userInfo();
+                store.commit('user/setUserInfo', res.result);
+                next({...to, replace: true});
             }
         }
-    }else {
+    } else {
 
         if (whiteUrl.indexOf(to.path) !== -1) {
             next()
         } else {
             NProgress.done();
-            next(`/`)
+            next(`/login`)
         }
     }
 })

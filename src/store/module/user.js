@@ -1,41 +1,36 @@
-import {userInfo} from "@/apis/user";
-
 export default {
     namespaced: true,
     state: {
-        user: '' || JSON.parse( window.localStorage.getItem('user')),
-        token: '' || window.localStorage.getItem('token'),
-        refreshToken: '' || window.localStorage.getItem('refreshToken')
+        isLogin: false,
+        token: '',
+        info: ''
     },
-    getters: {
-    },
+    getters: {},
     mutations: {
-        setToken(state, token) {
-            state.token = token;
-            window.localStorage.setItem('token', token);
+        setUserInfo(state, info) {
+            if(info){
+                state.info = info;
+            }else{
+                state.info = {}
+            }
+            state.isLogin = true;
         },
-        setRefreshToken(state,refreshToken){
-            state.refreshToken = refreshToken;
-            window.localStorage.setItem('refreshToken', refreshToken);
-        },
-        setUser(state, user) {
-            state.user = user;
-            window.localStorage.setItem('user', JSON.stringify(user));
+        setUserToken(state, token){
+            if(token){
+                state.token = token;
+            }else{
+                state.token = ''
+            }
+            localStorage.setItem("token", token)
         },
         logout(state){
-            window.localStorage.removeItem('token');
-            window.localStorage.removeItem('refreshToken');
-            window.localStorage.removeItem('user');
             state.token = '';
-            state.refreshToken = '';
-            state.user = '';
+            state.info = '';
+            state.isLogin = false;
+            localStorage.clear();
         }
     },
     actions: {
-        async loadUserInfo({ state }){
-            const [res] = await Promise.all([ userInfo()]);
-            state.user = res.result;
-            window.localStorage.setItem('user', JSON.stringify(res.result));
-        }
+
     }
 }

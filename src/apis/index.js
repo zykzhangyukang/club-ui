@@ -21,6 +21,17 @@ export const notificationCount = () => {
     })
 }
 
+/**
+ * 获取首页用户信息导航
+ */
+export const indexUserInfo = () => {
+    return http({
+        url: `/api/index/user`,
+        method: 'get',
+    })
+}
+
+
 
 
 

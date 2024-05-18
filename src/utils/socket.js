@@ -42,7 +42,7 @@ class MyWebSock {
             },
             err => {
                 // 连接发生错误时的处理函数
-                console.log('失败')
+                console.log('websocket失败')
                 console.log(err)
             }
         )
