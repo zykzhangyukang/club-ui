@@ -32,6 +32,9 @@
                                                 <Icon type="ios-chatboxes-outline"/>
                                                 私信
                                             </Button>
+                                            <Button class="edit-btn" size="small" @click="toEditPostPage(post.postId)" v-if="currentUser && post.userId === currentUser.userId">
+                                                编辑
+                                            </Button>
                                         </div>
                                     </div>
                                 </div>
@@ -95,11 +98,13 @@
             }
         },
         methods: {
+            toEditPostPage(postId){
+                this.$router.push('/post/edit?id='+postId);
+            },
             postDetail() {
                 let id = this.$route.query.id;
                 this.loading = true;
                 getPostDetail(id).then(res => {
-
                     if(res.code === 200){
                         this.post = res.result;
                     }else {
@@ -199,6 +204,7 @@
         margin-bottom: 5px;
     }
 
+    .edit-btn,
     .message-btn,
     .follow-btn {
         margin-right: 10px;

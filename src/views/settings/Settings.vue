@@ -196,12 +196,14 @@
             }
         }
         , methods: {
-            uploadAvatarSuccess(response, file, fileList) {
+            async uploadAvatarSuccess(response, file, fileList) {
                 if (response && response.code === 200) {
                     this.$Message.success("上传头像成功！");
                     this.uploadPercent = 100;
                     this.userInfoForm.avatar = response.result;
-                    this.$store.dispatch('user/loadUserInfo')
+
+                    let res = await userInfo();
+                    store.commit('user/setUserInfo', res.result);
                 } else {
                     this.$Message.error("上传头像失败！");
                     this.uploadPercent = 0;

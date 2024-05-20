@@ -6,6 +6,7 @@ import LoginView from '@/views/login/Login';
 import RegisterView from '@/views/register/Register';
 import SettingsView from '@/views/settings/Settings';
 import PostPublishView from '@/views/post/PostPublish'
+import PostEditView from '@/views/post/PostEdit'
 import PostDetailView from '@/views/post/PostDetail'
 import NotificationView from '@/views/notification/Notification'
 import SystemNotification from '@/views/notification/System'
@@ -60,6 +61,12 @@ const routes = [
                 name: 'PostDetail',
                 component: PostDetailView,
                 meta: {title: '帖子详情'}
+            },
+            {
+                path: '/post/edit',
+                name: 'PostEdit',
+                component: PostEditView,
+                meta: {title: '帖子编辑'}
             },
             {
                 path: '/notification',
