@@ -106,13 +106,13 @@
             // 规则校验
             const ruleValidate =reactive({
                 title: [
-                    { required: true, message: '帖子标题不能为空！', trigger: 'blur' }
+                    { required: true, message: '标题不能为空！', trigger: 'blur' }
                 ],
                 content: [
-                    { required: true, message: '帖子内容不能为空！', trigger: 'blur' }
+                    { required: true, message: '内容不能为空！', trigger: 'blur' }
                 ],
                 sectionId: [
-                    { required: true, message: '帖子所属栏目不能为空！', trigger: 'blur' }
+                    { required: true, message: '栏目不能为空！', trigger: 'blur' }
                 ],
             })
 
@@ -188,14 +188,14 @@
 
             function createPost() {
                 if (!postForm.title) {
-                    return Message.warning("帖子标题不能为空！");
+                    return Message.warning("标题不能为空！");
                 }
                 if (!postForm.content) {
-                    return Message.warning("帖子内容不能为空！");
+                    return Message.warning("内容不能为空！");
                 }
                 const sectionArr = postForm.sectionId;
                 if (!sectionArr || sectionArr.length === 0 || sectionArr.length !== 2) {
-                    return Message.warning("所属栏目不能为空！");
+                    return Message.warning("栏目不能为空！");
                 }
                 const param = {
                     title: postForm.title,
@@ -206,8 +206,13 @@
                 }
                 loading.value = true;
                 postPublish(param).then(res => {
-                    Message.success("创建帖子成功！");
-                    router.push('/')
+                    if(res.code === 200){
+                        Message.success("创建成功！");
+                        router.push('/')
+                    }else {
+                        Message.warning(res.msg);
+                    }
+
                 }).finally(()=>{
                     loading.value = false;
                 })

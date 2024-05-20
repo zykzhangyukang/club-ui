@@ -228,7 +228,11 @@
             getUserInfoInit() {
                 this.loading = true
                 userUpdateInit().then(res => {
-                    this.userInfoForm = res.result;
+                    if(res.code === 200){
+                        this.userInfoForm = res.result;
+                    }else {
+                        this.$Message.error(res.msg);
+                    }
                 }).finally(()=>{
                     this.loading = false;
                 })
@@ -236,10 +240,14 @@
             updateUserInfo() {
                 this.updateUserLoading = true;
                 userUpdateInfo(this.userInfoForm).then(async  res => {
-                    this.$Message.success("修改成功！");
 
-                    let response = await userInfo();
-                    store.commit('user/setUserInfo', response.result);
+                    if(res.code === 200){
+                        this.$Message.success("修改成功！");
+                        let response = await userInfo();
+                        store.commit('user/setUserInfo', response.result);
+                    }else {
+                        this.$Message.error(res.msg);
+                    }
 
                 }).finally(()=>{
                     this.updateUserLoading = false;
