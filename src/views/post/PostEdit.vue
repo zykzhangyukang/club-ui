@@ -9,6 +9,8 @@
                     </h3>
                     <Divider/>
                     <Form :model="postForm" label-position="right" :label-width="80" :rules="ruleValidate">
+                        <Spin fix :show="spinShow">
+                        </Spin>
                         <FormItem label="帖子标题" prop="title">
                             <Input v-model="postForm.title" placeholder="请输入帖子标题..."></Input>
                         </FormItem>
@@ -35,8 +37,7 @@
                                 <template #prefix>
                                     <Icon type="ios-pricetags-outline"/>
                                 </template>
-                                <Option v-for="item in defaultUserTags" :value="item.value" :key="item.value">{{
-                                    item.label }}
+                                <Option v-for="item in defaultUserTags" :value="item.value" :key="item.value">{{item.label }}
                                 </Option>
                             </Select>
                         </FormItem>
@@ -87,6 +88,7 @@
             // 栏目数据
             const selectList = ref([]);
             const loading = ref(false);
+            const spinShow = ref(false);
             // 表单数据
             let defaultUserTags = reactive([]);
             let postForm = reactive({
@@ -165,7 +167,7 @@
                 initSectionList();
 
                 const id = route.query.id;
-                loading.value = true;
+                spinShow.value = true;
                 getPostDetail(id).then(res => {
                     if (res.code === 200) {
                         postForm.postId = res.result.postId;
@@ -183,7 +185,7 @@
                         router.push('/');
                     }
                 }).finally(() => {
-                    loading.value = false;
+                    spinShow.value = false;
                 })
 
             })
@@ -274,6 +276,7 @@
                 selectList,
                 postForm,
                 loading,
+                spinShow,
                 mode: 'simple',
                 toolbarConfig,
                 editorConfig,
