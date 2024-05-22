@@ -1,7 +1,33 @@
 <template>
     <div class="list_wrapper">
-        <Skeleton :loading="loading" animated avatar style="margin-top: 12px">
+        <Skeleton :loading="loading" animated avatar>
             <template #template>
+                <List  :border="false">
+                    <ListItem v-for="item in 30">
+                        <ListItemMeta>
+                            <template v-slot:title>
+                                <a class="post_title" v-line-clamp="1" ><SkeletonItem block width="80%" height="16px" /></a>
+                            </template>
+                            <template v-slot:avatar>
+                                <SkeletonItem type="circle" class="ivu-mr" />
+                            </template>
+                            <template v-slot:description>
+                                <span class="section_name"><SkeletonItem width="44px" height="16px" /> </span>  <span class="nickname"><SkeletonItem width="60px" height="16px" /></span>  <span style="font-size: 12px;color: #778087"><SkeletonItem width="60px" height="16px" /></span>
+                            </template>
+                        </ListItemMeta>
+                        <template #action>
+                            <li>
+                                <SkeletonItem width="23px" height="16px" />
+                            </li>
+                            <li>
+                                <SkeletonItem width="23px" height="16px" />
+                            </li>
+                            <li>
+                                <SkeletonItem width="23px" height="16px" />
+                            </li>
+                        </template>
+                    </ListItem>
+                </List>
             </template>
             <template #default>
                 <div  v-if="postList && postList.length > 0">
@@ -36,10 +62,10 @@
                     </List>
                     <Page :total="total" :page-size="searchForm.pageSize" :model-value="searchForm.currentPage" class-name="page_bar" size="default" @on-change="pageChange" />
                 </div>
-                <div v-else>
+                <div v-show="isEmpty">
 <!--                    <img class="empty_svg" :src="require('@/assets/img/empty.svg')"/>-->
                     <img class="empty_svg" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/empty.svg"/>
-                    <div class="ivu-text-center ivu-mb-16 " style="color: #808695;font-size: 11px;">暂无更多内容了~</div>
+                    <div class="ivu-text-center ivu-mb-16 " style="color: #808695;font-size: 11px;">暂无更多内容了！</div>
                 </div>
             </template>
         </Skeleton>
@@ -55,10 +81,11 @@
             return {
                 searchForm: {
                     currentPage: 1,
-                    pageSize: 20,
+                    pageSize: 30,
                     firstSectionId: null,
                     secondSectionId: null,
                 },
+                isEmpty: false,
                 postList: [],
                 loading: false,
                 total: 0,
@@ -73,6 +100,7 @@
                     this.postList.forEach(item=>{
                         item.createdAtStr = tool.showTime(item.createdAt);
                     })
+                    this.isEmpty = this.total === 0;
                 }).finally(() => {
                     this.loading = false;
                 })
@@ -108,7 +136,7 @@
 <style scoped>
     .list_wrapper {
         background: #ffffff;
-        padding: 0 10px 10px 10px;
+        padding: 0 10px 0px 10px;
         border: 1px solid #e4e6eb;
     }
     .section_name{

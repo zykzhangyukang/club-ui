@@ -1,17 +1,32 @@
 <template>
     <div class="section_nav_wrapper" style="position: relative">
-        <Spin fix  size="large" :show="loading">
-        </Spin>
-        <div class="first_level_section">
-            <a v-for="item in sectionList" :key="item.sectionId"
-               :class="[item.sectionId === activeFirstSection ? 'first_level_item current_active': 'first_level_item']"
-               @click="selectFirstSection(item)">{{item.sectionName}}</a>
-        </div>
-        <div class="second_level_section">
-            <a v-for="subItem in activeFirstSectionChildren" :key="subItem.sectionId"
-               :class="[subItem.sectionId === activeSecondSection ? 'second_level_item current_active': 'second_level_item']"
-               @click="selectSecondSection(subItem)">{{subItem.sectionName}}</a>
-        </div>
+
+        <Skeleton :loading="loading" animated avatar>
+            <template #template>
+                <div class="first_level_section">
+                    <a class="first_level_item" v-for="item in 13">
+                        <SkeletonItem width="30px" height="16px" />
+                    </a>
+                </div>
+                <div class="second_level_section">
+                    <a class="second_level_item" v-for="subItem in 13">
+                        <SkeletonItem width="30px" height="16px" />
+                    </a>
+                </div>
+            </template>
+            <template #default>
+                <div class="first_level_section">
+                    <a v-for="item in sectionList" :key="item.sectionId"
+                       :class="[item.sectionId === activeFirstSection ? 'first_level_item current_active': 'first_level_item']"
+                       @click="selectFirstSection(item)">{{item.sectionName}}</a>
+                </div>
+                <div class="second_level_section">
+                    <a v-for="subItem in activeFirstSectionChildren" :key="subItem.sectionId"
+                       :class="[subItem.sectionId === activeSecondSection ? 'second_level_item current_active': 'second_level_item']"
+                       @click="selectSecondSection(subItem)">{{subItem.sectionName}}</a>
+                </div>
+            </template>
+        </Skeleton>
     </div>
 </template>
 
