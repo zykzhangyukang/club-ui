@@ -35,7 +35,7 @@ http.interceptors.response.use(
 
         if (!error.response) {
 
-            Message.error('请检查您的网络连接！');
+            console.log("请检查您的网络连接！")
 
         } else {
 

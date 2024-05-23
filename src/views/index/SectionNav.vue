@@ -9,7 +9,7 @@
                     </a>
                 </div>
                 <div class="second_level_section">
-                    <a class="second_level_item" v-for="subItem in 13">
+                    <a class="second_level_item" v-for="subItem in 11">
                         <SkeletonItem width="30px" height="16px" />
                     </a>
                 </div>

@@ -18,6 +18,7 @@ import ReplyMsgNotification from '@/views/notification/Reply'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
 import {userInfo} from "@/apis/user";
+import NotFound from "@/views/error/404";
 
 const routes = [
     {
@@ -105,8 +106,18 @@ const routes = [
                     }
                 ]
             },
+            {
+                path: 'notfound',
+                name: 'NotFound',
+                component: NotFound,
+                meta: {title: 'HTTP 404'}
+            },
         ]
-    }
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/notfound'
+    },
 ]
 
 

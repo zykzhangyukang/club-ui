@@ -108,8 +108,7 @@
                     if(res.code === 200){
                         this.post = res.result;
                     }else {
-                        this.$Message.warning(res.msg);
-                        this.$router.push('/');
+                        this.$router.push('/404');
                     }
 
                 }).finally(() => {
