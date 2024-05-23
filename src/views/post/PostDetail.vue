@@ -23,16 +23,17 @@
                                 <div class="author-section">
                                     <div class="author-info">
                                         <div class="author-actions">
-                                            <Avatar icon="ios-person" shape="square" :src="post.avatar" class="ivu-mr-16 ivu-tag-border"/>
+                                            <Avatar icon="ios-person" shape="square" :src="post.avatar"
+                                                    class="ivu-mr-16 ivu-tag-border"/>
                                             <Button class="follow-btn" size="small" :type="post.isFollowed? '': 'success'" @click="followUser(post.userId,post.isFollowed)" :loading="followLoading" :disabled="null!=currentUser && currentUser.userId === post.userId">
-                                                <Icon type="md-star-outline"/>
                                                 {{post.isFollowed ? '取消关注': '关注TA'}}
                                             </Button>
                                             <Button class="message-btn" size="small">
                                                 <Icon type="ios-chatboxes-outline"/>
                                                 私信
                                             </Button>
-                                            <Button class="edit-btn" size="small" @click="toEditPostPage(post.postId)" v-if="currentUser && post.userId === currentUser.userId">
+                                            <Button class="edit-btn" size="small" @click="toEditPostPage(post.postId)"
+                                                    v-if="currentUser && post.userId === currentUser.userId">
                                                 编辑
                                             </Button>
                                         </div>
@@ -40,7 +41,8 @@
                                 </div>
                                 <div class="post-header">
                                     <div class="header-info" v-line-clamp="1">
-                                        <span class="ivu-ml-4" style="color: #778087;font-weight:600;cursor: pointer;"> {{post.nickname}}</span> 发布于 {{post.createdAt }}
+                                        <span class="ivu-ml-4" style="color: #778087;font-weight:600;cursor: pointer;"> {{post.nickname}}</span>
+                                        发布于 {{post.createdAt }}
                                         <Divider type="vertical"/>
                                         阅读量:{{ post.viewsCount }}
                                         <Divider type="vertical"/>
@@ -60,6 +62,11 @@
                             </div>
                             <div id="post_content" v-html="post.content">
                             </div>
+                            <Divider>
+                                <Button class="edit-btn"    @click="likePost(post.postId,post.isLiked)" :loading="likeLoading" :icon="post.isLiked ? 'md-thumbs-up' :'ios-thumbs-up-outline' " style="color: #f40">
+                                </Button>
+                            </Divider>
+
                         </template>
                     </Skeleton>
                 </div>
@@ -77,7 +84,7 @@
 <script>
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
-    import {getPostDetail} from "@/apis/post";
+    import {getPostDetail, postLike, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
 
     export default {
@@ -89,25 +96,26 @@
             return {
                 loading: false,
                 followLoading: false,
+                likeLoading: false,
                 post: {}
             }
         },
-        computed:{
-            currentUser(){
+        computed: {
+            currentUser() {
                 return this.$store.state.user.info;
             }
         },
         methods: {
-            toEditPostPage(postId){
-                this.$router.push('/post/edit?id='+postId);
+            toEditPostPage(postId) {
+                this.$router.push('/post/edit?id=' + postId);
             },
             postDetail() {
                 let id = this.$route.query.id;
                 this.loading = true;
                 getPostDetail(id).then(res => {
-                    if(res.code === 200){
+                    if (res.code === 200) {
                         this.post = res.result;
-                    }else {
+                    } else {
                         this.$router.push('/404');
                     }
 
@@ -115,30 +123,72 @@
                     this.loading = false;
                 })
             },
-            followUser(userId,isFollowed){
+            followUser(userId, isFollowed) {
                 let isLogin = this.$store.state.user.isLogin;
-                if(!isLogin){
+                if (!isLogin) {
                     return this.$Message.warning('用户未登录！');
                 }
                 // 如果关注了，则取消关注
-                if(isFollowed){
+                if (isFollowed) {
                     this.followLoading = true;
-                    userUnFollow(userId).then(res=>{
-                        this.$Message.success("取关成功！");
-                        this.post.isFollowed = false;
-                    }).finally(()=>{
+                    userUnFollow(userId).then(res => {
+                        if(res.code === 200){
+                            // this.$Message.success("取关成功！");
+                            this.post.isFollowed = false;
+                        }else {
+                            this.$Message.error(res.msg);
+                        }
+                    }).finally(() => {
                         this.followLoading = false;
                     })
-                }else {
+                } else {
                     this.followLoading = true;
-                    userFollow(userId).then(res=>{
-                        this.$Message.success("关注成功！");
-                        this.post.isFollowed = true;
-                    }).finally(()=>{
+                    userFollow(userId).then(res => {
+                        if(res.code === 200){
+                            // this.$Message.success("关注成功！");
+                            this.post.isFollowed = true;
+                        }else {
+                            this.$Message.error(res.msg);
+                        }
+                    }).finally(() => {
                         this.followLoading = false;
                     })
                 }
             },
+            likePost(userId, isLiked) {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
+                // 如果点赞了，则取消点赞
+                if (isLiked) {
+                    this.likeLoading = true;
+                    postUnLike(userId).then(res => {
+                        if (res.code === 200) {
+                            // this.$Message.success("已取消点赞！");
+                            this.post.isLiked = false;
+                            this.post.likesCount = this.post.likesCount -1;
+                        } else {
+                            this.$Message.error(res.msg);
+                        }
+                    }).finally(() => {
+                        this.likeLoading = false;
+                    })
+                } else {
+                    this.likeLoading = true;
+                    postLike(userId).then(res => {
+                        if (res.code === 200) {
+                            // this.$Message.success("点赞成功！");
+                            this.post.isLiked = true;
+                            this.post.likesCount = this.post.likesCount  + 1;
+                        } else {
+                            this.$Message.error(res.msg);
+                        }
+                    }).finally(() => {
+                        this.likeLoading = false;
+                    })
+                }
+            }
         },
         created() {
             this.postDetail();

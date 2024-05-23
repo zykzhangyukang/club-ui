@@ -1,5 +1,28 @@
 import http from '../utils/request'
 
+
+/**
+ * 点赞帖子
+ */
+export const postLike = (postId) => {
+    return http({
+        url: `/api/post/like/${postId}`,
+        method: 'post',
+    })
+}
+
+
+/**
+ * 取消用户
+ */
+export const postUnLike = (postId) => {
+    return http({
+        url: `/api/post/unlike/${postId}`,
+        method: 'post',
+    })
+}
+
+
 /**
  * 获取帖子详情
  */
