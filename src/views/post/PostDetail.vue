@@ -39,7 +39,7 @@
                                     <Button class="edit-btn" type="small"  @click="likePost(post.postId,post.isLiked)" style="color: #666" :disabled="likeLoading">
                                         <Icon   :type="post.isLiked ? 'md-thumbs-up' :'ios-thumbs-up-outline' " style="color: #f40;font-size: 13px;vertical-align: text-bottom" /> 点赞数:{{ post.likesCount }}
                                     </Button>
-                                    <Button class="edit-btn" type="small" @click="collectPost(post.postId,post.isCollected)" style="cursor: pointer" >
+                                    <Button class="edit-btn" type="small" @click="collectPost(post.postId,post.isCollected)" style="cursor: pointer"  :disabled="collectLoading" >
                                         <Icon  :type="post.isCollected ? 'ios-heart' :'ios-heart-outline' " style="color: orange;font-size: 13px;" /> 收藏:{{ post.collectsCount }}
                                     </Button>
                                 </div>

@@ -45,7 +45,7 @@
                                                placeholder="个人简介"/>
                                     </FormItem>
                                     <FormItem>
-                                        <Button type="primary" @click="updateUserInfo" :loading="updateUserLoading">立即修改</Button>
+                                        <Button type="primary" @click="updateUserInfo" :disabled="updateUserLoading">立即修改</Button>
                                         <Button style="margin-left: 8px" @click="handleReset('userInfoForm')">重置
                                         </Button>
                                     </FormItem>

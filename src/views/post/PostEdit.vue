@@ -63,13 +63,13 @@
 <script>
     import UserInfoNav from "@/layouts/UserInfoNav";
     import PublishTips from '@/views/post/PublishTips'
-    import {sectionList} from "@/apis";
     import {getPostDetail, getPostToken, postPublish} from "@/apis/post";
     import '@wangeditor/editor/dist/css/style.css' // 引入 css
-    import {onBeforeUnmount, ref, shallowRef, onMounted, reactive} from 'vue'
+    import {onBeforeUnmount, onMounted, reactive, ref, shallowRef} from 'vue'
     import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
     import {Message} from 'view-ui-plus'
     import {useRoute, useRouter} from 'vue-router'
+    import {useStore} from "vuex";
 
 
     export default {
@@ -81,6 +81,7 @@
             Toolbar
         },
         setup() {
+            const store = useStore();
             const route = useRoute();
             const router = useRouter();
             // 编辑器实例，必须用 shallowRef
@@ -194,10 +195,12 @@
                 editorRef.value = editor // 记录 editor 实例，重要！
             }
 
+
             function initSectionList() {
-                sectionList().then(res => {
-                    selectList.value = transformData(res.result);
-                })
+                let list = store.state.index.sectionList;
+                if(list){
+                    selectList.value = transformData(list);
+                }
             }
 
             function initPostToken() {

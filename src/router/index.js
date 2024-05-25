@@ -154,6 +154,7 @@ router.beforeEach(async (to, from, next) => {
                 next();
             } else {
 
+                // 用户信息
                 let res = await userInfo();
                 store.commit('user/setUserInfo', res.result);
                 next({...to, replace: true});

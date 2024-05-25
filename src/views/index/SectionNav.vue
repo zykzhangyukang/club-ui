@@ -1,15 +1,14 @@
 <template>
     <div class="section_nav_wrapper" style="position: relative">
-
         <Skeleton :loading="loading" animated avatar>
             <template #template>
                 <div class="first_level_section">
-                    <a class="first_level_item" v-for="item in 13">
+                    <a class="first_level_item" v-for="item in 13" :key="item">
                         <SkeletonItem width="30px" height="16px" />
                     </a>
                 </div>
                 <div class="second_level_section">
-                    <a class="second_level_item" v-for="subItem in 11">
+                    <a class="second_level_item" v-for="subItem in 11" :key="subItem">
                         <SkeletonItem width="30px" height="16px" />
                     </a>
                 </div>
@@ -17,12 +16,12 @@
             <template #default>
                 <div class="first_level_section">
                     <a v-for="item in sectionList" :key="item.sectionId"
-                       :class="[item.sectionId === activeFirstSection ? 'first_level_item current_active': 'first_level_item']"
+                       :class="[item.sectionId === activeFirstSection ? 'first_level_item current_active' : 'first_level_item']"
                        @click="selectFirstSection(item)">{{item.sectionName}}</a>
                 </div>
                 <div class="second_level_section">
                     <a v-for="subItem in activeFirstSectionChildren" :key="subItem.sectionId"
-                       :class="[subItem.sectionId === activeSecondSection ? 'second_level_item current_active': 'second_level_item']"
+                       :class="[subItem.sectionId === activeSecondSection ? 'second_level_item current_active' : 'second_level_item']"
                        @click="selectSecondSection(subItem)">{{subItem.sectionName}}</a>
                 </div>
             </template>
@@ -31,33 +30,45 @@
 </template>
 
 <script>
-    import { sectionList } from "@/apis";
     import EventBus from '@/utils/eventBus';
 
     export default {
-        name: "CatalogNav.vue",
+        name: "SectionNav",
+        props: {
+            sectionList: {
+                type: Array,
+                required: true
+            }
+        },
         data() {
             return {
-                loading: false,
-                sectionList: [],
+                loading: true,
                 activeFirstSection: null,
                 activeSecondSection: null,
                 activeFirstSectionChildren: []
             }
         },
+        watch: {
+            sectionList: {
+                immediate: true,
+                handler(newList) {
+                    if (newList.length > 0) {
+                        this.getSectionList();
+                    }
+                }
+            }
+        },
         methods: {
             getSectionList() {
-                this.loading = true;
-                sectionList().then(res => {
-                    this.sectionList = res.result;
-                    if (this.sectionList.length > 0) {
-                        this.activeFirstSection = this.sectionList[0].sectionId; // Set the first section as active on initialization
-                        this.activeFirstSectionChildren = this.sectionList[0].children || [];
-                    }
-                    EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
-                }).finally(() => {
+                let list = this.sectionList || [];
+                if (list.length > 0) {
+                    this.activeFirstSection = list[0].sectionId;
+                    this.activeFirstSectionChildren = list[0].children || [];
+                }
+                setTimeout(() => {
                     this.loading = false;
-                });
+                    EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
+                }, 1);
             },
             selectFirstSection(item) {
                 this.activeFirstSection = item.sectionId;
@@ -70,8 +81,7 @@
                 EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
             }
         },
-        mounted() {
-            this.getSectionList();
+        created() {
         }
     }
 </script>
@@ -79,7 +89,6 @@
 <style scoped>
     .section_nav_wrapper {
         height: 86px;
-        /*box-shadow: 0 1px 1px rgba(0, 0, 0, .1);*/
         border: 1px solid #efefef;
     }
 

@@ -1,7 +1,7 @@
 <template>
     <Dropdown>
         <span href="javascript:void(0)">
-             <Badge  :count="totalCount" :class-name="'badge_count'" :overflow-count="10">
+             <Badge  :count="totalCount" :class-name="'badge_count'" :overflow-count="9">
                    <Icon type="md-notifications-outline" style="font-size: 20px" />
             </Badge>
         </span>

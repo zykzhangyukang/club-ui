@@ -1,5 +1,15 @@
 import http from '../utils/request'
 
+/**
+ * 获取首页资源
+ */
+export const getResource = () => {
+    return http({
+        url: `/api/index/resource`,
+        method: 'get',
+    })
+}
+
 
 /**
  * 获取板块列表
