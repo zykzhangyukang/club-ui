@@ -42,6 +42,10 @@
                                     <span class="nickname">{{ item.nickname }}</span>
                                     •
                                     <span class="timestamp">{{ item.createdAtStr }}</span>
+                                    <span v-if="item.isHot">
+                                           •
+                                    <span class="hot_tag" >热</span>
+                                    </span>
                                 </template>
                             </ListItemMeta>
                             <template #action>
@@ -184,6 +188,22 @@
     }
 
     .post_title {
+        cursor: pointer;
+    }
+    .hot_tag{
+        display: inline-block;
+        height: 17px;
+        line-height: 17px;
+        margin: 0px 4px 2px 0;
+        padding: 0 3px;
+        border: 1px solid #e8eaec;
+        border-radius: 3px;
+        font-size: 11px;
+        vertical-align: middle;
+        opacity: 0.8;
+        overflow: hidden;
+        background: #f90;
+        color: #ffffff;
         cursor: pointer;
     }
 </style>

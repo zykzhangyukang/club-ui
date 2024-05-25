@@ -72,6 +72,7 @@
             </Col>
             <Col span="6">
                 <div class="right_content">
+                    <UserInfoNav></UserInfoNav>
                     <GuideNav></GuideNav>
                     <AdvertNav></AdvertNav>
                 </div>
@@ -85,11 +86,13 @@
     import AdvertNav from "@/layouts/AdvertNav";
     import {getPostDetail, postCollect, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
+    import UserInfoNav from "@/layouts/UserInfoNav";
 
     export default {
         components: {
             GuideNav,
             AdvertNav,
+            UserInfoNav
         },
         data() {
             return {
@@ -135,6 +138,8 @@
                         if(res.code === 200){
                             // this.$Message.success("取关成功！");
                             this.post.isFollowed = false;
+                            // 关注人数-1
+                            this.$store.commit('user/incFollowCount', -1);
                         }else {
                             this.$Message.error(res.msg);
                         }
@@ -147,6 +152,8 @@
                         if(res.code === 200){
                             // this.$Message.success("关注成功！");
                             this.post.isFollowed = true;
+                            // 关注人数+1
+                            this.$store.commit('user/incFollowCount', +1);
                         }else {
                             this.$Message.error(res.msg);
                         }

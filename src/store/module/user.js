@@ -23,6 +23,11 @@ export default {
             }
             localStorage.setItem("token", token)
         },
+        incFollowCount(state, num){
+          if(state.info){
+              state.info.followCount +=num;
+          }
+        },
         logout(state){
             state.token = '';
             state.info = '';

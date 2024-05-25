@@ -7,9 +7,9 @@
             <div class="user-text">
                 <a class="custom-link" href="#">收藏 (0)</a>
                 <Divider type="vertical" />
-                <a class="custom-link" href="#">话题 (2)</a>
+                <a class="custom-link" href="#">关注 ({{currentUser.followCount}})</a>
                 <Divider type="vertical" />
-                <a class="custom-link" href="#">关注 (5)</a>
+                <a class="custom-link" href="#">粉丝 (2)</a>
             </div>
             <div class="user-description">
                 <a class="username" href="#">
@@ -17,7 +17,6 @@
                            {{ currentUser.nickname }}
                     </span>
                     <Badge color="green" text="在线" class="online-status ivu-mr-4" />
-<!--                    <img width="18" height="18" :src="require('@/assets/img/silver.png')" />-->
                     <img width="18" height="18" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/silver.png" />
                 </a>
             </div>
