@@ -1,5 +1,3 @@
-import {getResource} from "@/apis";
-
 export default {
     namespaced: true,
     state: {

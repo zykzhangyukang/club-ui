@@ -61,6 +61,7 @@
 <script>
     import UserInfoNav from "@/layouts/UserInfoNav";
     import PublishTips from '@/views/post/PublishTips'
+    import {sectionList} from "@/apis";
     import {getPostToken, postPublish} from "@/apis/post";
     import '@wangeditor/editor/dist/css/style.css' // 引入 css
     import {onBeforeUnmount, onMounted, reactive, ref, shallowRef} from 'vue'
@@ -176,6 +177,9 @@
             }
 
             function initSectionList() {
+                sectionList().then(res => {
+                    selectList.value = transformData(res.result);
+                })
                 let list = store.state.index.sectionList;
                 if(list){
                     selectList.value = transformData(list);

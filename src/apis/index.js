@@ -5,7 +5,7 @@ import http from '../utils/request'
  */
 export const getResource = () => {
     return http({
-        url: `/api/index/resource`,
+        url: `/api/index`,
         method: 'get',
     })
 }

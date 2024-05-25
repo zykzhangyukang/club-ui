@@ -2,76 +2,75 @@
     <div class="list_wrapper">
         <Skeleton :loading="loading" animated avatar>
             <template #template>
-                <List  :border="false">
-                    <ListItem v-for="item in 30">
+                <List :border="false">
+                    <ListItem v-for="item in 30" :key="item">
                         <ListItemMeta>
                             <template v-slot:title>
-                                <a class="post_title" v-line-clamp="1" ><SkeletonItem block width="80%" height="16px" /></a>
+                                <a class="post_title" v-line-clamp="1"><SkeletonItem block width="80%" height="16px" /></a>
                             </template>
                             <template v-slot:avatar>
                                 <SkeletonItem type="circle" class="ivu-mr" />
                             </template>
                             <template v-slot:description>
-                                <span class="section_name"><SkeletonItem width="44px" height="16px" /> </span>  <span class="nickname"><SkeletonItem width="60px" height="16px" /></span>  <span style="font-size: 12px;color: #778087"><SkeletonItem width="60px" height="16px" /></span>
+                                <span class="section_name"><SkeletonItem width="44px" height="16px" /></span>
+                                <span class="nickname"><SkeletonItem width="60px" height="16px" /></span>
+                                <span class="timestamp"><SkeletonItem width="60px" height="16px" /></span>
                             </template>
                         </ListItemMeta>
                         <template #action>
-                            <li>
-                                <SkeletonItem width="23px" height="16px" />
-                            </li>
-                            <li>
-                                <SkeletonItem width="23px" height="16px" />
-                            </li>
-                            <li>
-                                <SkeletonItem width="23px" height="16px" />
-                            </li>
+                            <li><SkeletonItem width="23px" height="16px" /></li>
+                            <li><SkeletonItem width="23px" height="16px" /></li>
+                            <li><SkeletonItem width="23px" height="16px" /></li>
                         </template>
                     </ListItem>
                 </List>
             </template>
             <template #default>
-                <div  v-if="postList && postList.length > 0">
+                <div v-if="postList.length">
                     <List :loading="loading" :border="false">
                         <ListItem v-for="item in postList" :key="item.postId">
                             <ListItemMeta>
                                 <template v-slot:title>
-                                    <a class="post_title" v-line-clamp="1" @click="getPostDetail(item.postId)">  {{item.title}}</a>
+                                    <a class="post_title" v-line-clamp="1" @click="getPostDetail(item.postId)">{{ item.title }}</a>
                                 </template>
                                 <template v-slot:avatar>
-                                    <Avatar  :src="item.avatar" size="35"  />
+                                    <Avatar :src="item.avatar" size="35" />
                                 </template>
                                 <template v-slot:description>
-                                    <span class="section_name">{{item.sectionName}} </span> •  <span class="nickname">{{item.nickname}}</span> • <span style="font-size: 12px;color: #778087">{{item.createdAtStr}}</span>
+                                    <span class="section_name">{{ item.sectionName }}</span>
+                                    •
+                                    <span class="nickname">{{ item.nickname }}</span>
+                                    •
+                                    <span class="timestamp">{{ item.createdAtStr }}</span>
                                 </template>
                             </ListItemMeta>
                             <template #action>
-                                <li>
-                                    <Icon type="ios-star-outline"/>
-                                    {{item.collectsCount}}
-                                </li>
-                                <li>
-                                    <Icon type="ios-thumbs-up-outline"/>
-                                    {{item.likesCount}}
-                                </li>
-                                <li>
-                                    <Icon type="ios-chatbubbles-outline"/>
-                                    {{item.commentsCount}}
-                                </li>
+                                <li><Icon type="ios-star-outline" />{{ item.collectsCount }}</li>
+                                <li><Icon type="ios-thumbs-up-outline" />{{ item.likesCount }}</li>
+                                <li><Icon type="ios-chatbubbles-outline" />{{ item.commentsCount }}</li>
                             </template>
                         </ListItem>
                     </List>
-                    <Page :total="total" :page-size="searchForm.pageSize" :model-value="searchForm.currentPage" class-name="page_bar" size="default" @on-change="pageChange" />
+                    <Page
+                            :total="total"
+                            :page-size="searchForm.pageSize"
+                            :model-value="searchForm.currentPage"
+                            class-name="page_bar"
+                            size="default"
+                            @on-change="pageChange"
+                    />
                 </div>
                 <div v-show="isEmpty">
-                    <img class="empty_svg" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/empty.svg"/>
-                    <div class="ivu-text-center ivu-mb-16 " style="color: #808695;font-size: 11px;">暂无更多内容了！</div>
+                    <img class="empty_svg" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/empty.svg" />
+                    <div class="empty_text">暂无更多内容了！</div>
                 </div>
             </template>
         </Skeleton>
     </div>
 </template>
+
 <script>
-    import {getPostPage} from "@/apis/post";
+    import { getPostPage } from "@/apis/post";
     import tool from "@/utils/tool";
     import EventBus from '@/utils/eventBus';
 
@@ -82,39 +81,37 @@
                     currentPage: 1,
                     pageSize: 30,
                     firstSectionId: null,
-                    secondSectionId: null,
+                    secondSectionId: null
                 },
                 isEmpty: false,
                 postList: [],
                 loading: false,
-                total: 0,
-            }
+                total: 0
+            };
         },
         methods: {
-            getPage() {
+            async getPage() {
                 this.loading = true;
-                getPostPage(this.searchForm).then(res => {
+                try {
+                    const res = await getPostPage(this.searchForm);
                     this.postList = res.result.dataList;
-                    this.total= res.result.totalRow;
-                    this.postList.forEach(item=>{
+                    this.total = res.result.totalRow;
+                    this.postList.forEach(item => {
                         item.createdAtStr = tool.showTime(item.createdAt);
-                    })
+                    });
                     this.isEmpty = this.total === 0;
-                }).finally(() => {
+                } finally {
                     this.loading = false;
-                })
+                }
             },
-            pageChange(page){
+            pageChange(page) {
                 this.searchForm.currentPage = page;
                 this.getPage();
                 document.body.scrollTop = 0; // 兼容旧版本浏览器
                 document.documentElement.scrollTop = 0; // 兼容现代浏览器
             },
-            getPostDetail(postId){
-                this.$router.push({
-                    path: '/post/detail',
-                    query: { id: postId }
-                });
+            getPostDetail(postId) {
+                this.$router.push({ path: '/post/detail', query: { id: postId } });
             }
         },
         mounted() {
@@ -129,46 +126,64 @@
         beforeUnmount() {
             const eventBus = EventBus.config.globalProperties.$eventBus;
             eventBus.$off('sectionChange');
-        },
-    }
+        }
+    };
 </script>
+
 <style scoped>
     .list_wrapper {
         background: #ffffff;
-        padding: 0 10px 0px 10px;
+        padding: 0 10px;
         border: 1px solid #e4e6eb;
     }
-    .section_name{
-        background: #f5f5f5;
+
+    .section_name,
+    .nickname,
+    .timestamp {
         font-size: 12px;
+    }
+
+    .section_name {
+        background: #f5f5f5;
         padding: 0 4px;
         display: inline-block;
         border-radius: 2px;
         color: #999;
     }
-    .nickname{
+
+    .nickname {
         font-weight: 600;
-        font-size: 12px;
         color: #778087;
         cursor: pointer;
     }
-    .nickname:hover{
+
+    .nickname:hover {
         text-decoration: underline;
     }
-    .empty_svg{
+
+    .empty_svg {
         width: 150px;
         height: 150px;
         display: block;
-        text-align: center;
         margin: 20px auto;
         user-select: none;
         -webkit-user-drag: none;
     }
-    .page_bar{
+
+    .empty_text {
+        text-align: center;
+        margin-bottom: 16px;
+        color: #808695;
+        font-size: 11px;
+    }
+
+    .page_bar {
         display: inline-block;
         margin: 10px auto;
         font-size: 12px;
     }
-    .post_title{
+
+    .post_title {
+        cursor: pointer;
     }
 </style>

@@ -65,10 +65,10 @@
                     this.activeFirstSection = list[0].sectionId;
                     this.activeFirstSectionChildren = list[0].children || [];
                 }
-                setTimeout(() => {
+                this.$nextTick(function () {
                     this.loading = false;
                     EventBus.config.globalProperties.$eventBus.$emit('sectionChange', this.activeFirstSection, this.activeSecondSection);
-                }, 1);
+                })
             },
             selectFirstSection(item) {
                 this.activeFirstSection = item.sectionId;
