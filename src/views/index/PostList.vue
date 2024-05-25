@@ -47,7 +47,7 @@
                             <template #action>
                                 <li>
                                     <Icon type="ios-star-outline"/>
-                                    {{item.favoritesCount}}
+                                    {{item.collectsCount}}
                                 </li>
                                 <li>
                                     <Icon type="ios-thumbs-up-outline"/>
@@ -63,7 +63,6 @@
                     <Page :total="total" :page-size="searchForm.pageSize" :model-value="searchForm.currentPage" class-name="page_bar" size="default" @on-change="pageChange" />
                 </div>
                 <div v-show="isEmpty">
-<!--                    <img class="empty_svg" :src="require('@/assets/img/empty.svg')"/>-->
                     <img class="empty_svg" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/empty.svg"/>
                     <div class="ivu-text-center ivu-mb-16 " style="color: #808695;font-size: 11px;">暂无更多内容了！</div>
                 </div>

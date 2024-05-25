@@ -2,6 +2,28 @@ import http from '../utils/request'
 
 
 /**
+ * 收藏帖子
+ */
+export const postCollect = (postId) => {
+    return http({
+        url: `/api/post/collect/${postId}`,
+        method: 'post',
+    })
+}
+
+
+/**
+ * 取消收藏帖子
+ */
+export const postUnCollect = (postId) => {
+    return http({
+        url: `/api/post/uncollect/${postId}`,
+        method: 'post',
+    })
+}
+
+
+/**
  * 点赞帖子
  */
 export const postLike = (postId) => {

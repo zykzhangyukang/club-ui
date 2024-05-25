@@ -1,4 +1,5 @@
 import {notificationCount} from "@/apis";
+import {Message} from "view-ui-plus";
 
 export default {
     namespaced: true,
@@ -14,6 +15,7 @@ export default {
     },
     mutations: {
         ADD_MSG(state, msg) {
+            Message.success("收到消息通知！");
             if(msg.type === 'register_welcome' || msg.type === 'following_user'){
                 state.sysCount += 1
             }

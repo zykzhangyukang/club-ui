@@ -3,72 +3,71 @@
         <Row :gutter="16">
             <Col span="18">
                 <div class="main_content">
-                    <Skeleton :loading="loading" animated style="margin-top: 12px" :paragraph="{ rows: 6}">
-                        <template #template>
-                        </template>
-                        <template #default>
-                            <Breadcrumb>
-                                <BreadcrumbItem to="/">
-                                    首页
-                                </BreadcrumbItem>
-                                <BreadcrumbItem to="/">
-                                    {{post.parentSectionName}}
-                                </BreadcrumbItem>
-                                <BreadcrumbItem to="/">
-                                    {{post.sectionName}}
-                                </BreadcrumbItem>
-                            </Breadcrumb>
-                            <h1 id="post_title" v-line-clamp="1">{{post.title}}</h1>
-                            <div class="post-details">
-                                <div class="author-section">
-                                    <div class="author-info">
-                                        <div class="author-actions">
-                                            <Avatar icon="ios-person" shape="square" :src="post.avatar"
-                                                    class="ivu-mr-16 ivu-tag-border"/>
-                                            <Button class="follow-btn" size="small" :type="post.isFollowed? '': 'success'" @click="followUser(post.userId,post.isFollowed)" :loading="followLoading" :disabled="null!=currentUser && currentUser.userId === post.userId">
-                                                {{post.isFollowed ? '取消关注': '关注TA'}}
-                                            </Button>
-                                            <Button class="message-btn" size="small">
-                                                <Icon type="ios-chatboxes-outline"/>
-                                                私信
-                                            </Button>
-                                            <Button class="edit-btn" size="small" @click="toEditPostPage(post.postId)"
-                                                    v-if="currentUser && post.userId === currentUser.userId">
-                                                编辑
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="post-header">
-                                    <div class="header-info" v-line-clamp="1">
-                                        <span class="ivu-ml-4" style="color: #778087;font-weight:600;cursor: pointer;"> {{post.nickname}}</span>
-                                        发布于 {{post.createdAt }}
-                                        <Divider type="vertical"/>
-                                        阅读量:{{ post.viewsCount }}
-                                        <Divider type="vertical"/>
-                                        点赞:{{ post.likesCount }}
-                                        <Divider type="vertical"/>
-                                        收藏:{{ post.favoritesCount }}
-                                        <Divider type="vertical"/>
-                                        评论:{{ post.commentsCount }}
-                                        <Divider type="vertical"/>
-                                        <span v-if="post.tags && post.tags.length > 0">标签：
-                                        <tag size="small" v-for="item in post.tags">
-                                             {{ item }}
-                                        </tag>
-                                        </span>
-                                    </div>
+                    <Spin :show="loading" fix size=large >
+                    </Spin>
+                    <Breadcrumb>
+                        <BreadcrumbItem to="/">
+                            首页
+                        </BreadcrumbItem>
+                        <BreadcrumbItem to="/">
+                            {{post.parentSectionName}}
+                        </BreadcrumbItem>
+                        <BreadcrumbItem to="/">
+                            {{post.sectionName}}
+                        </BreadcrumbItem>
+                    </Breadcrumb>
+                    <h1 id="post_title" v-line-clamp="1">{{post.title}}</h1>
+                    <div class="post-details">
+                        <div class="author-section">
+                            <div class="author-info">
+                                <div class="author-actions">
+                                    <Avatar icon="ios-person" shape="square" :src="post.avatar" class="ivu-mr-16 ivu-tag-border"/>
+                                    <Button v-if="post.isFollowed" class="follow-btn" size="small"  @click="followUser(post.userId,post.isFollowed)" :disabled="(null!=currentUser && currentUser.userId === post.userId) || followLoading">
+                                      取消关注
+                                    </Button>
+                                    <Button v-else class="follow-btn" size="small"  type="success" @click="followUser(post.userId,post.isFollowed)" :disabled="(null!=currentUser && currentUser.userId === post.userId) || followLoading">
+                                      立即关注
+                                    </Button>
+                                    <Button class="message-btn" size="small">
+                                        <Icon type="ios-chatboxes-outline"/>
+                                        私信
+                                    </Button>
+                                    <Button class="edit-btn" size="small" @click="toEditPostPage(post.postId)"
+                                            v-if="currentUser && post.userId === currentUser.userId">
+                                        编辑
+                                    </Button>
+                                    <Button class="edit-btn" type="small"  @click="likePost(post.postId,post.isLiked)" style="color: #666" :disabled="likeLoading">
+                                        <Icon   :type="post.isLiked ? 'md-thumbs-up' :'ios-thumbs-up-outline' " style="color: #f40;font-size: 13px;vertical-align: text-bottom" /> 点赞数:{{ post.likesCount }}
+                                    </Button>
+                                    <Button class="edit-btn" type="small" @click="collectPost(post.postId,post.isCollected)" style="cursor: pointer" >
+                                        <Icon  :type="post.isCollected ? 'ios-heart' :'ios-heart-outline' " style="color: orange;font-size: 13px;" /> 收藏:{{ post.collectsCount }}
+                                    </Button>
                                 </div>
                             </div>
-                            <div id="post_content" v-html="post.content">
+                        </div>
+                        <div class="post-header">
+                            <div class="header-info" v-line-clamp="1">
+                                <span class="ivu-ml-4" style="color: #778087;font-weight:600;cursor: pointer;"> {{post.nickname}}</span>
+                                发布于 {{post.createdAt }}
+                                <Divider type="vertical"/>
+                                <label style="cursor: pointer" >
+                                    阅读量:{{ post.viewsCount }}
+                                </label>
+                                  <span style="user-select: none">
+                                    <Divider type="vertical"/>
+                                    评论:{{ post.commentsCount }}
+                                    <Divider type="vertical"/>
+                                    <span v-if="post.tags && post.tags.length > 0">标签：
+                                            <tag size="small" v-for="item in post.tags">
+                                                 {{ item }}
+                                            </tag>
+                                    </span>
+                                </span>
                             </div>
-                            <Divider>
-                                <Button class="edit-btn"    @click="likePost(post.postId,post.isLiked)" :loading="likeLoading" :icon="post.isLiked ? 'md-thumbs-up' :'ios-thumbs-up-outline' " style="color: #f40">
-                                </Button>
-                            </Divider>
-
-                        </template>
-                    </Skeleton>
+                        </div>
+                    </div>
+                    <div id="post_content" v-html="post.content">
+                    </div>
                 </div>
             </Col>
             <Col span="6">
@@ -84,7 +83,7 @@
 <script>
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
-    import {getPostDetail, postLike, postUnLike} from "@/apis/post";
+    import {getPostDetail, postCollect, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
 
     export default {
@@ -97,6 +96,7 @@
                 loading: false,
                 followLoading: false,
                 likeLoading: false,
+                collectLoading: false,
                 post: {}
             }
         },
@@ -186,6 +186,38 @@
                         }
                     }).finally(() => {
                         this.likeLoading = false;
+                    })
+                }
+            },
+            collectPost(userId, isCollected) {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
+                // 如果点赞了，则取消点赞
+                if (isCollected) {
+                    this.collectLoading = true;
+                    postUnCollect(userId).then(res => {
+                        if (res.code === 200) {
+                            this.post.isCollected = false;
+                            this.post.collectsCount = this.post.collectsCount -1;
+                        } else {
+                            this.$Message.error(res.msg);
+                        }
+                    }).finally(() => {
+                        this.collectLoading = false;
+                    })
+                } else {
+                    this.collectLoading = true;
+                    postCollect(userId).then(res => {
+                        if (res.code === 200) {
+                            this.post.isCollected = true;
+                            this.post.collectsCount = this.post.collectsCount  + 1;
+                        } else {
+                            this.$Message.error(res.msg);
+                        }
+                    }).finally(() => {
+                        this.collectLoading = false;
                     })
                 }
             }
@@ -281,5 +313,8 @@
         font-size: 24px;
         color: rgba(0, 0, 0, .85);
         font-weight: 500;
+    }
+    .main_content{
+        min-height: 240px;
     }
 </style>

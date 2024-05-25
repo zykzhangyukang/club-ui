@@ -28,7 +28,7 @@ class MyWebSock {
         this.stompClient = Stomp.over(socket)
         this.stompClient.debug = null
         // 定义客户端的认证信息,按需求配置
-        const user = store.state.user.user;
+        const user = store.state.user.info;
         const headers = {
             Authorization: localStorage.getItem("token") || ""
         }
