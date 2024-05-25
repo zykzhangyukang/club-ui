@@ -5,7 +5,7 @@
         </div>
         <div class="user-info">
             <div class="user-text">
-                <a class="custom-link" href="#">收藏 (0)</a>
+                <a class="custom-link" href="#">收藏 ({{currentUser.collectCount}})</a>
                 <Divider type="vertical" />
                 <a class="custom-link" href="#">关注 ({{currentUser.followCount}})</a>
                 <Divider type="vertical" />

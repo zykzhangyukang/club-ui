@@ -22,10 +22,10 @@
                             <div class="author-info">
                                 <div class="author-actions">
                                     <Avatar icon="ios-person" shape="square" :src="post.avatar" class="ivu-mr-16 ivu-tag-border"/>
-                                    <Button v-if="post.isFollowed" class="follow-btn" size="small"  @click="followUser(post.userId,post.isFollowed)" :disabled="(null!=currentUser && currentUser.userId === post.userId) || followLoading">
+                                    <Button v-if="post.isFollowed && null!=currentUser && currentUser.userId !== post.userId" class="follow-btn" size="small"  @click="followUser(post.userId,post.isFollowed)" :disabled="followLoading">
                                       取消关注
                                     </Button>
-                                    <Button v-else class="follow-btn" size="small"  type="success" @click="followUser(post.userId,post.isFollowed)" :disabled="(null!=currentUser && currentUser.userId === post.userId) || followLoading">
+                                    <Button v-if="!post.isFollowed && null!=currentUser && currentUser.userId !== post.userId" class="follow-btn" size="small"  type="success" @click="followUser(post.userId,post.isFollowed)" :disabled="followLoading">
                                       立即关注
                                     </Button>
                                     <Button class="message-btn" size="small">
@@ -72,7 +72,6 @@
             </Col>
             <Col span="6">
                 <div class="right_content">
-                    <UserInfoNav></UserInfoNav>
                     <GuideNav></GuideNav>
                     <AdvertNav></AdvertNav>
                 </div>
@@ -86,13 +85,11 @@
     import AdvertNav from "@/layouts/AdvertNav";
     import {getPostDetail, postCollect, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
-    import UserInfoNav from "@/layouts/UserInfoNav";
 
     export default {
         components: {
             GuideNav,
             AdvertNav,
-            UserInfoNav
         },
         data() {
             return {
@@ -208,6 +205,8 @@
                         if (res.code === 200) {
                             this.post.isCollected = false;
                             this.post.collectsCount = this.post.collectsCount -1;
+                            // 收藏-1
+                            this.$store.commit('user/incCollectCount', -1);
                         } else {
                             this.$Message.error(res.msg);
                         }
@@ -220,6 +219,8 @@
                         if (res.code === 200) {
                             this.post.isCollected = true;
                             this.post.collectsCount = this.post.collectsCount  + 1;
+                            // 收藏-1
+                            this.$store.commit('user/incCollectCount', 1);
                         } else {
                             this.$Message.error(res.msg);
                         }

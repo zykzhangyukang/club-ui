@@ -28,6 +28,11 @@ export default {
               state.info.followCount +=num;
           }
         },
+        incCollectCount(state, num){
+          if(state.info){
+              state.info.collectCount +=num;
+          }
+        },
         logout(state){
             state.token = '';
             state.info = '';
