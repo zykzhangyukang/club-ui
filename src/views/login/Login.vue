@@ -48,8 +48,9 @@
                                 </p>
                             </FormItem>
                         </Form>
-                        <div v-if="loginType === '扫码登录'" style="text-align: center">
-                            <h3 style="user-select: none">关注公众号，输入验证码 <span style="color: red">{{eventCode}}</span>
+                        <div v-if="loginType === '扫码登录'" style="text-align: center;position: relative">
+                            <Spin fix :show="qrLoading"> </Spin>
+                            <h3 style="user-select: none">关注公众号，输入验证码 <span style="color: #f40">{{eventCode}}</span>
                                 <small><a @click="refreshEventCode" type="text"> &nbsp;刷新</a></small>
                             </h3>
 
@@ -71,7 +72,7 @@
     </Content>
 </template>
 <script>
-    import {loginCaptcha, userLogin} from "@/apis/user";
+    import {loginCaptcha, userInfo, userLogin} from "@/apis/user";
     import tool from "@/utils/tool";
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
@@ -94,6 +95,7 @@
                 tipMsg: '',
                 btnLoading: false,
                 spinShow: false,
+                qrLoading: false,
                 captchaBase64: '',
                 loginType: '账号登录',
                 deviceId: tool.uuid(),
@@ -104,9 +106,12 @@
         watch: {
             loginType(newVal) {
                 if (newVal === '扫码登录') {
+                    this.qrLoading = true;
                     getEventCode(this.deviceId).then(res => {
                         this.eventCode = res.result;
                         this.startScanTimer();
+                    }).finally(e=>{
+                        this.qrLoading = false;
                     })
                 } else {
                     this.stopScanTimer();
@@ -121,9 +126,16 @@
                 this.scanTimer = setInterval(this.checkScanStatus, 2000);
             },
             refreshEventCode() {
+                this.qrLoading = true;
                 this.eventMsg = '';
                 getEventCode(this.deviceId).then(res => {
-                    this.eventCode = res.result;
+                    if(res.code === 200){
+                        this.eventCode = res.result;
+                    }else {
+                        this.$Message.error(res.msg);
+                    }
+                }).finally(e=>{
+                    this.qrLoading = false;
                 })
             },
             stopScanTimer() {
@@ -159,10 +171,16 @@
                     return;
                 }
                 this.btnLoading = true;
-                userLogin(this.loginForm).then(res => {
+                userLogin(this.loginForm).then(async res => {
                     if(res.code === 200){
-                        this.$store.commit('user/setUserInfo', res.result);
+
+                        // 保存用户令牌
                         this.$store.commit('user/setUserToken', res.result.token);
+
+                        // 获取用户信息
+                        let response = await userInfo();
+                        this.$store.commit('user/setUserInfo', response.result);
+
                         this.$router.push('/');
                         this.$Message.success('登录成功！');
                     }else {

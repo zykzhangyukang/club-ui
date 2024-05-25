@@ -69,6 +69,7 @@
                     <div id="post_content" v-html="post.content">
                     </div>
                 </div>
+                <PostComment/>
             </Col>
             <Col span="6">
                 <div class="right_content">
@@ -85,11 +86,13 @@
     import AdvertNav from "@/layouts/AdvertNav";
     import {getPostDetail, postCollect, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
+    import PostComment from "@/views/post/PostComment";
 
     export default {
         components: {
             GuideNav,
             AdvertNav,
+            PostComment
         },
         data() {
             return {

@@ -7,6 +7,11 @@ export default {
     },
     getters: {},
     mutations: {
+        setAvatar(state, avatar){
+            if(state.info){
+                state.info.avatar =avatar;
+            }
+        },
         setUserInfo(state, info) {
             if(info){
                 state.info = info;
