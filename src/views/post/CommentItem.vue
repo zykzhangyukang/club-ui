@@ -20,7 +20,7 @@
             </label>
         </div>
         <div v-if="showReply" class="reply-input">
-            <Input v-model="replyContent" placeholder="写下你的回复..." />
+            <Input v-model="replyContent" placeholder="写下你的回复..." class="ivu-mr-4 ivu-ml-4" />
             <Button type="primary" @click="submitReply(comment)">回复</Button>
         </div>
         <div class="reply-list" v-if="comment.replies.length">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="reply-content">
-                    <span> {{ reply.content }}</span>
+                    <span v-if="reply.replyId > 0"> 回复 <a> @{{reply.toUserNickName}}：</a></span>  {{ reply.content }}
                 </div>
                 <div class="reply-actions">
                     <label type="text" @click="likeReply(reply)">
@@ -45,7 +45,7 @@
                     </label>
                 </div>
                 <div v-if="reply.showReplyInput" class="reply-input">
-                    <Input v-model="reply.replyContent" placeholder="写下你的回复..." />
+                    <Input v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" />
                     <Button type="primary" @click="submitReplyForReply(reply)">回复</Button>
                 </div>
             </div>
@@ -81,6 +81,10 @@
                 this.showReply = !this.showReply;
             },
             submitReply(comment) {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
                 if (this.replyContent.trim() !== "") {
                     let param = {
                         postId: comment.postId,
@@ -103,14 +107,19 @@
             },
             toggleReplyInputForReply(reply) {
                 reply.showReplyInput = !reply.showReplyInput;
+                reply.placeholder = `回复 @${reply.nickname}：`;
             },
             submitReplyForReply(reply) {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
                 if (reply.replyContent.trim() !== "") {
                     let param = {
                         postId: reply.postId,
                         parentId: this.comment.commentId,
                         replyId: reply.commentId,
-                        content: reply.replyContent,
+                        content: `回复 @${reply.nickname}：${reply.replyContent}`,
                     }
                     postComment(param).then(res => {
                         if (res.code === 200) {
@@ -189,5 +198,11 @@
         display: flex;
         gap: 8px;
         margin-top: 8px;
+    }
+    .reply-actions label{
+        cursor: pointer;
+    }
+    .comment-actions label{
+        cursor: pointer;
     }
 </style>

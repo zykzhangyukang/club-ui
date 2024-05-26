@@ -44,6 +44,10 @@
         },
         methods: {
             addComment() {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
                 if (this.newComment.trim() !== "") {
                     let param = {
                         postId: this.postId,
