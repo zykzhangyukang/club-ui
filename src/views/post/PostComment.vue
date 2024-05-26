@@ -12,6 +12,8 @@
                         :key="index"
                         :comment="comment"
                         @reply="addReply(index, $event)"
+                        @deleteComment="deleteComment(index)"
+                        @deleteReply="deleteReply(index, $event)"
                 />
             </div>
         </Card>
@@ -20,7 +22,7 @@
 
 <script>
     import CommentItem from './CommentItem.vue';
-    import {postComment} from "@/apis/post";
+    import {postComment, deleteCommentById, postCommentDelete} from "@/apis/post";
 
     export default {
         name: "PostComment",
@@ -28,7 +30,6 @@
             CommentItem
         },
         props: {
-            post: Object,
             postId: Number,
             comments: Array
         },
@@ -66,6 +67,28 @@
             },
             addReply(commentIndex, reply) {
                 this.comments[commentIndex].replies.push(reply);
+            },
+            deleteComment(index) {
+                const commentId = this.comments[index].commentId;
+                postCommentDelete(commentId).then(res=>{
+                    if(res.code === 200){
+                        this.comments.splice(index, 1);
+                        this.$Message.success("删除成功！")
+                    }else {
+                        this.$Message.error(res.msg);
+                    }
+                })
+            },
+            deleteReply(commentIndex, replyIndex) {
+                const replyId = this.comments[commentIndex].replies[replyIndex].commentId;
+                postCommentDelete(replyId).then(res=>{
+                    if(res.code === 200){
+                        this.comments[commentIndex].replies.splice(replyIndex, 1);
+                        this.$Message.success("删除成功！")
+                    }else {
+                        this.$Message.error(res.msg);
+                    }
+                })
             }
         }
     };

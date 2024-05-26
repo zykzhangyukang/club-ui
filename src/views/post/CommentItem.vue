@@ -4,7 +4,7 @@
             <Avatar :src="comment.avatar" />
             <div class="user-info">
                 <span class="username">{{ comment.nickname }}</span>
-                <span class="timestamp">{{ comment.createTime }}</span>
+                <span class="timestamp">{{ formatTime(comment.createTime) }}</span>
                 <span class="location">{{ comment.location }}</span>
             </div>
         </div>
@@ -18,8 +18,11 @@
             <label type="text" @click="toggleReplyInput">
                 <Icon type="md-text" /> 回复
             </label>
+            <label type="text" @click="deleteComment" v-if="currentUser==null || currentUser.userId === comment.userId">
+                <Icon type="md-trash" /> 删除
+            </label>
         </div>
-        <div v-if="showReply" class="reply-input">
+        <div v-if="comment.showReply" class="reply-input">
             <Input v-model="replyContent" placeholder="写下你的回复..." class="ivu-mr-4 ivu-ml-4" />
             <Button type="primary" @click="submitReply(comment)">回复</Button>
         </div>
@@ -29,7 +32,7 @@
                     <Avatar :src="reply.avatar" />
                     <div class="user-info">
                         <span class="username">{{ reply.nickname }}</span>
-                        <span class="timestamp">{{ reply.createTime}}</span>
+                        <span class="timestamp">{{ formatTime(reply.createTime)}}</span>
                         <span class="location"> {{ reply.location }}</span>
                     </div>
                 </div>
@@ -43,11 +46,17 @@
                     <label type="text" @click="toggleReplyInputForReply(reply)">
                         <Icon type="md-text" /> 回复
                     </label>
+                    <label type="text" @click="deleteReply(index)" v-if="currentUser==null || currentUser.userId === reply.userId">
+                        <Icon type="md-trash" /> 删除
+                    </label>
                 </div>
                 <div v-if="reply.showReplyInput" class="reply-input">
                     <Input v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" />
                     <Button type="primary" @click="submitReplyForReply(reply)">回复</Button>
                 </div>
+            </div>
+            <div class="load-more-replies">
+                <span>共22条回复，点击查看</span>
             </div>
         </div>
     </div>
@@ -64,21 +73,23 @@
         },
         data() {
             return {
-                showReply: false,
                 replyContent: ""
             };
         },
-        filters:{
-          formatTime(time){
-              return tool.showTime(time);
-          }
+        computed: {
+            currentUser() {
+                return this.$store.state.user.info;
+            },
         },
         methods: {
+            formatTime(time){
+                return tool.showTime(time);
+            },
             likeComment() {
                 this.comment.likes += 1;
             },
             toggleReplyInput() {
-                this.showReply = !this.showReply;
+                this.comment.showReply = !this.comment.showReply;
             },
             submitReply(comment) {
                 let isLogin = this.$store.state.user.isLogin;
@@ -131,6 +142,24 @@
                         }
                     })
                 }
+            },
+            deleteComment() {
+                this.$Modal.confirm({
+                    title: '删除评论',
+                    content: '<p>您是否要删除该条评论？</p>',
+                    onOk: () => {
+                        this.$emit('deleteComment');
+                    },
+                });
+            },
+            deleteReply(replyIndex) {
+                this.$Modal.confirm({
+                    title: '删除回复',
+                    content: '<p>您是否要删除该条回复？</p>',
+                    onOk: () => {
+                        this.$emit('deleteReply', replyIndex);
+                    },
+                });
             }
         }
     }
@@ -198,11 +227,19 @@
         display: flex;
         gap: 8px;
         margin-top: 8px;
+        user-select: none;
     }
     .reply-actions label{
         cursor: pointer;
     }
     .comment-actions label{
         cursor: pointer;
+    }
+    .load-more-replies {
+        text-align: left;
+        cursor: pointer;
+        color: #9499A0;
+        margin-top: 8px;
+        font-size: 12px;
     }
 </style>

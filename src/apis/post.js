@@ -1,6 +1,17 @@
 import http from '../utils/request'
 
 /**
+ * 删除帖子评论
+ */
+export const postCommentDelete = (commentId) => {
+    return http({
+        url: `/api/post/comment/delete/${commentId}`,
+        method: 'delete',
+    })
+}
+
+
+/**
  * 评论帖子
  */
 export const postComment = (data) => {
