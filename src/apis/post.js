@@ -1,5 +1,16 @@
 import http from '../utils/request'
 
+/**
+ * 评论帖子
+ */
+export const postComment = (data) => {
+    return http({
+        url: `/api/post/comment`,
+        method: 'post',
+        data
+    })
+}
+
 
 /**
  * 收藏帖子

@@ -69,7 +69,7 @@
                     <div id="post_content" v-html="post.content">
                     </div>
                 </div>
-                <PostComment/>
+                <PostComment  :post-id="post.postId" :comments="post.comments"/>
             </Col>
             <Col span="6">
                 <div class="right_content">
