@@ -1,6 +1,16 @@
 import http from '../utils/request'
 
 /**
+ * 评论回复分页
+ */
+export const postReplyPage = (data) => {
+    return http({
+        url: `/api/post/reply/page`,
+        method: 'post',
+        data
+    })
+}
+/**
  * 删除帖子评论
  */
 export const postCommentDelete = (commentId) => {

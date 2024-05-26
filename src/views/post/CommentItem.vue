@@ -55,8 +55,8 @@
                     <Button type="primary" @click="submitReplyForReply(reply)">回复</Button>
                 </div>
             </div>
-            <div class="load-more-replies">
-                <span>共22条回复，点击查看</span>
+            <div class="load-more-replies" v-if="isShowMore" @click="loadMoreReplies">
+                <span>共{{comment.replyCount}}条回复，点击查看 <Icon type="ios-arrow-down" /> </span>
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
 
 <script>
     import tool from "@/utils/tool";
-    import {postComment} from "@/apis/post";
+    import {postComment, postReplyPage} from "@/apis/post";
 
     export default {
         name: "CommentItem",
@@ -73,15 +73,38 @@
         },
         data() {
             return {
-                replyContent: ""
+                replyContent: "",
+                loadedReplies: this.comment.replies.length
             };
         },
         computed: {
             currentUser() {
                 return this.$store.state.user.info;
             },
+            isShowMore() {
+                return this.loadedReplies < this.comment.replyCount;
+            }
         },
         methods: {
+            loadMoreReplies() {
+                const lastReplyId = this.comment.replies[this.comment.replies.length - 1].commentId;
+                let param = {
+                    offsetId: lastReplyId,
+                    pageSize: 5,
+                    commentId: this.comment.commentId
+                }
+                postReplyPage(param).then(res=>{
+                    if(res.code === 200){
+                        const newReplies = res.result;
+                        // 将新加载的回复追加到 comment.replies 中
+                        this.comment.replies.push(...newReplies);
+                        // 更新已加载数
+                        this.loadedReplies += newReplies.length;
+                    }else {
+                        this.$Message.error(res.msg);
+                    }
+                })
+            },
             formatTime(time){
                 return tool.showTime(time);
             },
@@ -236,6 +259,7 @@
         cursor: pointer;
     }
     .load-more-replies {
+        user-select: none;
         text-align: left;
         cursor: pointer;
         color: #9499A0;
