@@ -87,6 +87,10 @@
         },
         methods: {
             loadMoreReplies() {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
                 const lastReplyId = this.comment.replies[this.comment.replies.length - 1].commentId;
                 let param = {
                     offsetId: lastReplyId,
@@ -112,6 +116,10 @@
                 this.comment.likes += 1;
             },
             toggleReplyInput() {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
                 this.comment.showReply = !this.comment.showReply;
             },
             submitReply(comment) {
@@ -140,6 +148,10 @@
                 reply.likes += 1;
             },
             toggleReplyInputForReply(reply) {
+                let isLogin = this.$store.state.user.isLogin;
+                if (!isLogin) {
+                    return this.$Message.warning('用户未登录！');
+                }
                 reply.showReplyInput = !reply.showReplyInput;
                 reply.placeholder = `回复 @${reply.nickname}：`;
             },

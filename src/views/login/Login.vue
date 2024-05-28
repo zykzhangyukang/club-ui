@@ -2,7 +2,6 @@
     <Content class="layout-content">
         <Row :gutter="16">
             <Col span="18">
-                <!-- 主要内容区域 -->
                 <div class="main_content">
                     <div class="login-wrapper">
                         <h3>
@@ -64,19 +63,19 @@
             </Col>
             <Col span="6">
                 <div class="right_content">
-                    <!-- 广告区域-->
                     <AdvertNav></AdvertNav>
                 </div>
             </Col>
         </Row>
     </Content>
 </template>
+
 <script>
-    import {loginCaptcha, userInfo, userLogin} from "@/apis/user";
+    import { loginCaptcha, userInfo, userLogin } from "@/apis/user";
     import tool from "@/utils/tool";
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
-    import {getEventCode, subEventCode} from "@/apis/wechat";
+    import { getEventCode, subEventCode } from "@/apis/wechat";
 
     export default {
         components: {
@@ -85,7 +84,6 @@
         },
         data() {
             return {
-                scanTimer: null,
                 loginForm: {
                     username: '',
                     password: '',
@@ -109,53 +107,60 @@
                     this.qrLoading = true;
                     getEventCode(this.deviceId).then(res => {
                         this.eventCode = res.result;
-                        this.startScanTimer();
-                    }).finally(e=>{
+                        this.startSSE(this.deviceId);
+                    }).finally(e => {
                         this.qrLoading = false;
                     })
                 } else {
-                    this.stopScanTimer();
+                    this.stopSSE();
                 }
             },
         },
         beforeUnmount() {
-            this.stopScanTimer();
+            this.stopSSE();
         },
         methods: {
-            startScanTimer() {
-                this.scanTimer = setInterval(this.checkScanStatus, 2000);
+            startSSE(deviceId) {
+                this.eventSource = new EventSource('http://localhost:8080/api/wechat/subscribe?deviceId='+deviceId);
+                this.eventSource.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    if (data.code === 200) {
+                        this.$store.commit('user/setUserInfo', data.result);
+                        this.$store.commit('user/setUserToken', data.result.token);
+                        this.$router.push('/');
+                        this.$Message.success('登录成功！');
+                        this.stopSSE();
+                    } else {
+                        this.eventMsg = data.msg;
+                        this.stopSSE();
+                    }
+                };
+                this.eventSource.onerror = (error) => {
+                    console.error('Error occurred:', error);
+                    this.eventMsg = '连接中断，请刷新二维码重试。';
+                    this.stopSSE();
+                };
             },
             refreshEventCode() {
+                this.stopSSE();
                 this.qrLoading = true;
                 this.eventMsg = '';
                 getEventCode(this.deviceId).then(res => {
-                    if(res.code === 200){
+                    if (res.code === 200) {
                         this.eventCode = res.result;
-                    }else {
+                        this.startSSE(this.deviceId);
+                    } else {
                         this.$Message.error(res.msg);
                     }
-                }).finally(e=>{
+                }).finally(e => {
                     this.qrLoading = false;
                 })
             },
-            stopScanTimer() {
-                clearInterval(this.scanTimer);
-            },
-            checkScanStatus() {
-                subEventCode(this.deviceId).then(res => {
-                    if (res.code === 200) {
-                        this.$store.commit('user/setUserInfo', res.result);
-                        this.$store.commit('user/setUserToken', res.result.token);
-                        this.$router.push('/');
-                        this.$Message.success('登录成功！');
-                        this.stopScanTimer();
-                    } else if (res.code === 201 && res.msg) {
-                        this.$router.push({ path: '/register', query: { mpOpenId: res.msg } });
-                        this.stopScanTimer();
-                    }else {
-                        this.eventMsg = res.msg;
-                    }
-                })
+            stopSSE() {
+                if (this.eventSource) {
+                    this.eventSource.close();
+                    this.eventSource = null;
+                }
             },
             handleSubmit() {
                 if (!this.loginForm.username || this.loginForm.username === '') {
@@ -172,18 +177,13 @@
                 }
                 this.btnLoading = true;
                 userLogin(this.loginForm).then(async res => {
-                    if(res.code === 200){
-
-                        // 保存用户令牌
+                    if (res.code === 200) {
                         this.$store.commit('user/setUserToken', res.result.token);
-
-                        // 获取用户信息
                         let response = await userInfo();
                         this.$store.commit('user/setUserInfo', response.result);
-
                         this.$router.push('/');
                         this.$Message.success('登录成功！');
-                    }else {
+                    } else {
                         this.$Message.warning(res.msg);
                         this.getLoginCaptcha();
                         this.loginForm.code = '';
@@ -216,6 +216,7 @@
         }
     }
 </script>
+
 <style scoped>
     .captcha_img {
         width: 108px;
