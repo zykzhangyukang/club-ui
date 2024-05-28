@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="reply-content">
-                    <span v-if="reply.replyId > 0"> 回复 <a> @{{reply.toUserNickName}}：</a></span>  {{ reply.content }}
+                    <span v-if="reply.replyId > 0"> 回复 <a> @{{reply.toUserNickName}} : </a></span>  {{ reply.content }}
                 </div>
                 <div class="reply-actions">
                     <label type="text" @click="likeReply(reply)">
@@ -153,7 +153,7 @@
                     return this.$Message.warning('用户未登录！');
                 }
                 reply.showReplyInput = !reply.showReplyInput;
-                reply.placeholder = `回复 @${reply.nickname}：`;
+                reply.placeholder = `回复 @${reply.nickname} : `;
             },
             submitReplyForReply(reply) {
                 let isLogin = this.$store.state.user.isLogin;
@@ -165,10 +165,12 @@
                         postId: reply.postId,
                         parentId: this.comment.commentId,
                         replyId: reply.commentId,
-                        content: `回复 @${reply.nickname}：${reply.replyContent}`,
+                        content: reply.replyContent,
                     }
                     postComment(param).then(res => {
                         if (res.code === 200) {
+                            // 回显
+                            res.result.content  = `回复 @${res.result.nickname } : ${res.result.content }`;
                             this.$emit('reply', res.result);
                             reply.replyContent = "";
                             reply.showReplyInput = false;
@@ -245,8 +247,8 @@
     }
     .reply-list {
         margin-top: 8px;
-        padding-left: 16px;
-        border-left: 2px solid #eee;
+        margin-left: 35px;
+        /*border-left: 2px solid #eee;*/
     }
     .reply-item {
         margin-bottom: 8px;
