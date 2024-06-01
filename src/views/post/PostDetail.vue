@@ -3,7 +3,7 @@
         <Row :gutter="16">
             <Col span="18">
                 <div class="main_content">
-                    <Spin :show="loading" fix size=large >
+                    <Spin :show="loading" fix size=large>
                     </Spin>
                     <Breadcrumb>
                         <BreadcrumbItem to="/">
@@ -21,12 +21,17 @@
                         <div class="author-section">
                             <div class="author-info">
                                 <div class="author-actions">
-                                    <Avatar icon="ios-person" shape="square" :src="post.avatar" class="ivu-mr-16 ivu-tag-border"/>
-                                    <Button v-if="post.isFollowed && null!=currentUser && currentUser.userId !== post.userId" class="follow-btn" size="small"  @click="followUser(post.userId,post.isFollowed)" :disabled="followLoading">
-                                      取消关注
+                                    <Avatar icon="ios-person" shape="square" :src="post.avatar"
+                                            class="ivu-mr-16 ivu-tag-border"/>
+                                    <Button v-if="post.isFollowed && null!=currentUser && currentUser.userId !== post.userId"
+                                            class="follow-btn" size="small"
+                                            @click="followUser(post.userId,post.isFollowed)" :disabled="followLoading">
+                                        取消关注
                                     </Button>
-                                    <Button v-if="!post.isFollowed && null!=currentUser && currentUser.userId !== post.userId" class="follow-btn" size="small"  type="success" @click="followUser(post.userId,post.isFollowed)" :disabled="followLoading">
-                                      立即关注
+                                    <Button v-if="!post.isFollowed && null!=currentUser && currentUser.userId !== post.userId"
+                                            class="follow-btn" size="small" type="success"
+                                            @click="followUser(post.userId,post.isFollowed)" :disabled="followLoading">
+                                        立即关注
                                     </Button>
                                     <Button class="message-btn" size="small">
                                         <Icon type="ios-chatboxes-outline"/>
@@ -36,11 +41,18 @@
                                             v-if="currentUser && post.userId === currentUser.userId">
                                         编辑
                                     </Button>
-                                    <Button class="edit-btn" type="small"  @click="likePost(post.postId,post.isLiked)" style="color: #666" :disabled="likeLoading">
-                                        <Icon   :type="post.isLiked ? 'md-thumbs-up' :'ios-thumbs-up-outline' " style="color: #f40;font-size: 13px;vertical-align: text-bottom" /> 点赞数:{{ post.likesCount }}
+                                    <Button class="edit-btn" type="small" @click="likePost(post.postId,post.isLiked)"
+                                            style="color: #666" :disabled="likeLoading">
+                                        <Icon :type="post.isLiked ? 'md-thumbs-up' :'ios-thumbs-up-outline' "
+                                              style="color: #f40;font-size: 13px;vertical-align: text-bottom"/>
+                                        点赞数:{{ post.likesCount }}
                                     </Button>
-                                    <Button class="edit-btn" type="small" @click="collectPost(post.postId,post.isCollected)" style="cursor: pointer"  :disabled="collectLoading" >
-                                        <Icon  :type="post.isCollected ? 'ios-heart' :'ios-heart-outline' " style="color: orange;font-size: 13px;" /> 收藏:{{ post.collectsCount }}
+                                    <Button class="edit-btn" type="small"
+                                            @click="collectPost(post.postId,post.isCollected)" style="cursor: pointer"
+                                            :disabled="collectLoading">
+                                        <Icon :type="post.isCollected ? 'ios-heart' :'ios-heart-outline' "
+                                              style="color: orange;font-size: 13px;"/>
+                                        收藏:{{ post.collectsCount }}
                                     </Button>
                                 </div>
                             </div>
@@ -50,10 +62,10 @@
                                 <span class="ivu-ml-4" style="color: #778087;font-weight:600;cursor: pointer;"> {{post.nickname}}</span>
                                 发布于 {{post.createdAt }}
                                 <Divider type="vertical"/>
-                                <label style="cursor: pointer" >
+                                <label style="cursor: pointer">
                                     阅读量:{{ post.viewsCount }}
                                 </label>
-                                  <span style="user-select: none">
+                                <span style="user-select: none">
                                     <Divider type="vertical"/>
                                     评论:{{ post.commentsCount }}
                                     <Divider type="vertical"/>
@@ -69,7 +81,12 @@
                     <div id="post_content" v-html="post.content">
                     </div>
                 </div>
-                <PostComment  :post-id="post.postId" :comments="post.comments"/>
+                <!-- 评论区 -->
+                <Card dis-hover class="ivu-mt-8">
+                    <PostComment :post-id="post.postId" :comments="comments"/>
+                    <Page :total="this.count" :page-size="this.searchForm.pagSize"
+                          :model-value="this.searchForm.currentPage" @on-change="commentPageChange"/>
+                </Card>
             </Col>
             <Col span="6">
                 <div class="right_content">
@@ -84,7 +101,7 @@
 <script>
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
-    import {getPostDetail, postCollect, postLike, postUnCollect, postUnLike} from "@/apis/post";
+    import {getPostDetail, postCollect, postCommentPage, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
     import PostComment from "@/views/post/PostComment";
 
@@ -100,7 +117,14 @@
                 followLoading: false,
                 likeLoading: false,
                 collectLoading: false,
-                post: {}
+                post: {},
+                searchForm: {
+                    currentPage: 1,
+                    pageSize: 5,
+                    postId: this.$route.query.id
+                },
+                count: 0,
+                comments: []
             }
         },
         computed: {
@@ -109,6 +133,21 @@
             }
         },
         methods: {
+            commentPageChange(page) {
+                this.searchForm.currentPage = page;
+                this.getCommentPage();
+            },
+            getCommentPage() {
+                postCommentPage(this.searchForm).then(res => {
+                    if (res.code === 200) {
+                        this.comments = res.result.dataList;
+                        this.count = res.result.totalRow;
+                        console.log(this.count)
+                    } else {
+                        return this.$Message.error(res.msg);
+                    }
+                })
+            },
             toEditPostPage(postId) {
                 this.$router.push('/post/edit?id=' + postId);
             },
@@ -135,12 +174,12 @@
                 if (isFollowed) {
                     this.followLoading = true;
                     userUnFollow(userId).then(res => {
-                        if(res.code === 200){
+                        if (res.code === 200) {
                             // this.$Message.success("取关成功！");
                             this.post.isFollowed = false;
                             // 关注人数-1
                             this.$store.commit('user/incFollowCount', -1);
-                        }else {
+                        } else {
                             this.$Message.error(res.msg);
                         }
                     }).finally(() => {
@@ -149,12 +188,12 @@
                 } else {
                     this.followLoading = true;
                     userFollow(userId).then(res => {
-                        if(res.code === 200){
+                        if (res.code === 200) {
                             // this.$Message.success("关注成功！");
                             this.post.isFollowed = true;
                             // 关注人数+1
                             this.$store.commit('user/incFollowCount', +1);
-                        }else {
+                        } else {
                             this.$Message.error(res.msg);
                         }
                     }).finally(() => {
@@ -174,7 +213,7 @@
                         if (res.code === 200) {
                             // this.$Message.success("已取消点赞！");
                             this.post.isLiked = false;
-                            this.post.likesCount = this.post.likesCount -1;
+                            this.post.likesCount = this.post.likesCount - 1;
                         } else {
                             this.$Message.error(res.msg);
                         }
@@ -187,7 +226,7 @@
                         if (res.code === 200) {
                             // this.$Message.success("点赞成功！");
                             this.post.isLiked = true;
-                            this.post.likesCount = this.post.likesCount  + 1;
+                            this.post.likesCount = this.post.likesCount + 1;
                         } else {
                             this.$Message.error(res.msg);
                         }
@@ -207,7 +246,7 @@
                     postUnCollect(userId).then(res => {
                         if (res.code === 200) {
                             this.post.isCollected = false;
-                            this.post.collectsCount = this.post.collectsCount -1;
+                            this.post.collectsCount = this.post.collectsCount - 1;
                             // 收藏-1
                             this.$store.commit('user/incCollectCount', -1);
                         } else {
@@ -221,7 +260,7 @@
                     postCollect(userId).then(res => {
                         if (res.code === 200) {
                             this.post.isCollected = true;
-                            this.post.collectsCount = this.post.collectsCount  + 1;
+                            this.post.collectsCount = this.post.collectsCount + 1;
                             // 收藏-1
                             this.$store.commit('user/incCollectCount', 1);
                         } else {
@@ -235,6 +274,7 @@
         },
         created() {
             this.postDetail();
+            this.getCommentPage();
         }
     }
 </script>
@@ -325,7 +365,8 @@
         color: rgba(0, 0, 0, .85);
         font-weight: 500;
     }
-    .main_content{
+
+    .main_content {
         min-height: 240px;
     }
 </style>

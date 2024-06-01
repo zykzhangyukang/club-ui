@@ -1,32 +1,30 @@
 <template>
     <div class="comment-section ivu-mt-8">
-        <Card dis-hover>
-            <div style="padding: 20px;
-                      border: 1px solid rgb(235, 236, 237);
+        <div style="padding: 20px;
                       border-radius: 4px;">
-                <div class="comment-input">
-                    <Avatar  icon="md-person" :src="currentUser.avatar" />
-                    <Input v-model="newComment" placeholder="写下你的评论..." class="ivu-mr-8 ivu-ml-8" />
-                    <Button type="primary" @click="addComment">评论</Button>
-                </div>
-                <div class="comment-list">
-                    <CommentItem
-                            v-for="(comment, index) in comments"
-                            :key="index"
-                            :comment="comment"
-                            @reply="addReply(index, $event)"
-                            @deleteComment="deleteComment(index)"
-                            @deleteReply="deleteReply(index, $event)"
-                    />
-                </div>
+            <div class="comment-input">
+                <Avatar  icon="md-person" :src="currentUser.avatar" />
+                <Input v-model="newComment" placeholder="写下你的评论..." class="ivu-mr-8 ivu-ml-8" />
+                <Button type="primary" @click="addComment">评论</Button>
             </div>
-        </Card>
+            <div class="comment-list">
+                <CommentItem
+                        v-for="(comment, index) in comments"
+                        :key="index"
+                        :comment="comment"
+                        @reply="addReply(index, $event)"
+                        @closeAllInput="closeAllInput($event)"
+                        @deleteComment="deleteComment(index)"
+                        @deleteReply="deleteReply(index, $event)"
+                />
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import CommentItem from './CommentItem.vue';
-    import {postComment, deleteCommentById, postCommentDelete} from "@/apis/post";
+    import {postComment, postCommentDelete} from "@/apis/post";
 
     export default {
         name: "PostComment",
@@ -71,6 +69,16 @@
             },
             addReply(commentIndex, reply) {
                 this.comments[commentIndex].replies.push(reply);
+            },
+            closeAllInput(){
+                this.comments.forEach(e=>{
+                    e.showReply = false;
+                    if(e.replies){
+                        e.replies.forEach(i=>{
+                            i.showReplyInput = false;
+                        })
+                    }
+                })
             },
             deleteComment(index) {
                 const commentId = this.comments[index].commentId;

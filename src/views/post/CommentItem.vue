@@ -18,12 +18,15 @@
             <label type="text" @click="toggleReplyInput">
                 <Icon type="md-text" /> 回复
             </label>
+            <label type="text">
+                <Icon type="md-warning" /> 举报
+            </label>
             <label type="text" @click="deleteComment" v-if="currentUser==null || currentUser.userId === comment.userId">
                 <Icon type="md-trash" /> 删除
             </label>
         </div>
         <div v-if="comment.showReply" class="reply-input">
-            <Input v-model="replyContent" placeholder="写下你的回复..." class="ivu-mr-4 ivu-ml-4" />
+            <Input ref="replyInput" v-model="replyContent" placeholder="写下你的回复..." class="ivu-mr-4 ivu-ml-4" />
             <Button type="primary" @click="submitReply(comment)">回复</Button>
         </div>
         <div class="reply-list" v-if="comment.replies.length">
@@ -43,15 +46,18 @@
                     <label type="text" @click="likeReply(reply)">
                         <Icon type="md-thumbs-up" /> 点赞({{ reply.likes }})
                     </label>
-                    <label type="text" @click="toggleReplyInputForReply(reply)">
+                    <label type="text" @click="toggleReplyInputForReply(reply, index)">
                         <Icon type="md-text" /> 回复
+                    </label>
+                    <label type="text">
+                        <Icon type="md-warning" /> 举报
                     </label>
                     <label type="text" @click="deleteReply(index)" v-if="currentUser==null || currentUser.userId === reply.userId">
                         <Icon type="md-trash" /> 删除
                     </label>
                 </div>
                 <div v-if="reply.showReplyInput" class="reply-input">
-                    <Input v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" />
+                    <Input :ref="'replyInput-'+index" v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" />
                     <Button type="primary" @click="submitReplyForReply(reply)">回复</Button>
                 </div>
             </div>
@@ -64,7 +70,7 @@
 
 <script>
     import tool from "@/utils/tool";
-    import {postComment, postReplyPage} from "@/apis/post";
+    import { postComment, postReplyPage } from "@/apis/post";
 
     export default {
         name: "CommentItem",
@@ -97,19 +103,17 @@
                     pageSize: 5,
                     commentId: this.comment.commentId
                 }
-                postReplyPage(param).then(res=>{
-                    if(res.code === 200){
+                postReplyPage(param).then(res => {
+                    if (res.code === 200) {
                         const newReplies = res.result;
-                        // 将新加载的回复追加到 comment.replies 中
                         this.comment.replies.push(...newReplies);
-                        // 更新已加载数
                         this.loadedReplies += newReplies.length;
-                    }else {
+                    } else {
                         this.$Message.error(res.msg);
                     }
                 })
             },
-            formatTime(time){
+            formatTime(time) {
                 return tool.showTime(time);
             },
             likeComment() {
@@ -120,7 +124,15 @@
                 if (!isLogin) {
                     return this.$Message.warning('用户未登录！');
                 }
+                if (!this.comment.showReply) {
+                    this.$emit('closeAllInput');
+                }
                 this.comment.showReply = !this.comment.showReply;
+                this.$nextTick(() => {
+                    if (this.comment.showReply) {
+                        this.$refs.replyInput.focus();
+                    }
+                });
             },
             submitReply(comment) {
                 let isLogin = this.$store.state.user.isLogin;
@@ -137,7 +149,7 @@
                         if (res.code === 200) {
                             this.$emit('reply', res.result);
                             this.replyContent = "";
-                            this.showReply = false;
+                            this.comment.showReply = false;
                         } else {
                             this.$Message.error(res.msg);
                         }
@@ -147,13 +159,21 @@
             likeReply(reply) {
                 reply.likes += 1;
             },
-            toggleReplyInputForReply(reply) {
+            toggleReplyInputForReply(reply, index) {
                 let isLogin = this.$store.state.user.isLogin;
                 if (!isLogin) {
                     return this.$Message.warning('用户未登录！');
                 }
+                if (!reply.showReplyInput) {
+                    this.$emit('closeAllInput');
+                }
                 reply.showReplyInput = !reply.showReplyInput;
                 reply.placeholder = `回复 @${reply.nickname} : `;
+                this.$nextTick(() => {
+                    if (reply.showReplyInput) {
+                        this.$refs[`replyInput-${index}`][0].focus();
+                    }
+                });
             },
             submitReplyForReply(reply) {
                 let isLogin = this.$store.state.user.isLogin;
@@ -169,8 +189,7 @@
                     }
                     postComment(param).then(res => {
                         if (res.code === 200) {
-                            // 回显
-                            res.result.content  = `回复 @${res.result.nickname } : ${res.result.content }`;
+                            res.result.content = `回复 @${res.result.nickname} : ${res.result.content}`;
                             this.$emit('reply', res.result);
                             reply.replyContent = "";
                             reply.showReplyInput = false;

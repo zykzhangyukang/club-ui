@@ -1,7 +1,7 @@
 <template>
     <div class="user-info-card" v-if="currentUser">
         <div class="user-avatar">
-            <Avatar :size="45" shape="square" :src="currentUser.avatar" icon="ios-person" />
+            <Avatar :size="50" shape="square" :src="currentUser.avatar" icon="ios-person" />
         </div>
         <div class="user-info">
             <div class="user-text">
