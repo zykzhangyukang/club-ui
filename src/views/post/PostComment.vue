@@ -51,6 +51,9 @@
                 if (!isLogin) {
                     return this.$Message.warning('用户未登录！');
                 }
+                if(!this.newComment){
+                    return this.$Message.warning("内容不能为空！");
+                }
                 if (this.newComment.trim() !== "") {
                     let param = {
                         postId: this.postId,

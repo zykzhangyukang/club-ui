@@ -139,6 +139,9 @@
                 if (!isLogin) {
                     return this.$Message.warning('用户未登录！');
                 }
+                if(!this.replyContent){
+                    return this.$Message.warning("内容不能为空！");
+                }
                 if (this.replyContent.trim() !== "") {
                     let param = {
                         postId: comment.postId,
@@ -179,6 +182,9 @@
                 let isLogin = this.$store.state.user.isLogin;
                 if (!isLogin) {
                     return this.$Message.warning('用户未登录！');
+                }
+                if(!reply.replyContent){
+                    return this.$Message.warning("内容不能为空！");
                 }
                 if (reply.replyContent.trim() !== "") {
                     let param = {

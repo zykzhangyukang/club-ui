@@ -1,5 +1,6 @@
 <template>
     <Content class="layout-content">
+
         <Row :gutter="16">
             <Col span="18">
                 <div class="main_content">
@@ -84,8 +85,7 @@
                 <!-- 评论区 -->
                 <Card dis-hover class="ivu-mt-8">
                     <PostComment :post-id="post.postId" :comments="comments"/>
-                    <Page :total="this.count" :page-size="this.searchForm.pagSize"
-                          :model-value="this.searchForm.currentPage" @on-change="commentPageChange"/>
+                    <Page :total="this.count" v-if="this.count > 0" :page-size="this.searchForm.pagSize" :model-value="this.searchForm.currentPage" @on-change="commentPageChange"/>
                 </Card>
             </Col>
             <Col span="6">
@@ -96,6 +96,7 @@
             </Col>
         </Row>
     </Content>
+    <ScrollComponent/>
 </template>
 
 <script>
@@ -104,12 +105,14 @@
     import {getPostDetail, postCollect, postCommentPage, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
     import PostComment from "@/views/post/PostComment";
+    import ScrollComponent from "@/components/ScrollComponent";
 
     export default {
         components: {
             GuideNav,
             AdvertNav,
-            PostComment
+            PostComment,
+            ScrollComponent
         },
         data() {
             return {

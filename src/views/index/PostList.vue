@@ -3,7 +3,7 @@
         <Skeleton :loading="loading" animated avatar>
             <template #template>
                 <List :border="false">
-                    <ListItem v-for="item in 30" :key="item">
+                    <ListItem v-for="item in 5" :key="item">
                         <ListItemMeta>
                             <template v-slot:title>
                                 <a class="post_title" v-line-clamp="1"><SkeletonItem block width="80%" height="16px" /></a>
@@ -43,7 +43,7 @@
                                     •
                                     <span class="timestamp">{{ item.createdAtStr }}</span>
                                     <span v-if="item.isHot">
-                                           •
+                                    •
                                     <span class="hot_tag" >热</span>
                                     </span>
                                 </template>
@@ -71,19 +71,24 @@
             </template>
         </Skeleton>
     </div>
+    <ScrollComponent/>
 </template>
 
 <script>
     import { getPostPage } from "@/apis/post";
     import tool from "@/utils/tool";
     import EventBus from '@/utils/eventBus';
+    import ScrollComponent from "@/components/ScrollComponent";
 
     export default {
+        components:{
+          ScrollComponent
+        },
         data() {
             return {
                 searchForm: {
                     currentPage: 1,
-                    pageSize: 30,
+                    pageSize: 50,
                     firstSectionId: null,
                     secondSectionId: null
                 },
@@ -167,7 +172,7 @@
 
     .empty_svg {
         width: 150px;
-        height: 150px;
+        height: 250px;
         display: block;
         margin: 20px auto;
         user-select: none;
