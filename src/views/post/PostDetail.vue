@@ -1,6 +1,6 @@
 <template>
     <Content class="layout-content">
-
+        <BackTop :bottom="100"></BackTop>
         <Row :gutter="16">
             <Col span="18">
                 <div class="main_content">
@@ -96,7 +96,6 @@
             </Col>
         </Row>
     </Content>
-    <ScrollComponent/>
 </template>
 
 <script>
@@ -105,14 +104,12 @@
     import {getPostDetail, postCollect, postCommentPage, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
     import PostComment from "@/views/post/PostComment";
-    import ScrollComponent from "@/components/ScrollComponent";
 
     export default {
         components: {
             GuideNav,
             AdvertNav,
             PostComment,
-            ScrollComponent
         },
         data() {
             return {
@@ -127,7 +124,7 @@
                     postId: this.$route.query.id
                 },
                 total: 0,
-                comments: []
+                comments: [],
             }
         },
         computed: {

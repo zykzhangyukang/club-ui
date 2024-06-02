@@ -8,7 +8,6 @@
         <template #list>
             <DropdownMenu>
                 <DropdownItem @click="getToNotification('/notification/reply')"><Badge :count="replyCount" :class-name="'badge_count'">回复我的</Badge></DropdownItem>
-                <DropdownItem @click="getToNotification('/notification/at')"><Badge :count="atCount" :class-name="'badge_count'">@ 我的</Badge></DropdownItem>
                 <DropdownItem @click="getToNotification('/notification/zan')"><Badge :count="zanCount" :class-name="'badge_count'">收到的赞</Badge></DropdownItem>
                 <DropdownItem @click="getToNotification('/notification/system')"><Badge :count="sysCount" :class-name="'badge_count'">系统消息</Badge></DropdownItem>
                 <DropdownItem @click="getToNotification('/notification/chat')"><Badge :count="chatCount" :class-name="'badge_count'">我的消息</Badge></DropdownItem>

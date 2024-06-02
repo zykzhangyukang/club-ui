@@ -6,7 +6,6 @@
                 <div class="main_content" >
                     <Tabs :animated="false" @on-click="tabClick" size="large" :model-value="currentTab">
                         <TabPane label="回复我的" name="/notification/reply"></TabPane>
-                        <TabPane label="@ 我的" name="/notification/at"></TabPane>
                         <TabPane label="收到的赞" name="/notification/zan"></TabPane>
                         <TabPane label="系统消息" name="/notification/system"></TabPane>
                         <TabPane label="我的私信" name="/notification/chat"></TabPane>

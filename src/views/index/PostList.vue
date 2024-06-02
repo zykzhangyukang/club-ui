@@ -1,4 +1,5 @@
 <template>
+    <BackTop :bottom="100"></BackTop>
     <div class="list_wrapper">
         <Skeleton :loading="loading" animated avatar>
             <template #template>
@@ -71,18 +72,15 @@
             </template>
         </Skeleton>
     </div>
-    <ScrollComponent/>
 </template>
 
 <script>
-    import { getPostPage } from "@/apis/post";
+    import {getPostPage} from "@/apis/post";
     import tool from "@/utils/tool";
     import EventBus from '@/utils/eventBus';
-    import ScrollComponent from "@/components/ScrollComponent";
 
     export default {
         components:{
-          ScrollComponent
         },
         data() {
             return {

@@ -10,7 +10,6 @@ import PostEditView from '@/views/post/PostEdit'
 import PostDetailView from '@/views/post/PostDetail'
 import NotificationView from '@/views/notification/Notification'
 import SystemNotification from '@/views/notification/System'
-import AtNotification from '@/views/notification/At'
 import ZanNotification from '@/views/notification/Zan'
 import ChatNotification from '@/views/notification/Chat'
 import ReplyMsgNotification from '@/views/notification/Reply'
@@ -85,12 +84,6 @@ const routes = [
                         path: 'zan',
                         name: 'ZanNotification',
                         component: ZanNotification,
-                        meta: {title: '消息通知'}
-                    },
-                    {
-                        path: 'at',
-                        name: 'AtNotification',
-                        component: AtNotification,
                         meta: {title: '消息通知'}
                     },
                     {
