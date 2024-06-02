@@ -4,7 +4,7 @@
                       border-radius: 4px;">
             <div class="comment-input">
                 <Avatar  icon="md-person" :src="currentUser.avatar" />
-                <Input v-model="newComment" placeholder="写下你的评论..." class="ivu-mr-8 ivu-ml-8" />
+                <Input v-model="newComment" placeholder="写下你的评论..." class="ivu-mr-8 ivu-ml-8" maxlength="512" show-word-limit  />
                 <Button type="primary" @click="addComment">评论</Button>
             </div>
             <div class="comment-list">

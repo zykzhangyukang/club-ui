@@ -47,7 +47,7 @@ http.interceptors.response.use(
 
                 store.commit('user/logout');
                 router.push('/').then(r => {
-                    Message.warning('会话已失效！');
+                    Message.warning('登录会话过期！');
                 })
 
             } else if (error.response.status === 403) {

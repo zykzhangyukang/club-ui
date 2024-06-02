@@ -85,7 +85,7 @@
                 <!-- 评论区 -->
                 <Card dis-hover class="ivu-mt-8">
                     <PostComment :post-id="post.postId" :comments="comments"/>
-                    <Page :total="this.count" v-if="this.count > 0" :page-size="this.searchForm.pagSize" :model-value="this.searchForm.currentPage" @on-change="commentPageChange"/>
+                    <Page :total="this.total" v-if="this.total > 0" :page-size="20" :model-value="this.searchForm.currentPage" @on-change="commentPageChange"/>
                 </Card>
             </Col>
             <Col span="6">
@@ -123,10 +123,10 @@
                 post: {},
                 searchForm: {
                     currentPage: 1,
-                    pageSize: 5,
+                    pageSize: 20,
                     postId: this.$route.query.id
                 },
-                count: 0,
+                total: 0,
                 comments: []
             }
         },
@@ -144,8 +144,7 @@
                 postCommentPage(this.searchForm).then(res => {
                     if (res.code === 200) {
                         this.comments = res.result.dataList;
-                        this.count = res.result.totalRow;
-                        console.log(this.count)
+                        this.total = res.result.totalRow;
                     } else {
                         return this.$Message.error(res.msg);
                     }

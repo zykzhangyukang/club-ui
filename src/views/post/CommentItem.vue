@@ -26,7 +26,7 @@
             </label>
         </div>
         <div v-if="comment.showReply" class="reply-input">
-            <Input ref="replyInput" v-model="replyContent" placeholder="写下你的回复..." class="ivu-mr-4 ivu-ml-4" />
+            <Input ref="replyInput" v-model="replyContent" placeholder="写下你的回复..." class="ivu-mr-4 ivu-ml-4"  maxlength="512" show-word-limit />
             <Button type="primary" @click="submitReply(comment)">回复</Button>
         </div>
         <div class="reply-list" v-if="comment.replies.length">
@@ -57,12 +57,12 @@
                     </label>
                 </div>
                 <div v-if="reply.showReplyInput" class="reply-input">
-                    <Input :ref="'replyInput-'+index" v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" />
+                    <Input :ref="'replyInput-'+index" v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" maxlength="512" show-word-limit />
                     <Button type="primary" @click="submitReplyForReply(reply)">回复</Button>
                 </div>
             </div>
-            <div class="load-more-replies" v-if="isShowMore" @click="loadMoreReplies">
-                <span>共{{comment.replyCount}}条回复，点击查看 <Icon type="ios-arrow-down" /> </span>
+            <div class="load-more-replies" v-if="isShowMore && isShow" @click="loadMoreReplies">
+                <span>共{{comment.replyCount}}条回复，点击查看<Icon type="ios-arrow-down" /> </span>
             </div>
         </div>
     </div>
@@ -80,7 +80,7 @@
         data() {
             return {
                 replyContent: "",
-                loadedReplies: this.comment.replies.length
+                isShow: true,
             };
         },
         computed: {
@@ -89,6 +89,9 @@
             },
             isShowMore() {
                 return this.loadedReplies < this.comment.replyCount;
+            },
+            loadedReplies(){
+                return this.comment.replies.length;
             }
         },
         methods: {
@@ -153,6 +156,7 @@
                             this.$emit('reply', res.result);
                             this.replyContent = "";
                             this.comment.showReply = false;
+                            this.isShow = false;
                         } else {
                             this.$Message.error(res.msg);
                         }
@@ -199,6 +203,7 @@
                             this.$emit('reply', res.result);
                             reply.replyContent = "";
                             reply.showReplyInput = false;
+                            this.isShow = false;
                         } else {
                             this.$Message.error(res.msg);
                         }
