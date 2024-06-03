@@ -1,21 +1,22 @@
 <template>
     <div>
-        <Card v-for="item in dataList" :key="item.id" class="notification-card" dis-hover>
+        <Card v-for="(item,index) in dataList" :key="item.id" class="notification-card" dis-hover>
             <div class="notification-header">
                 <Avatar :src="item.senderAvatar" size="large"/>
                 <div class="notification-content">
                     <span class="notification-time">{{ formatTime(item.createTime) }} </span>
                         <span v-if="item.type === 'like_post'">
-                            <strong>{{item.sendNickName}}</strong> 赞了我的帖子:  <a>{{item.postTitle}}</a>
+                            <strong>{{item.sendNickName}}</strong> 赞了我的帖子:  <a>{{item.post.title}}</a>
                         </span>
                 </div>
                 <Badge dot :count="item.isRead ? 0 : 1">
                 <Button size="small" @click="markAsRead(item)" v-if="!item.isRead" class="mark-read-btn">标记为已读</Button>
-                <Button size="small" @click="markAsRead(item)" v-else class="remove-btn">清除该消息</Button>
+                <Button size="small" @click="remove(item,index)" v-else class="remove-btn">清除该消息</Button>
                 </Badge>
             </div>
         </Card>
         <Page
+                v-if="this.total > 0"
                 :total="total"
                 :current="searchForm.currentPage"
                 :page-size="searchForm.pageSize"
@@ -25,8 +26,9 @@
 </template>
 
 <script>
-    import {getNotificationByType, markNotificationAsRead} from "@/apis/notification";
+    import {deleteNotification, getNotificationByType, markNotificationAsRead} from "@/apis/notification";
     import tool from "@/utils/tool";
+    import store from "@/store";
 
     export default {
         name: "SystemNotification",
@@ -68,6 +70,17 @@
                         this.$Message.error(res.msg);
                     }
                 });
+            },
+            remove(item,index){
+                deleteNotification(item.notificationId).then(res=>{
+                    if (res.code === 200) {
+                        this.dataList.splice(index, 1);
+                        this.total -=1;
+                        this.$Message.success('清除成功');
+                    } else {
+                        this.$Message.error(res.msg);
+                    }
+                })
             }
         },
         created() {

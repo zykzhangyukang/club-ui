@@ -184,11 +184,10 @@
                         this.$router.push('/');
                         this.$Message.success('登录成功！');
                     } else {
-                        this.$Message.warning(res.msg);
                         this.getLoginCaptcha();
                         this.loginForm.code = '';
                         this.loginForm.password = '';
-                        this.tipMsg = e.msg;
+                        this.tipMsg = res.msg;
                     }
                 }).finally(() => {
                     this.btnLoading = false;
