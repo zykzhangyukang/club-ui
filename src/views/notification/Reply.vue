@@ -12,6 +12,10 @@
                             <strong>{{item.sendNickName}}</strong> 回复了我的评论:  <a>{{item.comment.content}}</a>
                             <small>{{item.reply.content}}</small>
                     </span>
+                    <span v-if="item.type === 'reply_at_comment'">
+                            <strong>{{item.sendNickName}}</strong> 回复@了我:  <a>{{item.comment.content}}</a>
+                            <small>{{item.reply.content}}</small>
+                    </span>
                 </div>
                 <Badge dot :count="item.isRead ? 0 : 1">
                     <Button size="small" @click="markAsRead(item)" v-if="!item.isRead" class="mark-read-btn">标记为已读</Button>
