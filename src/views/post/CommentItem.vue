@@ -199,7 +199,7 @@
                     }
                     postComment(param).then(res => {
                         if (res.code === 200) {
-                            res.result.content = `回复 @${res.result.nickname} : ${res.result.content}`;
+                            res.result.content = `回复 @${reply.nickname} : ${res.result.content}`;
                             this.$emit('reply', res.result);
                             reply.replyContent = "";
                             reply.showReplyInput = false;
