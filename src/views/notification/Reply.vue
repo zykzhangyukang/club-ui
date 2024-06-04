@@ -6,19 +6,26 @@
                 <div class="notification-content">
                     <span class="notification-time">{{ formatTime(item.createTime) }} </span>
                     <span v-if="item.type === 'comment_post'">
-                            <strong>{{item.sendNickName}}</strong> 对我的帖子发表了评论:  <a>{{item.comment.content}}</a>
+                            <strong>{{item.sendNickName}}</strong> <span style="color: #505050"> 对我的帖子发表了评论 </span>
+                             <br/>
+                            <span class="content">{{item.comment ?  item.comment.content : "该评论已被删除！"}}</span>
                         </span>
                     <span v-if="item.type === 'reply_comment'">
-                            <strong>{{item.sendNickName}}</strong> 回复了我的评论:  <a>{{item.comment.content}}</a>
-                            <small>{{item.reply.content}}</small>
+                        <strong>{{item.sendNickName}}</strong> <span style="color: #505050"> 回复了我的评论</span>
+                        <br/>
+                        <span class="content">{{item.comment ? item.comment.content : "该评论已被删除！"}}</span>
+                        <blockquote>{{item.comment ? item.comment.repliedContent : "该回复已被删除！"}}</blockquote>
                     </span>
                     <span v-if="item.type === 'reply_at_comment'">
-                            <strong>{{item.sendNickName}}</strong> 回复@了我:  <a>{{item.comment.content}}</a>
-                            <small>{{item.reply.content}}</small>
+                          <strong>{{item.sendNickName}}</strong><span style="color: #505050"> 回复了我的评论</span>
+                           <br/>
+                            <span class="content">回复 <a>@{{item.nickname}}</a> {{item.comment ? item.comment.content : "该评论已被删除！"}}</span>
+                            <blockquote>{{item.comment ? item.comment.repliedContent : "该回复已被删除！"}}</blockquote>
                     </span>
                 </div>
                 <Badge dot :count="item.isRead ? 0 : 1">
-                    <Button size="small" @click="markAsRead(item)" v-if="!item.isRead" class="mark-read-btn">标记为已读</Button>
+                    <Button size="small" @click="markAsRead(item)" v-if="!item.isRead" class="mark-read-btn">标记为已读
+                    </Button>
                     <Button size="small" @click="remove(item,index)" v-else class="remove-btn">清除该消息</Button>
                 </Badge>
             </div>
@@ -79,11 +86,11 @@
                     }
                 });
             },
-            remove(item,index){
-                deleteNotification(item.notificationId).then(res=>{
+            remove(item, index) {
+                deleteNotification(item.notificationId).then(res => {
                     if (res.code === 200) {
                         this.dataList.splice(index, 1);
-                        this.total -=1;
+                        this.total -= 1;
                         this.$Message.success('清除成功');
                     } else {
                         this.$Message.error(res.msg);
@@ -122,7 +129,21 @@
     .mark-read-btn {
         margin-left: 10px;
     }
+
     .remove-btn {
         margin-left: 10px;
+    }
+
+    blockquote {
+        padding: 5px 0 0 .6em;
+        border-left: 2px solid hsla(0, 0%, 39.2%, .2);
+        font-size: 12px;
+        color: #999;
+    }
+
+    .content {
+        display: inline-block;
+        margin: 5px;
+        color: #222;
     }
 </style>

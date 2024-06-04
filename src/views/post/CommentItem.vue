@@ -109,7 +109,13 @@
                 postReplyPage(param).then(res => {
                     if (res.code === 200) {
                         const newReplies = res.result;
-                        this.comment.replies.push(...newReplies);
+
+                        if(!newReplies || newReplies.length === 0){
+                            this.$Message.warning("没有更多了！");
+                            this.isShow = false;
+                        }else {
+                            this.comment.replies.push(...newReplies);
+                        }
                         this.loadedReplies += newReplies.length;
                     } else {
                         this.$Message.error(res.msg);
