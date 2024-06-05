@@ -1,37 +1,40 @@
 <template>
     <div>
-        <Card v-for="(item,index) in dataList" :key="item.id" class="notification-card" dis-hover>
+        <Card v-for="(item, index) in dataList" :key="item.id" class="notification-card" dis-hover>
             <div class="notification-header">
                 <Avatar :src="item.senderAvatar" size="large"/>
                 <div class="notification-content">
-                    <span class="notification-time">{{ formatTime(item.createTime) }} </span>
+                    <span class="notification-time">{{ formatTime(item.createTime) }}</span>
                     <span v-if="item.type === 'comment_post'">
-                            <strong>{{item.sendNickName}}</strong> <span style="color: #505050"> 对我的帖子发表了评论 </span>
-                             <br/>
-                            <span class="content">{{item.comment ?  item.comment.content : "该评论已被删除！"}}</span>
-                        </span>
-                    <span v-if="item.type === 'reply_comment'">
-                        <strong>{{item.sendNickName}}</strong> <span style="color: #505050"> 回复了我的评论</span>
+                        <strong>{{ item.sendNickName }}</strong>
+                        <span class="notification-text">对我的帖子发表了评论</span>
                         <br/>
-                        <span class="content">{{item.comment ? item.comment.content : "该评论已被删除！"}}</span>
-                        <blockquote>{{item.comment ? item.comment.repliedContent : "该回复已被删除！"}}</blockquote>
+                        <span class="content">{{ item.comment?.content ?? "该评论已被删除！" }}</span>
+                    </span>
+                    <span v-if="item.type === 'reply_comment'">
+                        <strong>{{ item.sendNickName }}</strong>
+                        <span class="notification-text">回复了我的评论</span>
+                        <br/>
+                        <span class="content">{{item.comment?.content ?? "该评论已被删除！" }}</span>
+                        <blockquote>{{item.comment?.repliedContent ?? "该回复已被删除！" }}</blockquote>
                     </span>
                     <span v-if="item.type === 'reply_at_comment'">
-                          <strong>{{item.sendNickName}}</strong><span style="color: #505050"> 回复了我的评论</span>
-                           <br/>
-                            <span class="content">回复 <a>@{{item.nickname}}</a> {{item.comment ? item.comment.content : "该评论已被删除！"}}</span>
-                            <blockquote>{{item.comment ? item.comment.repliedContent : "该回复已被删除！"}}</blockquote>
+                        <strong>{{ item.sendNickName }}</strong>
+                        <span class="notification-text">回复了我的评论</span>
+                        <br/>
+                        <span class="content">回复 <a>@{{ item.nickname }}</a> {{item.comment?.content ?? "该评论已被删除！" }}</span>
+                        <blockquote>{{ item.comment?.repliedContent ?? "该回复已被删除！" }}</blockquote>
                     </span>
                 </div>
                 <Badge dot :count="item.isRead ? 0 : 1">
-                    <Button size="small" @click="markAsRead(item)" v-if="!item.isRead" class="mark-read-btn">标记为已读
+                    <Button size="small" @click="handleNotificationAction(item, index)" :class="item.isRead ? 'remove-btn' : 'mark-read-btn'">
+                        {{ item.isRead ? '清除该消息' : '标记为已读' }}
                     </Button>
-                    <Button size="small" @click="remove(item,index)" v-else class="remove-btn">清除该消息</Button>
                 </Badge>
             </div>
         </Card>
         <Page
-                v-if="this.total > 0"
+                v-if="total > 0"
                 :total="total"
                 :current="searchForm.currentPage"
                 :page-size="searchForm.pageSize"
@@ -41,9 +44,8 @@
 </template>
 
 <script>
-    import {deleteNotification, getNotificationByType, markNotificationAsRead} from "@/apis/notification";
+    import { deleteNotification, getNotificationByType, markNotificationAsRead } from "@/apis/notification";
     import tool from "@/utils/tool";
-    import store from "@/store";
 
     export default {
         name: "SystemNotification",
@@ -70,11 +72,20 @@
                     } else {
                         this.$Message.error(res.msg);
                     }
+                }).catch(() => {
+                    this.$Message.error('加载通知失败');
                 });
             },
             changePage(page) {
                 this.searchForm.currentPage = page;
                 this.getPage();
+            },
+            handleNotificationAction(item, index) {
+                if (item.isRead) {
+                    this.removeNotification(item, index);
+                } else {
+                    this.markAsRead(item);
+                }
             },
             markAsRead(item) {
                 markNotificationAsRead(item.notificationId).then(res => {
@@ -84,9 +95,11 @@
                     } else {
                         this.$Message.error(res.msg);
                     }
+                }).catch(() => {
+                    this.$Message.error('标记失败');
                 });
             },
-            remove(item, index) {
+            removeNotification(item, index) {
                 deleteNotification(item.notificationId).then(res => {
                     if (res.code === 200) {
                         this.dataList.splice(index, 1);
@@ -95,7 +108,9 @@
                     } else {
                         this.$Message.error(res.msg);
                     }
-                })
+                }).catch(() => {
+                    this.$Message.error('清除失败');
+                });
             }
         },
         created() {
@@ -126,11 +141,11 @@
         margin-right: 5px;
     }
 
-    .mark-read-btn {
-        margin-left: 10px;
+    .notification-text {
+        color: #505050;
     }
 
-    .remove-btn {
+    .mark-read-btn, .remove-btn {
         margin-left: 10px;
     }
 
