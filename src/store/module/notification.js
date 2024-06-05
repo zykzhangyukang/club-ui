@@ -19,7 +19,7 @@ export default {
             if (type === 'like_post') {
                 state.zanCount += 1;
             }
-            if (type === 'reply_comment' || type === 'comment_post' || type === 'reply_at_comment') {
+            if (type === 'reply' || type === 'comment' || type === 'reply_at') {
                 state.replyCount += 1;
             }
             state.totalCount += 1
