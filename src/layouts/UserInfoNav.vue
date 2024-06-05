@@ -13,10 +13,10 @@
             </div>
             <div class="user-description">
                 <a class="username" href="#">
-                    <span style="display: inline-block;width: 80px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
+                    <span class="nickname">
                            {{ currentUser.nickname }}
                     </span>
-                    <Badge color="green" text="在线" class="online-status ivu-mr-4" />
+                    <Badge :color="isOnline ? 'green' : 'red'" :text="isOnline ? '在线' : '离线'" class="online-status ivu-mr-4" />
                     <img width="18" height="18" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/silver.png" />
                 </a>
             </div>
@@ -31,6 +31,9 @@
             currentUser() {
                 return this.$store.state.user.info;
             },
+            isOnline() {
+                return this.$store.state.user.isOnline;
+            }
         },
     };
 </script>
@@ -41,7 +44,6 @@
         align-items: center;
         padding: 15px;
         background-color: #ffffff;
-        /*border-radius: 8px;*/
         margin-bottom: 10px;
         border: 1px solid #e4e6eb;
     }
@@ -59,17 +61,18 @@
 
     .user-text {
         font-size: 11px;
-        color: #515a6e!important;
+        color: #515a6e !important;
         margin-bottom: 8px;
     }
-    .user-text a{
+
+    .user-text a {
         font-size: 11px;
-        color: #515a6e!important;
+        color: #515a6e !important;
     }
 
     .user-description {
         font-size: 11px;
-        color: #515a6e!important;
+        color: #515a6e !important;
         margin-bottom: 12px;
     }
 
@@ -79,6 +82,14 @@
         color: #252933;
         font-size: 11px;
         text-decoration: underline;
+    }
+
+    .nickname {
+        display: inline-block;
+        width: 80px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .username img {

@@ -1,70 +1,122 @@
 import SockJS from 'sockjs-client';
-import Stomp from 'stompjs'
-import store from '@/store/index'
+import Stomp from 'stompjs';
+import store from '@/store/index';
 
 class MyWebSock {
-    url =   process.env.VUE_APP_API + '/club_websocket'
+    url = process.env.VUE_APP_API + '/club_websocket';
 
     constructor() {
-        this.stompClient = ''
+        this.stompClient = null;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 10; // 您可以根据需要调整这个数字
+        this.timer = null;
+        this.reconnectTimer = null;
 
-        this.connection()
-        // 断开重连机制,尝试发送消息,捕获异常发生时重连
-        this.timer = setInterval(() => {
-            try {
-               this.stompClient.send('heartbeat')
-            } catch (err) {
-                console.log('websocket 失去连接: ' + err)
-                this.connection()
-            }
-        }, 5000)
+        this.connect();
     }
 
-    // 连接 后台
-    connection() {
-        // 建立连接对象
-        const socket = new SockJS(this.url)
-        // 获取STOMP子协议的客户端对象
-        this.stompClient = Stomp.over(socket)
-        this.stompClient.debug = null
-        // 定义客户端的认证信息,按需求配置
-        const user = store.state.user.info;
+    connect() {
+        console.log('正在尝试连接 WebSocket...');
+        const socket = new SockJS(this.url);
+        this.stompClient = Stomp.over(socket);
+        this.stompClient.debug = null;
+
         const headers = {
             Authorization: localStorage.getItem("token") || ""
-        }
-        // 向服务器发起websocket连接
+        };
+
         this.stompClient.connect(headers, () => {
-                this.stompClient.subscribe('/topic/sysMsg', this.subSysMsg, headers)
-                if (user) {
-                    // 监听用户消息
-                    this.stompClient.subscribe(`/user/${user.userId}/sysMsg`, this.subUserMsg, headers)
-                }
+                this.reconnectAttempts = 0;
+                console.log('WebSocket 连接成功');
+                store.commit('user/setIsOnline', true);
+                this.subscribeToTopics();
+
+                // 重置心跳定时器
+                this.startHeartbeat();
             },
             err => {
-                // 连接发生错误时的处理函数
-                console.log('websocket失败')
-                console.log(err)
+                console.log('WebSocket 连接失败', err);
+                store.commit('user/setIsOnline', false);
+                this.handleReconnect();
             }
-        )
+        );
     }
 
-    // 断开连接
+    startHeartbeat() {
+        if (this.timer) clearInterval(this.timer);
+        this.timer = setInterval(() => {
+            this.sendHeartbeat();
+        }, 10000);
+    }
+
+    sendHeartbeat() {
+        try {
+            this.stompClient.send('heartbeat');
+        } catch (err) {
+            console.log('WebSocket 连接丢失: ' + err);
+            store.commit('user/setIsOnline', false);
+            this.handleReconnect();
+        }
+    }
+
+    handleReconnect() {
+        if (this.timer) clearInterval(this.timer);
+        if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+            const backoffTime = this.getFibonacciBackoffTime(this.reconnectAttempts) * 1000; // 斐波那契退避
+            console.log(`将在 ${backoffTime / 1000} 秒后重连...`);
+            this.reconnectTimer = setTimeout(() => {
+                this.connect();
+            }, backoffTime);
+            this.reconnectAttempts += 1;
+        } else {
+            store.commit('user/setIsOnline', false);
+            console.log('达到最大重连次数。放弃重连。');
+        }
+    }
+
+    getFibonacciBackoffTime(attempt) {
+        if (attempt <= 1) return attempt;
+        let a = 0, b = 1, temp;
+        for (let i = 2; i <= attempt; i++) {
+            temp = a + b;
+            a = b;
+            b = temp;
+        }
+        return b;
+    }
+
+    subscribeToTopics() {
+        const headers = {
+            Authorization: localStorage.getItem("token") || ""
+        };
+
+        this.stompClient.subscribe('/topic/sysMsg', this.subSysMsg, headers);
+
+        const user = store.state.user.info;
+        if (user) {
+            this.stompClient.subscribe(`/user/${user.userId}/sysMsg`, this.subUserMsg, headers);
+        }
+    }
+
     disconnect() {
         if (this.stompClient) {
-            this.stompClient.disconnect()
+            this.stompClient.disconnect();
         }
-        clearInterval(this.timer)
+        if (this.timer) clearInterval(this.timer);
+        if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+        store.commit('user/setIsOnline', false);
     }
 
-    // 监听系统消息
     subSysMsg(msg) {
+        // 处理系统消息
     }
 
-    // 监听用户消息
     subUserMsg(msg) {
         const body = JSON.parse(msg.body);
-        store.commit('notification/ADD_MSG', body)
+        store.commit('notification/ADD_MSG', body);
     }
 }
 
-export default MyWebSock
+export default MyWebSock;

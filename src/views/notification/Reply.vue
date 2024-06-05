@@ -5,25 +5,28 @@
                 <Avatar :src="item.senderAvatar" size="large"/>
                 <div class="notification-content">
                     <span class="notification-time">{{ formatTime(item.createTime) }}</span>
+
+                    <!-- 直接评论帖子 -->
                     <span v-if="item.type === 'comment'">
                         <strong>{{ item.sendNickName }}</strong>
                         <span class="notification-text">对我的帖子发表了评论</span>
                         <br/>
-                        <span class="content">{{ item.comment?.content ?? "该评论已被删除！" }}</span>
+                        <span class="content">{{ item.content }}</span>
                     </span>
+                    <!-- 回复评论 -->
                     <span v-if="item.type === 'reply'">
                         <strong>{{ item.sendNickName }}</strong>
                         <span class="notification-text">回复了我的评论</span>
                         <br/>
-                        <span class="content">{{item.comment?.content ?? "该评论已被删除！" }}</span>
-                        <blockquote>{{item.comment?.repliedContent ?? "该回复已被删除！" }}</blockquote>
+                        <span class="content">{{ item.content  }}</span>
+                        <blockquote>{{ item.repliedContent }}</blockquote>
                     </span>
                     <span v-if="item.type === 'reply_at'">
                         <strong>{{ item.sendNickName }}</strong>
                         <span class="notification-text">回复了我的评论</span>
                         <br/>
-                        <span class="content">回复 <a>@{{ item.nickname }}</a> {{item.comment?.content ?? "该评论已被删除！" }}</span>
-                        <blockquote>{{ item.comment?.repliedContent ?? "该回复已被删除！" }}</blockquote>
+                        <span class="content">回复 <a>@{{ item.nickname }}</a> {{item.content  }}</span>
+                         <blockquote>{{ item.repliedContent }}</blockquote>
                     </span>
                 </div>
                 <Badge dot :count="item.isRead ? 0 : 1">

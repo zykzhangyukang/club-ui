@@ -1,6 +1,7 @@
 export default {
     namespaced: true,
     state: {
+        isOnline: true,
         isLogin: false,
         token: '',
         info: ''
@@ -11,6 +12,9 @@ export default {
             if(state.info){
                 state.info.avatar =avatar;
             }
+        },
+        setIsOnline(state, isOnline){
+            state.isOnline = isOnline;
         },
         setUserInfo(state, info) {
             if(info){
