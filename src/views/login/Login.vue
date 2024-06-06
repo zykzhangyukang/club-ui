@@ -126,7 +126,8 @@
                     const data = JSON.parse(event.data);
                     if (data.code === 200) {
                         this.$store.commit('user/setUserInfo', data.result);
-                        this.$store.commit('user/setUserToken', data.result.token);
+                        this.$store.commit('user/setToken', data.result.token);
+                        this.$store.commit('user/setRefreshToken', data.result.refreshToken);
                         this.$router.push('/');
                         this.$Message.success('登录成功！');
                         this.stopSSE();
@@ -178,7 +179,8 @@
                 this.btnLoading = true;
                 userLogin(this.loginForm).then(async res => {
                     if (res.code === 200) {
-                        this.$store.commit('user/setUserToken', res.result.token);
+                        this.$store.commit('user/setToken', res.result.token);
+                        this.$store.commit('user/setRefreshToken', res.result.refreshToken);
                         let response = await userInfo();
                         this.$store.commit('user/setUserInfo', response.result);
                         this.$router.push('/');

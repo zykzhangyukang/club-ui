@@ -4,6 +4,7 @@ export default {
         isOnline: true,
         isLogin: false,
         token: '',
+        refreshToken: '',
         info: ''
     },
     getters: {},
@@ -24,13 +25,21 @@ export default {
             }
             state.isLogin = true;
         },
-        setUserToken(state, token){
+        setToken(state, token){
             if(token){
                 state.token = token;
             }else{
                 state.token = ''
             }
             localStorage.setItem("token", token)
+        },
+        setRefreshToken(state, refreshToken){
+            if(refreshToken){
+                state.refreshToken = refreshToken;
+            }else{
+                state.refreshToken = ''
+            }
+            localStorage.setItem("refreshToken", refreshToken)
         },
         incFollowCount(state, num){
           if(state.info){
