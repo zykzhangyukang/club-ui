@@ -2,13 +2,13 @@
     <div>
         <Card v-for="(item, index) in dataList" :key="item.id" class="notification-card" dis-hover>
             <div class="notification-header">
-                <Avatar :src="item.senderAvatar" size="large"/>
+                <Avatar :src="item.avatar" size="large"/>
                 <div class="notification-content">
                     <span class="notification-time">{{ formatTime(item.createTime) }}</span>
 
                     <!-- 直接评论帖子 -->
                     <span v-if="item.type === 'comment'">
-                        <strong>{{ item.sendNickName }}</strong>
+                        <strong>{{ item.user }}</strong>
                         <span class="notification-text">对我的帖子发表了评论</span>
                         <br/>
                         <span class="content">{{ item.content }}</span>
@@ -19,13 +19,14 @@
                         <span class="notification-text">回复了我的评论</span>
                         <br/>
                         <span class="content">{{ item.content  }}</span>
-                        <blockquote>{{ item.repliedContent }}</blockquote>
+                        <blockquote>{{ item.parentContent}}</blockquote>
                     </span>
                     <span v-if="item.type === 'reply_at'">
                         <strong>{{ item.sendNickName }}</strong>
                         <span class="notification-text">回复了我的评论</span>
                         <br/>
-                        <span class="content">回复 <a>@{{ item.nickname }}</a> {{item.content  }}</span>
+                        <span class="content" v-if="item.parentContent">回复 <a>@{{ item.toUser }}</a> {{item.content  }}</span>
+                        <span class="content" v-else>{{item.content}}</span>
                          <blockquote>{{ item.repliedContent }}</blockquote>
                     </span>
                 </div>
