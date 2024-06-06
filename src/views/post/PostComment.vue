@@ -5,7 +5,7 @@
             <div class="comment-input">
                 <Avatar  icon="md-person" :src="currentUser.avatar" />
                 <Input v-model="newComment" placeholder="写下你的评论..." class="ivu-mr-8 ivu-ml-8" maxlength="512" show-word-limit  />
-                <Button type="primary" @click="addComment">评论</Button>
+                <Button type="primary" @click="addComment" :loading="loading">评论</Button>
             </div>
             <div class="comment-list">
                 <CommentItem
@@ -43,6 +43,7 @@
         data() {
             return {
                 newComment: "",
+                loading: false
             };
         },
         methods: {
@@ -60,6 +61,7 @@
                         parentId: 0,
                         content: this.newComment,
                     }
+                    this.loading = true;
                     postComment(param).then(res => {
                         if (res.code === 200) {
                             this.comments.unshift(res.result);
@@ -67,6 +69,8 @@
                         } else {
                             this.$Message.error(res.msg);
                         }
+                    }).finally(e=>{
+                        this.loading = false;
                     })
                 }
             },

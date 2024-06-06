@@ -34,7 +34,6 @@
                 this.$router.push('/');
             },
             getHomeReload(){
-              // window.location.href = '/'
                 this.$router.push('/');
             },
             goToSettings() {
@@ -48,7 +47,6 @@
             },
             logout(){
                 this.$store.commit('user/logout');
-                this.$Message.success('注销成功！');
                 this.$router.push('/')
             }
         },

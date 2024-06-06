@@ -58,7 +58,7 @@
                 </div>
                 <div v-if="reply.showReplyInput" class="reply-input">
                     <Input :ref="'replyInput-'+index" v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" maxlength="512" show-word-limit />
-                    <Button type="primary" @click="submitReplyForReply(reply)">回复</Button>
+                    <Button type="primary" @click="submitReplyForReply(reply)" :loading="loading">回复</Button>
                 </div>
             </div>
             <div class="load-more-replies" v-if="isShowMore && isShow" @click="loadMoreReplies">
@@ -81,6 +81,7 @@
             return {
                 replyContent: "",
                 isShow: true,
+                loading: false
             };
         },
         computed: {
@@ -157,6 +158,7 @@
                         parentId: comment.commentId,
                         content: this.replyContent,
                     }
+                    this.loading = true;
                     postComment(param).then(res => {
                         if (res.code === 200) {
                             this.$emit('reply', res.result);
@@ -166,6 +168,8 @@
                         } else {
                             this.$Message.error(res.msg);
                         }
+                    }).finally(e=>{
+                        this.loading = false;
                     })
                 }
             },
@@ -203,6 +207,7 @@
                         replyId: reply.commentId,
                         content: reply.replyContent,
                     }
+                    this.loading = true;
                     postComment(param).then(res => {
                         if (res.code === 200) {
                             res.result.content = `回复 @${reply.nickname} : ${res.result.content}`;
@@ -213,6 +218,8 @@
                         } else {
                             this.$Message.error(res.msg);
                         }
+                    }).finally(e=>{
+                        this.loading = false;
                     })
                 }
             },

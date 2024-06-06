@@ -30,11 +30,7 @@
                          <blockquote>{{ item.repliedContent }}</blockquote>
                     </span>
                 </div>
-                <Badge dot :count="item.isRead ? 0 : 1">
-                    <Button size="small" @click="handleNotificationAction(item, index)" :class="item.isRead ? 'remove-btn' : 'mark-read-btn'">
-                        {{ item.isRead ? '清除该消息' : '标记为已读' }}
-                    </Button>
-                </Badge>
+                <Button size="small" @click="removeNotification(item, index)" >删除该通知</Button>
             </div>
         </Card>
         <Page
@@ -104,16 +100,22 @@
                 });
             },
             removeNotification(item, index) {
-                deleteNotification(item.notificationId).then(res => {
-                    if (res.code === 200) {
-                        this.dataList.splice(index, 1);
-                        this.total -= 1;
-                        this.$Message.success('清除成功');
-                    } else {
-                        this.$Message.error(res.msg);
-                    }
-                }).catch(() => {
-                    this.$Message.error('清除失败');
+                this.$Modal.confirm({
+                    title: '删除通知',
+                    content: '<p>删除该条通知后将无法恢复，是否继续？</p>',
+                    onOk: () => {
+                        deleteNotification(item.notificationId).then(res => {
+                            if (res.code === 200) {
+                                this.dataList.splice(index, 1);
+                                this.total -= 1;
+                                this.$Message.success('删除成功');
+                            } else {
+                                this.$Message.error(res.msg);
+                            }
+                        }).catch(() => {
+                            this.$Message.error('清除失败');
+                        });
+                    },
                 });
             }
         },

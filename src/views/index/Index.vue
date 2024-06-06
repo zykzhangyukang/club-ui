@@ -54,13 +54,20 @@
         },
         methods: {
             fetchResource() {
-                getResource().then(response => {
-                    if(response.code === 200){
-                        this.sectionList = response.result.sectionList;
-                    }
-                }).catch(error => {
-                    console.error("Error fetching section list:", error);
-                });
+                const cacheList = this.$store.state.index.sectionList;
+                if(cacheList && cacheList.length > 0){
+                    this.sectionList = cacheList;
+                }else {
+                    getResource().then(response => {
+                        if(response.code === 200){
+                            this.sectionList = response.result.sectionList;
+                            // 缓存到vuex中
+                            this.$store.commit("index/setSectionList", this.sectionList);
+                        }
+                    }).catch(error => {
+                        console.error("Error fetching section list:", error);
+                    });
+                }
             }
         }
     }

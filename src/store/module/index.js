@@ -7,13 +7,8 @@ export default {
     },
     getters: {},
     mutations: {
-        setResource(state, resource) {
-            if (resource.sectionList) {
-                state.sectionList = resource.sectionList;
-            }
-            if (resource.carouseList) {
-                state.carouseList = resource.carouseList;
-            }
+        setSectionList(state, sectionList) {
+            state.sectionList = sectionList;
         }
     },
     actions: {
