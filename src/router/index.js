@@ -18,6 +18,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'
 import {userInfo} from "@/apis/user";
 import NotFound from "@/views/error/404";
+import {getToken} from "@/utils/token";
 
 const routes = [
     {
@@ -135,7 +136,7 @@ router.beforeEach(async (to, from, next) => {
     NProgress.start()
     document.title = getPageTitle(to.meta.title || to.name);
 
-    let userToken = window.localStorage.getItem('token');
+    let userToken =  getToken();
     if (userToken) {
 
         if (to.path === '/login' || to.path === '/register') {

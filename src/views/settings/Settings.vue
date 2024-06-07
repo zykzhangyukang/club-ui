@@ -89,6 +89,7 @@
     import AdvertNav from "@/layouts/AdvertNav";
     import {userInfo, userUpdateInfo, userUpdateInit} from "@/apis/user";
     import store from "@/store";
+    import {getToken} from "@/utils/token";
 
     export default {
         name: "Settings.vue",
@@ -104,7 +105,7 @@
                 uploadPercent: 0,
                 uploadAvatarUrl: process.env.VUE_APP_API +'/api/user/upload/avatar',
                 uploadAvatarHeaders: {
-                    Authorization: localStorage.getItem('token') || ''
+                    Authorization: `Bearer ${getToken()}`
                 },
                 userInfoForm: {
                     userTags: [],

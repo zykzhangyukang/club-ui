@@ -1,6 +1,7 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import store from '@/store/index';
+import {getToken} from "@/utils/token";
 
 class MyWebSock {
     url = process.env.VUE_APP_API + '/club_websocket';
@@ -22,7 +23,7 @@ class MyWebSock {
         this.stompClient.debug = null;
 
         const headers = {
-            Authorization: localStorage.getItem("token") || ""
+            Authorization: getToken()
         };
 
         this.stompClient.connect(headers, () => {
@@ -89,7 +90,7 @@ class MyWebSock {
 
     subscribeToTopics() {
         const headers = {
-            Authorization: localStorage.getItem("token") || ""
+            Authorization: getToken()
         };
 
         this.stompClient.subscribe('/topic/sysMsg', this.subSysMsg, headers);

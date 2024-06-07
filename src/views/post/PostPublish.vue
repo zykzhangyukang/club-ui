@@ -69,6 +69,7 @@
     import {Message} from 'view-ui-plus'
     import {useRouter} from 'vue-router'
     import {useStore} from "vuex";
+    import {getToken} from "@/utils/token";
 
 
     export default {
@@ -135,7 +136,7 @@
                         maxNumberOfFiles: 1,
                         maxFileSize: 1024 * 1024,
                         headers: {
-                            Authorization: localStorage.getItem('token') || ''
+                            Authorization: `Bearer ${getToken()}`
                         },
                         onSuccess(file, res) {
                             Message.success("上传图片成功！");

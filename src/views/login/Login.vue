@@ -71,11 +71,12 @@
 </template>
 
 <script>
-    import { loginCaptcha, userInfo, userLogin } from "@/apis/user";
+    import {loginCaptcha, userInfo, userLogin} from "@/apis/user";
     import tool from "@/utils/tool";
     import GuideNav from "@/layouts/GuideNav";
     import AdvertNav from "@/layouts/AdvertNav";
-    import { getEventCode, subEventCode } from "@/apis/wechat";
+    import {getEventCode} from "@/apis/wechat";
+    import {setExpireTime, setRefreshToken, setToken} from "@/utils/token";
 
     export default {
         components: {
@@ -121,14 +122,14 @@
         },
         methods: {
             startSSE(deviceId) {
-                this.eventSource = new EventSource('http://localhost:8080/api/wechat/subscribe?deviceId='+deviceId);
+                this.eventSource = new EventSource(process.env.VUE_APP_API + '/api/wechat/subscribe?deviceId='+deviceId);
                 this.eventSource.onmessage = (event) => {
                     const data = JSON.parse(event.data);
                     if (data.code === 200) {
                         this.$store.commit('user/setUserInfo', data.result);
-                        this.$store.commit('user/setToken', data.result.token);
-                        this.$store.commit('user/setRefreshToken', data.result.refreshToken);
-                        this.$store.commit('user/setExpireTime', data.result.expiresIn);
+                        setToken(data.result.token);
+                        setRefreshToken(data.result.refreshToken);
+                        setExpireTime( data.result.expiresIn);
                         this.$router.push('/');
                         this.$Message.success('登录成功！');
                         this.stopSSE();
@@ -180,9 +181,9 @@
                 this.btnLoading = true;
                 userLogin(this.loginForm).then(async res => {
                     if (res.code === 200) {
-                        this.$store.commit('user/setToken', res.result.token);
-                        this.$store.commit('user/setRefreshToken', res.result.refreshToken);
-                        this.$store.commit('user/setExpireTime', res.result.expiresIn);
+                        setToken(res.result.token);
+                        setRefreshToken(res.result.refreshToken);
+                        setExpireTime( res.result.expiresIn);
                         let response = await userInfo();
                         this.$store.commit('user/setUserInfo', response.result);
                         this.$router.push('/');
