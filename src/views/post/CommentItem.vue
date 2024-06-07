@@ -26,7 +26,7 @@
             </label>
         </div>
         <div v-if="comment.showReply" class="reply-input">
-            <Input ref="replyInput" v-model="replyContent" placeholder="写下你的回复..." class="ivu-mr-4 ivu-ml-4"  maxlength="512" show-word-limit />
+            <EmojiInput ref="replyInput" v-model="replyContent" placeholder="写下你的回复..."  class="emoji_input"   maxlength="512" show-word-limit />
             <Button type="primary" @click="submitReply(comment)">回复</Button>
         </div>
         <div class="reply-list" v-if="comment.replies.length">
@@ -57,7 +57,7 @@
                     </label>
                 </div>
                 <div v-if="reply.showReplyInput" class="reply-input">
-                    <Input :ref="'replyInput-'+index" v-model="reply.replyContent" :placeholder="reply.placeholder" class="ivu-mr-4 ivu-ml-4" maxlength="512" show-word-limit />
+                    <EmojiInput :ref="'replyInput-'+index" v-model="reply.replyContent" :placeholder="reply.placeholder" class="emoji_input" maxlength="512" show-word-limit />
                     <Button type="primary" @click="submitReplyForReply(reply)" :loading="loading">回复</Button>
                 </div>
             </div>
@@ -71,9 +71,11 @@
 <script>
     import tool from "@/utils/tool";
     import { postComment, postReplyPage } from "@/apis/post";
+    import EmojiInput from "@/components/emoji/EmojiInput";
 
     export default {
         name: "CommentItem",
+        components: {EmojiInput},
         props: {
             comment: Object
         },
@@ -140,7 +142,7 @@
                 this.comment.showReply = !this.comment.showReply;
                 this.$nextTick(() => {
                     if (this.comment.showReply) {
-                        this.$refs.replyInput.focus();
+                        this.$refs.replyInput.focusInput();
                     }
                 });
             },
@@ -188,7 +190,7 @@
                 reply.placeholder = `回复 @${reply.nickname} : `;
                 this.$nextTick(() => {
                     if (reply.showReplyInput) {
-                        this.$refs[`replyInput-${index}`][0].focus();
+                        this.$refs[`replyInput-${index}`][0].focusInput();
                     }
                 });
             },
@@ -322,5 +324,9 @@
         color: #9499A0;
         margin-top: 8px;
         font-size: 12px;
+    }
+    .emoji_input{
+        width: 90%;
+        margin-right: 8px;
     }
 </style>

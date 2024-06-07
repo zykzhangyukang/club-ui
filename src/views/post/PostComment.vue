@@ -4,7 +4,7 @@
                       border-radius: 4px;">
             <div class="comment-input">
                 <Avatar  icon="md-person" :src="currentUser.avatar" />
-                <Input v-model="newComment" placeholder="写下你的评论..." class="ivu-mr-8 ivu-ml-8" maxlength="512" show-word-limit  />
+                <EmojiInput v-model="newComment" style="width: 90%" class="ivu-ml-4 ivu-mr-8"></EmojiInput>
                 <Button type="primary" @click="addComment" :loading="loading">评论</Button>
             </div>
             <div class="comment-list">
@@ -25,11 +25,13 @@
 <script>
     import CommentItem from './CommentItem.vue';
     import {postComment, postCommentDelete} from "@/apis/post";
+    import EmojiInput from "@/components/emoji/EmojiInput";
 
     export default {
         name: "PostComment",
         components: {
-            CommentItem
+            CommentItem,
+            EmojiInput
         },
         props: {
             postId: Number,
