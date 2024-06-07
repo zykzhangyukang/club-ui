@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="comment-content">
-            <span>{{ comment.content }}</span>
+            <span v-html="formatContent(comment.content)"></span>
         </div>
         <div class="comment-actions">
             <label type="text" @click="likeComment">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="reply-content">
-                    <span v-if="reply.replyId > 0"> 回复 <a> @{{reply.toUserNickName}} : </a></span>  {{ reply.content }}
+                    <span v-if="reply.replyId > 0"> 回复 <a> @{{reply.toUserNickName}} : </a></span>  <span v-html="formatContent(reply.content )"></span>
                 </div>
                 <div class="reply-actions">
                     <label type="text" @click="likeReply(reply)">
@@ -72,6 +72,7 @@
     import tool from "@/utils/tool";
     import { postComment, postReplyPage } from "@/apis/post";
     import EmojiInput from "@/components/emoji/EmojiInput";
+    import {parseEmotions} from '@/components/emoji/emojiParser'
 
     export default {
         name: "CommentItem",
@@ -127,6 +128,9 @@
             },
             formatTime(time) {
                 return tool.showTime(time);
+            },
+            formatContent(content) {
+                return parseEmotions(content);
             },
             likeComment() {
                 this.comment.likes += 1;
@@ -328,5 +332,9 @@
     .emoji_input{
         width: 90%;
         margin-right: 8px;
+    }
+    #emoji{
+        width: 20px!important;
+        height: 20px!important;
     }
 </style>

@@ -5,10 +5,10 @@
         <slot :name="name" v-bind="scopeData"></slot>
       </template>
       <template #prefix>
-        <Icon type="md-happy" @click.="toggleEmojiPicker" class="toggle-emoji-picker" />
+        <Icon type="md-happy" @click.stop="showEmojiPicker = !showEmojiPicker" class="toggle-emoji-picker" />
       </template>
     </Input>
-    <EmotionPicker :show="showEmojiPicker" @select-emoticon="addEmoji" @update:show="toggleEmojiPicker"  />
+    <EmotionPicker :show="showEmojiPicker" @select-emoticon="addEmoji" @show="show"  />
   </div>
 </template>
 
@@ -39,8 +39,8 @@
       },
     },
     methods: {
-      toggleEmojiPicker(v) {
-        this.showEmojiPicker = !this.showEmojiPicker;
+      show(v) {
+        this.showEmojiPicker = v;
       },
       addEmoji(emoji) {
         this.internalValue += `[${emoji}]`;
