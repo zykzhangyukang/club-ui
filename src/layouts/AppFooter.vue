@@ -1,5 +1,5 @@
 <template>
-    <GlobalFooter :links="links" :copyright="copyright" />
+    <GlobalFooter class="footer" :links="links" :copyright="copyright" />
 </template>
 
 <script>
@@ -26,7 +26,7 @@
                         blankTarget: true
                     }
                 ],
-                copyright: 'Copyright © 2023 Club All Rights Reserved'
+                copyright: 'Copyright © 2024 Club All Rights Reserved'
             }
         }
     }

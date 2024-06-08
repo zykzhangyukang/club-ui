@@ -5,13 +5,12 @@
         <slot :name="name" v-bind="scopeData"></slot>
       </template>
       <template #prefix>
-        <Icon type="md-happy" @click.stop="showEmojiPicker = !showEmojiPicker" class="toggle-emoji-picker" />
+        <Icon type="md-happy" @click.stop="toggleEmojiPicker" class="toggle-emoji-picker" />
       </template>
     </Input>
-    <EmotionPicker :show="showEmojiPicker" @select-emoticon="addEmoji" @show="show"  />
+    <EmotionPicker :show="showEmojiPicker" @select-emoticon="addEmoji" @show="show" />
   </div>
 </template>
-
 
 <script>
   import EmotionPicker from './EmojiPicker.vue';
@@ -41,11 +40,36 @@
     methods: {
       show(v) {
         this.showEmojiPicker = v;
+        if (v) {
+          this.$nextTick(() => {
+            this.focusInput();
+          });
+        }
+      },
+      toggleEmojiPicker() {
+        this.showEmojiPicker = !this.showEmojiPicker;
+        if (this.showEmojiPicker) {
+          this.$nextTick(() => {
+            this.focusInput();
+          });
+        }
       },
       addEmoji(emoji) {
-        this.internalValue += `[${emoji}]`;
+        const input = this.$refs.refInput.$el.querySelector('input');
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+
+        this.internalValue =
+                this.internalValue.substring(0, start) +
+                `[${emoji}]` +
+                this.internalValue.substring(end);
+
+        this.$nextTick(() => {
+          input.selectionStart = input.selectionEnd = start + `[${emoji}]`.length;
+          this.focusInput();
+        });
       },
-      focusInput(){
+      focusInput() {
         this.$refs.refInput.focus();
       },
     },
