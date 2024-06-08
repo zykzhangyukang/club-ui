@@ -65,7 +65,7 @@
                     <Button type="primary" @click="submitReplyForReply(reply)" :loading="loading">回复</Button>
                 </div>
             </div>
-            <div class="load-more-replies" v-if="isShowMore && isShow" @click="loadMoreReplies">
+            <div class="load-more-replies" v-if="hasMore && this.comment.replyCount > 3" @click="loadMoreReplies">
                 <span>共{{comment.replyCount}}条回复，点击查看<Icon type="ios-arrow-down" /> </span>
             </div>
         </div>
@@ -87,19 +87,14 @@
         data() {
             return {
                 replyContent: "",
-                isShow: true,
-                loading: false
+                hasMore: true,
+                loading: false,
+                pageNumber: 1,
             };
         },
         computed: {
             currentUser() {
                 return this.$store.state.user.info;
-            },
-            isShowMore() {
-                return this.loadedReplies < this.comment.replyCount;
-            },
-            loadedReplies(){
-                return this.comment.replies.length;
             },
             seekCid(){
                 const  hash = tool.getHashParams();
@@ -112,27 +107,26 @@
                 if (!isLogin) {
                     return this.$Message.warning('用户未登录！');
                 }
-                const lastReplyId = this.comment.replies[this.comment.replies.length - 1].commentId;
                 let param = {
-                    offsetId: lastReplyId,
-                    pageSize: 5,
+                    currentPage: this.pageNumber,
+                    pageSize: 6,
                     commentId: this.comment.commentId
-                }
+                };
                 postReplyPage(param).then(res => {
                     if (res.code === 200) {
-                        const newReplies = res.result;
-
-                        if(!newReplies || newReplies.length === 0){
-                            this.$Message.warning("没有更多了！");
-                            this.isShow = false;
+                        const newReplies = res.result.list;
+                        this.total = res.result.total;
+                        this.hasMore = res.result.hasMore;
+                        if(this.pageNumber ===1){
+                            this.comment.replies = newReplies;
                         }else {
                             this.comment.replies.push(...newReplies);
                         }
-                        this.loadedReplies += newReplies.length;
+                        this.pageNumber+=1;
                     } else {
                         this.$Message.error(res.msg);
                     }
-                })
+                });
             },
             formatTime(time) {
                 return tool.showTime(time);

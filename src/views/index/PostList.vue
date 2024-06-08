@@ -112,13 +112,12 @@
                 }
             },
             pageChange(page) {
-                this.searchForm.currentPage = page;
-                this.getPage().then(()=>{
-                    window.scrollTo({
-                        top: 0,
-                        behavior: "smooth"
-                    })
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
                 })
+                this.searchForm.currentPage = page;
+                this.getPage();
             },
             getPostDetail(postId) {
                 this.$router.push({ path: '/post/detail', query: { id: postId } });
