@@ -4,25 +4,21 @@
             <Avatar :size="50" shape="square" :src="currentUser.avatar" icon="ios-person" />
         </div>
         <div class="user-info">
-            <div class="user-text">
-                <a class="custom-link" href="#">收藏 ({{currentUser.collectCount}})</a>
-                <Divider type="vertical" />
-                <a class="custom-link" href="#">关注 ({{currentUser.followCount}})</a>
-                <Divider type="vertical" />
-                <a class="custom-link" href="#">粉丝 (2)</a>
-            </div>
             <div class="user-description">
                 <a class="username" href="#">
-                    <span class="nickname">
-                           {{ currentUser.nickname }}
-                    </span>
-                    <Badge :color="isOnline ? 'green' : 'red'" :text="isOnline ? '在线' : '离线'" class="online-status ivu-mr-4" />
-                    <img width="18" height="18" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/silver.png" />
+                    <span class="nickname">{{ currentUser.nickname }}</span>
+                    <Badge :color="isOnline ? 'green' : 'gray'" :text="isOnline ? '在线' : '离线'" class="online-status" />
                 </a>
+            </div>
+            <div class="user-text">
+                <a class="custom-link" href="#">收藏 ({{ currentUser.collectCount }})</a>
+                <a class="custom-link" href="#">关注 ({{ currentUser.followCount }})</a>
+                <a class="custom-link" href="#">粉丝 (2)</a>
             </div>
         </div>
     </div>
 </template>
+
 
 <script>
     export default {
@@ -34,7 +30,7 @@
             isOnline() {
                 return this.$store.state.user.isOnline;
             }
-        },
+        }
     };
 </script>
 
@@ -42,63 +38,63 @@
     .user-info-card {
         display: flex;
         align-items: center;
-        padding: 15px;
+        padding: 10px;
         background-color: #ffffff;
-        margin-bottom: 10px;
-        border: 1px solid #e4e6eb;
+        transition: box-shadow 0.3s ease;
+        border: 1px solid #eee;
     }
 
     .user-avatar {
-        margin-right: 20px;
-        align-self: flex-start;
+        margin-right: 15px;
     }
 
     .user-info {
         display: flex;
         flex-direction: column;
-        flex: 1;
-    }
-
-    .user-text {
-        font-size: 11px;
-        color: #515a6e !important;
-        margin-bottom: 8px;
-    }
-
-    .user-text a {
-        font-size: 11px;
-        color: #515a6e !important;
+        justify-content: center;
     }
 
     .user-description {
-        font-size: 11px;
-        color: #515a6e !important;
-        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
     }
 
     .username {
         display: flex;
         align-items: center;
-        color: #252933;
-        font-size: 11px;
-        text-decoration: underline;
+        color: #333;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
     }
 
     .nickname {
-        display: inline-block;
-        width: 80px;
+        max-width: 100px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
-    .username img {
-        margin-left: 5px;
-        width: 18px;
-        height: 18px;
+    .online-status {
+        margin-left: 10px;
+        font-size: 12px;
     }
 
-    .online-status {
-        font-size: 11px;
+    .user-text {
+        display: flex;
+        gap: 10px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    .custom-link {
+        color: #666;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .custom-link:hover {
+        color: #333;
     }
 </style>

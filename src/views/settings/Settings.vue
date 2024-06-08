@@ -77,7 +77,7 @@
                 <div class="right_content">
                     <UserInfoNav></UserInfoNav>
                     <!-- 广告区域-->
-                    <AdvertNav></AdvertNav>
+                    <AdvertNav class="ivu-mt-8"></AdvertNav>
                 </div>
             </Col>
         </Row>

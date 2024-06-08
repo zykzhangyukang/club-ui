@@ -31,6 +31,7 @@
                     </span>
                 </div>
                 <Button size="small" @click="removeNotification(item, index)" >删除该通知</Button>
+                <Button size="small" @click="markAsRead(item, index)" class="ivu-ml-8" v-if="!item.isRead">标记为已读</Button>
             </div>
         </Card>
         <Page

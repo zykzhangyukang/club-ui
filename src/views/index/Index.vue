@@ -14,7 +14,7 @@
                     <!-- 引导卡片 -->
                     <GuideNav></GuideNav>
                     <!-- 用户信息 -->
-                    <UserInfoNav></UserInfoNav>
+                    <UserInfoNav class="ivu-mb-8"></UserInfoNav>
                     <!-- 创建导航 -->
                     <CreateNav></CreateNav>
                     <!-- 广告区域-->

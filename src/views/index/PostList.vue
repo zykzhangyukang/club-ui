@@ -4,7 +4,7 @@
         <Skeleton :loading="loading" animated avatar>
             <template #template>
                 <List :border="false">
-                    <ListItem v-for="item in 5" :key="item">
+                    <ListItem v-for="item in 3" :key="item">
                         <ListItemMeta>
                             <template v-slot:title>
                                 <a class="post_title" v-line-clamp="1"><SkeletonItem block width="80%" height="16px" /></a>
@@ -86,7 +86,7 @@
             return {
                 searchForm: {
                     currentPage: 1,
-                    pageSize: 50,
+                    pageSize: 30,
                     firstSectionId: null,
                     secondSectionId: null
                 },
@@ -113,9 +113,12 @@
             },
             pageChange(page) {
                 this.searchForm.currentPage = page;
-                this.getPage();
-                document.body.scrollTop = 0; // 兼容旧版本浏览器
-                document.documentElement.scrollTop = 0; // 兼容现代浏览器
+                this.getPage().then(()=>{
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    })
+                })
             },
             getPostDetail(postId) {
                 this.$router.push({ path: '/post/detail', query: { id: postId } });

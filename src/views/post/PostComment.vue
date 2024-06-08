@@ -1,10 +1,10 @@
 <template>
     <div class="comment-section ivu-mt-8">
-        <div style="padding: 20px;
+        <div style="padding: 10px;
                       border-radius: 4px;">
             <div class="comment-input">
-                <Avatar  icon="md-person" :src="currentUser.avatar" />
-                <EmojiInput v-model="newComment" style="width: 90%" class="ivu-ml-4 ivu-mr-8"></EmojiInput>
+                <Avatar icon="md-person" :src="currentUser.avatar" />
+                <EmojiInput v-model="newComment" style="width: 90%" class="ivu-ml-4 ivu-mr-8" placeholder="这里是评论区，不是无人区;-)"></EmojiInput>
                 <Button type="primary" @click="addComment" :loading="loading">评论</Button>
             </div>
             <div class="comment-list">
@@ -109,6 +109,8 @@
                     }
                 })
             }
+        },
+        mounted() {
         }
     };
 </script>

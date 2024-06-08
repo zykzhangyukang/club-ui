@@ -69,21 +69,19 @@
                                 <span style="user-select: none">
                                     <Divider type="vertical"/>
                                     评论:{{ post.commentsCount }}
-                                    <Divider type="vertical"/>
-                                    <span v-if="post.tags && post.tags.length > 0">标签：
-                                            <tag size="small" v-for="item in post.tags">
-                                                 {{ item }}
-                                            </tag>
-                                    </span>
                                 </span>
                             </div>
                         </div>
                     </div>
                     <div id="post_content" v-html="post.content">
                     </div>
+                    <div v-line-clamp="1" v-if="post.tags && post.tags.length > 0">
+                      <label> <Icon type="md-pricetags" /> 标签：</label>
+                      <Tag v-for="tag in post.tags">{{tag}}</Tag>
+                    </div>
                 </div>
                 <!-- 评论区 -->
-                <Card dis-hover class="ivu-mt-8">
+                <Card dis-hover class="ivu-mt-16 comment_area">
                     <PostComment :post-id="post.postId" :comments="comments"/>
                     <Page :total="this.total" v-if="this.total > 0" :page-size="20" :model-value="this.searchForm.currentPage" @on-change="commentPageChange"/>
                 </Card>
@@ -275,11 +273,23 @@
                         this.collectLoading = false;
                     })
                 }
+            },
+            jumpToArea(){
+                const  hash = tool.getHashParams();
+                if(hash.cid){
+                    setTimeout(() => {
+                        const el = document.getElementsByClassName("comment_area")[0];
+                        el.scrollIntoView({
+                            behavior: "smooth"
+                        });
+                    }, 100);
+                }
             }
         },
-        created() {
-            this.postDetail();
-            this.getCommentPage();
+         mounted() {
+             this.postDetail();
+             this.getCommentPage();
+             this.jumpToArea();
         }
     }
 </script>
