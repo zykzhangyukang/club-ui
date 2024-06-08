@@ -1,5 +1,5 @@
 function uuid(l) {
-    return 'xxxxxxxx1xxxx34xxx5yxxx3xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx1xxxx34xxx5yxxx3xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
@@ -21,7 +21,7 @@ function showTime(time) {
     if (!isValidDate) {
         window.console.error("不是有效日期格式");
     }
-    const formatDate = function(date) {
+    const formatDate = function (date) {
         let today = new Date(date);
         let year = today.getFullYear();
         let month = ("0" + (today.getMonth() + 1)).slice(-2);
@@ -48,7 +48,19 @@ function showTime(time) {
     );
 }
 
+function getHashParams() {
+    const hash = window.location.hash.substring(1); // 移除前导的 #
+    const params = {};
+    const regex = /([^&;=]+)=?([^&;]*)/g;
+    let match;
+    while ((match = regex.exec(hash)) !== null) {
+        params[decodeURIComponent(match[1])] = decodeURIComponent(match[2]);
+    }
+    return params;
+}
+
 export default {
     uuid,
-    showTime
+    showTime,
+    getHashParams
 }

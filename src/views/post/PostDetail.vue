@@ -104,6 +104,7 @@
     import {getPostDetail, postCollect, postCommentPage, postLike, postUnCollect, postUnLike} from "@/apis/post";
     import {userFollow, userUnFollow} from "@/apis/user";
     import PostComment from "@/views/post/PostComment";
+    import tool from "@/utils/tool";
 
     export default {
         components: {
@@ -125,6 +126,7 @@
                 },
                 total: 0,
                 comments: [],
+                seekCid: "",
             }
         },
         computed: {
@@ -138,6 +140,10 @@
                 this.getCommentPage();
             },
             getCommentPage() {
+                const  hash = tool.getHashParams();
+                if (hash.cid) {
+                    this.searchForm.seekCid = hash.cid;
+                }
                 postCommentPage(this.searchForm).then(res => {
                     if (res.code === 200) {
                         this.comments = res.result.dataList;

@@ -9,23 +9,23 @@
                     <!-- 直接评论帖子 -->
                     <span v-if="item.type === 'comment'">
                         <strong>{{ item.user }}</strong>
-                        <span class="notification-text">对我的帖子发表了评论</span>
+                        <a class="notification-text" @click="toDetail(item)">对我的帖子发表了评论</a>
                         <br/>
                         <span class="content">{{ item.content }}</span>
                     </span>
                     <!-- 回复评论 -->
                     <span v-if="item.type === 'reply'">
                         <strong>{{ item.sendNickName }}</strong>
-                        <span class="notification-text">回复了我的评论</span>
+                        <a class="notification-text" @click="toDetail(item)">回复了我的评论</a>
                         <br/>
                         <span class="content">{{ item.content  }}</span>
                         <blockquote>{{ item.parentContent}}</blockquote>
                     </span>
                     <span v-if="item.type === 'reply_at'">
                         <strong>{{ item.sendNickName }}</strong>
-                        <span class="notification-text">回复了我的评论</span>
+                        <a class="notification-text" @click="toDetail(item)">回复了我的评论</a>
                         <br/>
-                        <span class="content" v-if="item.parentContent">回复 <a>@{{ item.toUser }}</a> {{item.content  }}</span>
+                        <span class="content" v-if="item.isHide === false && item.parentIsHide === false">回复 <a>@{{ item.toUser }}</a> {{item.content  }}</span>
                         <span class="content" v-else>{{item.content}}</span>
                          <blockquote>{{ item.repliedContent }}</blockquote>
                     </span>
@@ -61,6 +61,12 @@
             };
         },
         methods: {
+            toDetail(item){
+                if(!item.postId){
+                    return this.$Message.warning("帖子已被删除！");
+                }
+                this.$router.push(`/post/detail?id=${item.postId}#cid=${item.commentId || ''}`);
+            },
             formatTime(time) {
                 return tool.showTime(time);
             },
