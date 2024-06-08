@@ -53,7 +53,7 @@
             return {
                 searchForm: {
                     currentPage: 1,
-                    pageSize: 7,
+                    pageSize: 5,
                     type: 'reply'
                 },
                 dataList: [],

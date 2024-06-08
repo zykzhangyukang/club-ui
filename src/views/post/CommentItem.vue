@@ -1,36 +1,40 @@
 <template>
     <div class="comment-item">
-        <div class="comment-header">
-            <Avatar :src="comment.avatar" />
-            <div class="user-info">
-                <span class="username">{{ comment.nickname }}</span>
-                <span class="timestamp">{{ formatTime(comment.createTime) }}</span>
-                <span class="location">{{ comment.location }}</span>
+
+        <div :class="{'reply-item-seek' : seekCid === comment.commentId.toString() }">
+            <div  class="comment-header">
+                <Avatar :src="comment.avatar" />
+                <div class="user-info">
+                    <span class="username">{{ comment.nickname }}</span>
+                    <span class="timestamp">{{ formatTime(comment.createTime) }}</span>
+                    <span class="location">{{ comment.location }}</span>
+                </div>
+            </div>
+            <div class="comment-content">
+                <span v-html="formatContent(comment.content)"></span>
+            </div>
+            <div class="comment-actions">
+                <label type="text" @click="likeComment">
+                    <Icon type="md-thumbs-up" /> 点赞({{ comment.likes }})
+                </label>
+                <label type="text" @click="toggleReplyInput">
+                    <Icon type="md-text" /> 回复
+                </label>
+                <label type="text">
+                    <Icon type="md-warning" /> 举报
+                </label>
+                <label type="text" @click="deleteComment" v-if="currentUser==null || currentUser.userId === comment.userId">
+                    <Icon type="md-trash" /> 删除
+                </label>
             </div>
         </div>
-        <div class="comment-content">
-            <span v-html="formatContent(comment.content)"></span>
-        </div>
-        <div class="comment-actions">
-            <label type="text" @click="likeComment">
-                <Icon type="md-thumbs-up" /> 点赞({{ comment.likes }})
-            </label>
-            <label type="text" @click="toggleReplyInput">
-                <Icon type="md-text" /> 回复
-            </label>
-            <label type="text">
-                <Icon type="md-warning" /> 举报
-            </label>
-            <label type="text" @click="deleteComment" v-if="currentUser==null || currentUser.userId === comment.userId">
-                <Icon type="md-trash" /> 删除
-            </label>
-        </div>
+
         <div v-if="comment.showReply" class="reply-input">
             <EmojiInput ref="replyInput" v-model="replyContent" placeholder="写下你的回复..."  class="emoji_input"   maxlength="512" show-word-limit />
             <Button type="primary" @click="submitReply(comment)">回复</Button>
         </div>
         <div class="reply-list" v-if="comment.replies.length">
-            <div v-for="(reply, index) in comment.replies" :key="index" class="reply-item">
+            <div v-for="(reply, index) in comment.replies" :key="index" class="reply-item" :class="{'reply-item-seek' : seekCid === reply.commentId.toString() }">
                 <div class="reply-header">
                     <Avatar :src="reply.avatar" />
                     <div class="user-info">
@@ -96,6 +100,10 @@
             },
             loadedReplies(){
                 return this.comment.replies.length;
+            },
+            seekCid(){
+                const  hash = tool.getHashParams();
+                return hash.cid || ""
             }
         },
         methods: {
@@ -254,8 +262,8 @@
 <style scoped>
     .comment-item {
         border-bottom: 1px solid #eee;
-        padding-bottom: 8px;
         margin-bottom: 8px;
+        padding: 8px;
     }
     .comment-header {
         display: flex;
@@ -336,5 +344,18 @@
     #emoji{
         width: 20px!important;
         height: 20px!important;
+    }
+    .reply-item-seek{
+        animation-name: enterAnimation-jumpReply;
+        animation-duration: 5s;
+        animation-fill-mode: forwards;
+    }
+    @keyframes enterAnimation-jumpReply {
+        0% {
+            background-color: #dff6fb;
+        }
+        100% {
+            background-color: #dff6fb00;
+        }
     }
 </style>
