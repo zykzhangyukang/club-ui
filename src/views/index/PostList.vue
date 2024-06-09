@@ -4,7 +4,7 @@
         <Skeleton :loading="loading" animated avatar>
             <template #template>
                 <List :border="false">
-                    <ListItem v-for="item in 3" :key="item">
+                    <ListItem v-for="item in 20" :key="item">
                         <ListItemMeta>
                             <template v-slot:title>
                                 <a class="post_title" v-line-clamp="1"><SkeletonItem block width="80%" height="16px" /></a>
@@ -86,7 +86,7 @@
             return {
                 searchForm: {
                     currentPage: 1,
-                    pageSize: 30,
+                    pageSize: 20,
                     firstSectionId: null,
                     secondSectionId: null
                 },
