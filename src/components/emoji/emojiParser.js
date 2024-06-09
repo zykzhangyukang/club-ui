@@ -20,7 +20,7 @@ export function parseEmotions(text, size=20) {
     return text.replace(/\[([^\]]+)\]/g, (match, p1) => {
         const imgSrc = emotionMap[p1];
         if (imgSrc) {
-            return `<img width="${size}" height="${size}" src="${imgSrc}" alt="${p1}" />`;
+            return `<img width="${size}" style="vertical-align: text-bottom" height="${size}" src="${imgSrc}" alt="${p1}" />`;
         }
         return match;
     });

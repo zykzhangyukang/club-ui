@@ -44,7 +44,8 @@
                     </div>
                 </div>
                 <div class="reply-content">
-                    <span v-if="reply.replyId > 0"> 回复 <a> @{{reply.toUserNickName}} : </a></span>  <span v-html="formatContent(reply.content )"></span>
+                    <span v-if="comment.commentId !== reply.replyId"> 回复 <a> @{{reply.toUserNickName}} : </a></span>
+                    <span v-html="formatContent(reply.content )"></span>
                 </div>
                 <div class="reply-actions">
                     <label type="text" @click="likeReply(reply)">
@@ -165,6 +166,7 @@
                         postId: comment.postId,
                         parentId: comment.commentId,
                         content: this.replyContent,
+                        replyId: comment.commentId
                     }
                     this.loading = true;
                     postComment(param).then(res => {
@@ -172,7 +174,6 @@
                             this.$emit('reply', res.result);
                             this.replyContent = "";
                             this.comment.showReply = false;
-                            this.isShow = false;
                         } else {
                             this.$Message.error(res.msg);
                         }
@@ -218,11 +219,9 @@
                     this.loading = true;
                     postComment(param).then(res => {
                         if (res.code === 200) {
-                            res.result.content = `回复 @${reply.nickname} : ${res.result.content}`;
                             this.$emit('reply', res.result);
                             reply.replyContent = "";
                             reply.showReplyInput = false;
-                            this.isShow = false;
                         } else {
                             this.$Message.error(res.msg);
                         }
@@ -299,7 +298,6 @@
     .reply-list {
         margin-top: 8px;
         margin-left: 35px;
-        /*border-left: 2px solid #eee;*/
     }
     .reply-item {
         margin-bottom: 8px;
@@ -334,10 +332,6 @@
     .emoji_input{
         width: 90%;
         margin-right: 8px;
-    }
-    #emoji{
-        width: 20px!important;
-        height: 20px!important;
     }
     .reply-item-seek{
         animation-name: enterAnimation-jumpReply;
