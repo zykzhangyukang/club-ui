@@ -286,9 +286,11 @@
                 }
             }
         },
-         mounted() {
-             this.postDetail();
-             this.getCommentPage();
+        created() {
+            this.postDetail();
+            this.getCommentPage();
+        },
+        mounted() {
              this.jumpToArea();
         }
     }

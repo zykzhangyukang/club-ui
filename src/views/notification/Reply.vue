@@ -9,23 +9,23 @@
                     <!-- 直接评论帖子 -->
                     <span v-if="item.type === 'comment'">
                         <strong>{{ item.user }}</strong>
-                        <a class="notification-text" @click="toDetail(item)">对我的帖子发表了评论</a>
+                        <a class="notification-text" @click="toDetail(item)">&nbsp;&nbsp;对我的帖子发表了评论</a>
                         <br/>
                         <span class="content">{{ item.content }}</span>
                     </span>
                     <!-- 回复评论 -->
                     <span v-if="item.type === 'reply'">
-                        <strong>{{ item.sendNickName }}</strong>
-                        <a class="notification-text" @click="toDetail(item)">回复了我的评论</a>
+                        <strong>{{ item.user }}</strong>
+                        <a class="notification-text" @click="toDetail(item)">&nbsp;&nbsp;回复了我的评论</a>
                         <br/>
                         <span class="content">{{ item.content  }}</span>
                         <blockquote>{{ item.parentContent}}</blockquote>
                     </span>
                     <span v-if="item.type === 'reply_at'">
-                        <strong>{{ item.sendNickName }}</strong>
-                        <a class="notification-text" @click="toDetail(item)">回复了我的评论</a>
+                        <strong>{{ item.user }}</strong>
+                        <a class="notification-text" @click="toDetail(item)">&nbsp;&nbsp;回复了我的评论</a>
                         <br/>
-                        <span class="content" v-if="item.isHide === false && item.parentIsHide === false">回复 <a>@{{ item.toUser }}</a> {{item.content  }}</span>
+                        <span class="content" v-if="item.isHide === false && item.parentIsHide === false">回复 <a>@{{ item.toUser }}</a>：{{item.content  }}</span>
                         <span class="content" v-else>{{item.content}}</span>
                          <blockquote>{{ item.repliedContent }}</blockquote>
                     </span>
