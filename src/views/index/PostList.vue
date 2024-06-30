@@ -4,7 +4,7 @@
         <Skeleton :loading="loading" animated avatar>
             <template #template>
                 <List :border="false">
-                    <ListItem v-for="item in 20" :key="item">
+                    <ListItem v-for="item in 4" :key="item">
                         <ListItemMeta>
                             <template v-slot:title>
                                 <a class="post_title" v-line-clamp="1"><SkeletonItem block width="80%" height="16px" /></a>
@@ -165,11 +165,9 @@
         color: #778087;
         cursor: pointer;
     }
-
     .nickname:hover {
         text-decoration: underline;
     }
-
     .empty_svg {
         width: 150px;
         height: 250px;

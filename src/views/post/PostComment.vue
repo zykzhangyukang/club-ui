@@ -1,12 +1,15 @@
 <template>
     <div class="comment-section ivu-mt-8">
-        <div style="padding: 10px;
-                      border-radius: 4px;">
+        <div style="padding: 10px;  border-radius: 4px;">
             <div class="comment-input">
                 <Avatar icon="md-person" :src="currentUser.avatar" />
                 <EmojiInput v-model="newComment" style="width: 90%" class="ivu-ml-4 ivu-mr-8" placeholder="这里是评论区，不是无人区;-)"></EmojiInput>
                 <Button type="primary" @click="addComment" :loading="loading">评论</Button>
             </div>
+          <div v-if="comments.length === 0">
+            <img class="empty_svg" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/empty.svg" />
+            <div class="empty_text">暂无更多评论，快来抢沙发吧！</div>
+          </div>
             <div class="comment-list">
                 <CommentItem
                         v-for="(comment, index) in comments"
@@ -130,5 +133,19 @@
     }
     .comment-list {
         margin-top: 16px;
+    }
+    .empty_svg {
+      width: 150px;
+      height: 150px;
+      display: block;
+      margin: 0 auto;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .empty_text {
+      text-align: center;
+      margin-bottom: 16px;
+      color: #808695;
+      font-size: 11px;
     }
 </style>
