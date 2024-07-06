@@ -52,7 +52,7 @@
         align-items: center;
         width: 100%;
         background-color: #ffffff;
-        border: 1px solid #e4e6eb;
+        border: 1px solid #eee;
         margin-bottom: 10px;
         font-size: 11px;
         padding: 5px; /* 添加内边距，增加整体的空白 */

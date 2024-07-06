@@ -15,7 +15,7 @@
     .publish_tip_wrapper{
         width: 100%;
         background-color: #ffffff;
-        border: 1px solid #e4e6eb;
+        border: 1px solid #eee;
         margin-bottom: 10px;
         font-size: 12px;
         line-height: 24px;

@@ -15,7 +15,7 @@
                             <Input v-model="postForm.title" placeholder="请输入帖子标题..."></Input>
                         </FormItem>
                         <FormItem label="帖子内容" prop="content">
-                            <div style="border: 1px solid #e4e6eb">
+                            <div style="border: 1px solid #eee">
                                 <Toolbar
                                         style="border-bottom: 1px solid #e4e6eb"
                                         :editor="editorRef"
@@ -301,7 +301,7 @@
     .main_content {
         padding: 20px;
         background: #fff !important;
-        border: 1px solid #e4e6eb;
+        border: 1px solid #eee;
     }
 
     .w-e-full-screen-container {

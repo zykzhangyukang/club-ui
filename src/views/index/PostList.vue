@@ -65,7 +65,7 @@
                             @on-change="pageChange"
                     />
                 </div>
-                <div v-show="isEmpty">
+                <div class="empty_wrapper" v-show="isEmpty">
                     <img class="empty_svg" src="https://ioss-bucket.oss-cn-shenzhen.aliyuncs.com/club/cdn/imgs/empty.svg" />
                     <div class="empty_text">暂无更多内容了！</div>
                 </div>
@@ -86,7 +86,7 @@
             return {
                 searchForm: {
                     currentPage: 1,
-                    pageSize: 20,
+                    pageSize: 50,
                     firstSectionId: null,
                     secondSectionId: null
                 },
@@ -124,6 +124,7 @@
             }
         },
         mounted() {
+          window.scrollTo(0, 0);
             const eventBus = EventBus.config.globalProperties.$eventBus;
             eventBus.$on('sectionChange', (firstSection, secondSection) => {
                 this.searchForm.firstSectionId = firstSection;
@@ -143,7 +144,8 @@
     .list_wrapper {
         background: #ffffff;
         padding: 0 10px;
-        border: 1px solid #e4e6eb;
+        border: 1px solid #eee;
+        border-top: none;
     }
 
     .section_name,
@@ -168,20 +170,21 @@
     .nickname:hover {
         text-decoration: underline;
     }
+    .empty_wrapper{
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      padding-bottom: 20px;
+    }
     .empty_svg {
-        width: 150px;
-        height: 250px;
-        display: block;
-        margin: 20px auto;
+        width: 250px;
+        height: 180px;
         user-select: none;
         -webkit-user-drag: none;
     }
-
     .empty_text {
-        text-align: center;
-        margin-bottom: 16px;
-        color: #808695;
-        font-size: 11px;
+      color: #808695;
+      font-size: 11px;
     }
 
     .page_bar {

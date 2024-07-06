@@ -18,6 +18,6 @@
     text-align: center;
     vertical-align: middle;
     line-height: 100px;
-    border: 1px solid #e4e6eb;
+    border: 1px solid #eee;
 }
 </style>

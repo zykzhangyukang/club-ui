@@ -41,7 +41,7 @@
     }
     .carousel_wrapper{
         background: #ffffff;
-        border: 1px solid #e4e6eb;
+        border: 1px solid #eee;
     }
 
 </style>

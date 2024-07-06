@@ -301,7 +301,7 @@
     .main_content {
         padding: 20px;
         background: #fff !important;
-        border: 1px solid #e4e6eb;
+        border: 1px solid #eee;
         //min-height: 40vh;
     }
     .comment_area{
